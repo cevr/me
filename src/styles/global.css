@@ -1,0 +1,42 @@
+/* purgecss start ignore */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+/* purgecss end ignore */
+
+@import 'tailwindcss/utilities';
+@import url('https://fonts.googleapis.com/css?family=Megrim&display=swap');
+
+body {
+  transition: all 0.25s;
+  font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121315;
+    --fg: white;
+    --link-bg: #222222;
+    --accent: #666666;
+    --text: #eaeaea;
+    --footer-hover: white;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: white;
+    --fg: #121315;
+    --link-bg: #f5f5f5;
+    --accent: #888888;
+    --text: #252525;
+    --footer-hover: black;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+  }
+}
