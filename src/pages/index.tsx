@@ -1,6 +1,7 @@
 import React from 'react';
 import fetch from 'isomorphic-unfetch';
-import { NextPage, NextPageContext } from 'next';
+import { NextPage } from 'next';
+import { useAsync } from 'react-async';
 
 import { Nav, Footer, Head, ExternalLink } from 'components';
 import { Star } from 'components/icons';
@@ -17,28 +18,21 @@ interface Project {
   archived: boolean;
 }
 
-type Await<T> = T extends {
-  then(onfulfilled?: (value: infer U) => unknown): unknown;
-}
-  ? U
-  : T;
+async function getProjects() {
+  const projects: Project[] = await fetch(
+    'https://api.github.com/users/cevr/repos?page=1&per_page=100',
+    {
+      headers: {
+        Authorization: `token ${process.env.TOKEN}`,
+      },
+    }
+  ).then(res => res.json());
 
-type Props = Await<ReturnType<typeof getInitialProps>>;
+  const filteredProjects = projects
+    .filter(project => !project.fork && project.stargazers_count > 0)
+    .sort((a, b) => b.stargazers_count - a.stargazers_count);
 
-async function getInitialProps() {
-  try {
-    const projects: Project[] = await fetch(
-      'https://api.github.com/users/cevr/repos?page=1&per_page=100'
-    ).then(res => res.json());
-
-    const filteredProjects = projects
-      .filter(project => !project.fork && project.stargazers_count > 0)
-      .sort((a, b) => b.stargazers_count - a.stargazers_count);
-
-    return { projects: filteredProjects };
-  } catch {
-    return {};
-  }
+  return filteredProjects;
 }
 
 const ParagraphLink: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = props => (
@@ -143,7 +137,43 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
   </ExternalLink>
 );
 
-const Home: NextPage<Props> = ({ projects = [] }) => {
+const KaizenLoading = () => (
+  <div>
+    改善
+    <style jsx>
+      {`
+        div {
+          grid-area: projects;
+          animation-name: color;
+          animation-duration: 2s;
+          animation-iteration-count: infinite;
+          font-size: 64px;
+          display: grid;
+          justify-content: center;
+          align-content: center;
+          max-height: 100%;
+        }
+
+        @keyframes color {
+          0% {
+            color: var(--fg);
+          }
+          50% {
+            color: var(--highlight);
+          }
+          100 {
+            color: var(--fg);
+          }
+        }
+      `}
+    </style>
+  </div>
+);
+
+const Home: NextPage = () => {
+  const { data, status } = useAsync(getProjects);
+
+  const isLoading = status === 'pending';
   return (
     <Layout>
       <Head>
@@ -166,11 +196,15 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
             <ParagraphLink href="https://nextjs.org/#features">Next.js</ParagraphLink>.
           </p>
         </section>
-        <section className="projects">
-          {projects.map(project => (
-            <Project project={project} key={project.id} />
-          ))}
-        </section>
+        {isLoading ? (
+          <KaizenLoading />
+        ) : (
+          <section className="projects">
+            {data.map(project => (
+              <Project project={project} key={project.id} />
+            ))}
+          </section>
+        )}
       </main>
       <Footer />
       <style jsx>{`
@@ -236,7 +270,7 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
           display: none;
         }
 
-        @media (max-width: 1080px) {
+        @media (max-width: 800px) {
           main {
             grid-template-areas:
               'name     name'
@@ -262,12 +296,14 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
           .project {
             padding: 20px;
           }
+
+          :global(.project:hover) {
+            transform: none !important;
+          }
         }
       `}</style>
     </Layout>
   );
 };
-
-Home.getInitialProps = getInitialProps;
 
 export default Home;

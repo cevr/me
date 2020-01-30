@@ -16,7 +16,7 @@ const Layout: React.FC = ({ children }) => (
         margin: auto;
       }
 
-      @media (min-width: 1081px) {
+      @media (min-width: 800px) {
         .layout {
           grid-template-rows: 60px calc(100vh - 160px) 60px;
           max-height: 100vh;
