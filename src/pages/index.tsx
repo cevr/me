@@ -151,23 +151,22 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
       </Head>
       <Nav />
       <main>
-        <h1>
-          Hi, <br />
-          I'm Cristian.
-        </h1>
         <section className="about">
-          <p>
+          <h1>
+            Hi, <br />
+            I'm Cristian.
+          </h1>
+          <p className="desc">
             I'm a frontend developer though sometimes I call myself a software developer too. I have
             a passion for improvement, believing fully in <KaizenLink />.
           </p>
-          <p>
+          <p className="interests">
             I love <ParagraphLink href="https://reactjs.org/">React</ParagraphLink>, I love{' '}
             <ParagraphLink href="https://graphql.org/">GraphQL</ParagraphLink>, and I love{' '}
             <ParagraphLink href="https://nextjs.org/#features">Next.js</ParagraphLink>.
           </p>
         </section>
         <section className="projects">
-          <h2 className="projects-title">Projects</h2>
           {projects.map(project => (
             <Project project={project} key={project.id} />
           ))}
@@ -178,20 +177,21 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
         main {
           grid-area: content;
           display: grid;
-          grid-template-areas:
-            'name  projects'
-            'about projects'
-            'about projects';
+          grid-template-areas: 'about projects';
           grid-template-columns: 1fr 1fr;
-          grid-auto-rows: min-content;
           grid-gap: 10px;
           max-height: 100%;
-          padding: 80px 0;
+          padding: 50px 0;
         }
 
         .about {
           grid-area: about;
           display: grid;
+          grid-template-areas:
+            'name'
+            'desc'
+            'interests';
+          grid-auto-rows: min-content;
           grid-gap: 10px;
         }
 
@@ -203,7 +203,13 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
         .about p {
           font-size: 18px;
           font-weight: 100;
-          max-height: 300px;
+        }
+        .desc {
+          grid-area: desc;
+        }
+
+        .interests {
+          grid-area: interests;
         }
 
         .projects {
@@ -217,19 +223,15 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
           padding: 10px;
         }
 
-        .projects-title {
-          font-size: 30px;
-        }
-
         @media (max-width: 1080px) {
           main {
             grid-template-areas:
               'name     name'
               'about    about'
               'projects projects';
-            margin-bottom: 20px;
             padding: 0;
             grid-gap: 20px;
+            margin-bottom: 20px;
           }
 
           h1 {
@@ -242,10 +244,6 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
 
           .projects {
             padding: 0;
-          }
-
-          .projects-title {
-            font-size: 24px;
           }
 
           .project {
