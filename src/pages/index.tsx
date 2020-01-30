@@ -171,7 +171,7 @@ const KaizenLoading = () => (
 );
 
 const Home: NextPage = () => {
-  const { data, status } = useAsync(getProjects);
+  const { data = [], status } = useAsync(getProjects);
 
   const isLoading = status === 'pending';
   return (
