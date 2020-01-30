@@ -7,10 +7,10 @@ import ExternalLink from './ExternalLink';
 const Footer: React.FC = () => {
   return (
     <footer>
-      <ExternalLink className="icon" href="https://github.com/cevr">
+      <ExternalLink className="icon" href="https://github.com/cevr" aria-label="Github icon">
         <Github />
       </ExternalLink>
-      <ExternalLink className="icon" href="https://twitter.com/_cevr_">
+      <ExternalLink className="icon" href="https://twitter.com/_cevr_" aria-label="Twitter icon">
         <Twitter />
       </ExternalLink>
       <Link href="/contact">
