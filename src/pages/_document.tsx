@@ -14,7 +14,7 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-        <script src="/check-theme-preference.js"></script>
+        <script src="/check-theme-preference.js" async></script>
       </Html>
     );
   }

@@ -1,6 +1,11 @@
 /* purgecss start ignore */
-@import url('https://fonts.googleapis.com/css?family=Megrim&display=swap');
 @import 'tailwindcss/base';
+@font-face {
+  font-family: Megrim;
+  font-style: normal;
+  font-weight: 400;
+  src: local('Megrim'), url('/fonts/megrim.ttf') format('truetype');
+}
 
 .light {
   --bg: white;

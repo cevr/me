@@ -6,6 +6,17 @@ import { Nav, Footer, Head, ExternalLink } from 'components';
 import { Star } from 'components/icons';
 import Layout from 'layouts/Layout';
 
+interface Project {
+  svn_url: string;
+  id: number;
+  language: string;
+  name: string;
+  description: string | null;
+  stargazers_count: number;
+  fork: boolean;
+  archived: boolean;
+}
+
 type Await<T> = T extends {
   then(onfulfilled?: (value: infer U) => unknown): unknown;
 }
@@ -16,12 +27,12 @@ type Props = Await<ReturnType<typeof getInitialProps>>;
 
 async function getInitialProps() {
   try {
-    const projects: any[] = await fetch(
+    const projects: Project[] = await fetch(
       'https://api.github.com/users/cevr/repos?page=1&per_page=100'
     ).then(res => res.json());
 
     const filteredProjects = projects
-      .filter(project => !project.fork && !project.archived && project.stargazers_count > 0)
+      .filter(project => !project.fork && project.stargazers_count > 0)
       .sort((a, b) => b.stargazers_count - a.stargazers_count);
 
     return { projects: filteredProjects };
@@ -64,14 +75,7 @@ const KaizenLink: React.FC = () => {
 };
 
 interface ProjectProps {
-  project: {
-    svn_url: string;
-    id: number;
-    language: string;
-    name: string;
-    description: string | null;
-    stargazers_count: number;
-  };
+  project: Project;
 }
 
 const Project: React.FC<ProjectProps> = ({ project }) => (
@@ -134,12 +138,6 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
         width: 12px;
         margin-right: 4px;
         display: block;
-      }
-
-      @media (max-width: 1080px) {
-        .project {
-          padding: 20px;
-        }
       }
     `}</style>
   </ExternalLink>
@@ -229,7 +227,8 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
               'name     name'
               'about    about'
               'projects projects';
-            padding: 40px 0;
+            margin-bottom: 20px;
+            padding: 0;
             grid-gap: 20px;
           }
 
@@ -247,6 +246,10 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
 
           .projects-title {
             font-size: 24px;
+          }
+
+          .project {
+            padding: 20px;
           }
         }
       `}</style>
