@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ThemeProvider } from 'context/ThemeContext';
-import 'styles/global.css';
+import '../styles/global.css';
 
 function MyApp({ Component, pageProps }) {
   return (
