@@ -17,14 +17,16 @@
   --footer-hover: black;
 }
 body {
+  --transition: 0.15s;
   --highlight: salmon;
+  --grid-gap-sm: 10px;
   --bg: #121315;
   --fg: white;
   --link-bg: #222222;
   --accent: #999;
   --text: #eaeaea;
   --footer-hover: white;
-  transition: all 0.15s;
+  transition: all var(--transition);
   font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica, sans-serif;
   background: var(--bg);
   color: var(--fg);

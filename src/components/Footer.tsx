@@ -22,14 +22,14 @@ const Footer: React.FC = () => {
           justify-content: center;
           align-content: center;
           grid-auto-flow: column;
-          grid-gap: 24px;
+          grid-gap: 1.5rem;
           grid-area: footer;
         }
         :global(footer .icon) {
-          height: 24px;
-          width: 24px;
+          height: 1.5rem;
+          width: 1.5rem;
           color: var(--accent);
-          transition: color 0.15s;
+          transition: color var(--transition);
         }
         :global(footer .icon:hover) {
           color: var(--highlight);
@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
         a {
           font-weight: 300;
           color: var(--accent);
-          transition: color 0.15s;
+          transition: color var(--transition);
         }
         a:hover {
           color: var(--highlight);

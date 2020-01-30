@@ -44,7 +44,7 @@ const ParagraphLink: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = p
         padding: 2px 10px;
         background-color: var(--link-bg);
         border-radius: 6px;
-        transition: background-color 0.15s;
+        transition: background-color var(--transition);
         white-space: nowrap;
       }
       :global(.paragraph-link:hover) {
@@ -90,7 +90,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
         border-color: transparent;
         background-color: var(--link-bg);
         padding: 30px;
-        transition: border-color, transform, 0.15s;
+        transition: border-color, transform, var(--transition);
       }
       :global(.project:hover) {
         border-color: var(--highlight);
@@ -213,7 +213,7 @@ const Home: NextPage = () => {
           display: grid;
           grid-template-areas: 'about projects';
           grid-template-columns: 1fr 1fr;
-          grid-gap: 10px;
+          grid-gap: var(--grid-gap-sm);
           max-height: 100%;
           padding: 50px 0;
         }
@@ -226,7 +226,7 @@ const Home: NextPage = () => {
             'desc'
             'interests';
           grid-auto-rows: min-content;
-          grid-gap: 10px;
+          grid-gap: var(--grid-gap-sm);
         }
 
         h1 {
@@ -252,7 +252,7 @@ const Home: NextPage = () => {
           display: grid;
           grid-template-columns: 1fr;
           grid-auto-rows: minmax(min-content, max-content);
-          grid-gap: 10px;
+          grid-gap: var(--grid-gap-sm);
           overflow-y: auto;
           padding: 10px;
           -ms-overflow-style: none; /* IE 11 */
@@ -277,12 +277,12 @@ const Home: NextPage = () => {
               'about    about'
               'projects projects';
             padding: 0;
-            grid-gap: 20px;
-            margin-bottom: 20px;
+            grid-gap: 1.5rem;
+            margin-bottom: 1.5rem;
           }
 
           h1 {
-            font-size: 40px;
+            font-size: 2.5rem;
           }
 
           .about p {

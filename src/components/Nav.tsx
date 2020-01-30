@@ -37,20 +37,18 @@ const Nav = () => {
           display: grid;
           position: sticky;
           grid-area: nav;
-          grid-gap: 8px;
-          grid-template-columns: 150px 1fr;
+          grid-gap: var(--grid-gap-sm);
+          grid-template-columns: 10rem 1fr;
           align-items: center;
         }
 
-        .logoContainer {
-        }
         .logo {
           font-family: Megrim;
-          font-size: 40px;
+          font-size: 2.5rem;
           user-select: none;
         }
         .logo:hover {
-          transition: color 0.15s;
+          transition: color var(--transition);
           color: var(--highlight);
         }
 
@@ -59,14 +57,14 @@ const Nav = () => {
         }
 
         .theme-toggler {
-          --size: 20px;
+          --size: 1.25rem;
           height: var(--size);
           width: var(--size);
           border: 2px solid var(--fg);
           border-radius: 50%;
           background: transparent;
           cursor: pointer;
-          transition: border-color 0.15s ease-in-out;
+          transition: border-color var(--transition) ease-in-out;
         }
         .theme-toggler:hover {
           border-color: var(--highlight);

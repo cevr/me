@@ -10,8 +10,8 @@ const Layout: React.FC = ({ children }) => (
           'nav'
           'content'
           'footer';
-        grid-gap: 10px;
-        padding: 15px 40px;
+        grid-gap: var(--grid-gap-sm);
+        padding: 1rem 2.5rem;
         max-width: 1080px;
         margin: auto;
       }
