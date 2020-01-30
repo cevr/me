@@ -1,41 +1,36 @@
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import clsx from 'clsx';
 
-import Logo from './Logo';
+const storageKey = '__LIGHT';
+const classNameLight = 'light';
 
-const links = [
-  { href: '/', label: 'Me' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/contact', label: 'Contact' },
-].map(link => ({
-  ...link,
-  key: `nav-link-${link.href}-${link.label}`,
-}));
+const toggleTheme = () => {
+  const lightMode = JSON.parse(localStorage.getItem(storageKey));
+  lightMode
+    ? document.body.classList.remove(classNameLight)
+    : document.body.classList.add(classNameLight);
+
+  localStorage.setItem(storageKey, JSON.stringify(!lightMode));
+};
 
 const Nav = () => {
-  const { asPath } = useRouter();
-
   return (
     <nav>
-      <div className="logo">
+      <div className="logoContainer">
         <Link href="/">
-          <Logo />
+          <a className="logo" aria-label="logo" title="Logo">
+            CVR
+          </a>
         </Link>
       </div>
-      <div className="links">
-        {links.map(({ key, href, label }) => (
-          <Link href={href} key={key}>
-            <a
-              className={clsx('nav-link', {
-                active: asPath === href,
-              })}
-            >
-              {label}
-            </a>
-          </Link>
-        ))}
+      <div className="toggler-container">
+        <button
+          aria-label="Toggle Theme"
+          title="Toggle Theme"
+          type="button"
+          className="theme-toggler"
+          onClick={toggleTheme}
+        ></button>
       </div>
       <style jsx>{`
         nav {
@@ -47,33 +42,34 @@ const Nav = () => {
           align-items: center;
         }
 
+        .logoContainer {
+        }
         .logo {
           font-family: Megrim;
           font-size: 40px;
-          transition: color 0.15s;
-          height: 32px;
+          user-select: none;
         }
         .logo:hover {
-          color: salmon;
+          transition: color 0.15s;
+          color: var(--highlight);
         }
 
-        .page-title {
-          font-weight: 600;
-        }
-        .nav-link {
-          margin-right: 16px;
-          border-radius: 6px;
-          padding: 6px 16px;
-          font-weight: 500;
-          transition: all 0.15s;
-        }
-        .nav-link:hover {
-          background: salmon;
+        .toggler-container {
+          justify-self: end;
         }
 
-        .nav-link.active {
-          color: var(--bg);
-          background: var(--fg);
+        .theme-toggler {
+          --size: 20px;
+          height: var(--size);
+          width: var(--size);
+          border: 2px solid var(--fg);
+          border-radius: 50%;
+          background: transparent;
+          cursor: pointer;
+          transition: border-color 0.15s ease-in-out;
+        }
+        .theme-toggler:hover {
+          border-color: var(--highlight);
         }
       `}</style>
     </nav>
