@@ -221,6 +221,19 @@ const Home: NextPage<Props> = ({ projects = [] }) => {
           grid-gap: 10px;
           overflow-y: auto;
           padding: 10px;
+          -ms-overflow-style: none; /* IE 11 */
+          scrollbar-width: none; /* Firefox 64 */
+        }
+
+        .projects:after {
+          content: '';
+          display: block;
+          height: 10px;
+          width: 100%;
+        }
+
+        .projects::-webkit-scrollbar {
+          display: none;
         }
 
         @media (max-width: 1080px) {
