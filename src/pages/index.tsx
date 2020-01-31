@@ -3,7 +3,7 @@ import fetch from 'isomorphic-unfetch';
 import { NextPage } from 'next';
 import { useAsync } from 'react-async';
 
-import { Nav, Footer, Head, ExternalLink, KaizenLoading } from 'components';
+import { Nav, Footer, Head, ExternalLink, KaizenLoading, ButtonLink } from 'components';
 import { Star } from 'components/icons';
 import Layout from 'layouts/Layout';
 
@@ -18,53 +18,16 @@ interface Project {
   archived: boolean;
 }
 
-async function getProjects() {
-  const projects: Project[] = await fetch(
-    'https://api.github.com/users/cevr/repos?page=1&per_page=100',
-    {
-      headers: {
-        Authorization: `token ${process.env.TOKEN}`,
-      },
-    }
-  ).then(res => res.json());
-
-  const filteredProjects = projects
-    .filter(project => !project.fork && project.stargazers_count > 0)
-    .sort((a, b) => b.stargazers_count - a.stargazers_count);
-
-  return filteredProjects;
-}
-
-const ParagraphLink: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = props => (
-  <>
-    <ExternalLink className="paragraph-link" {...props} />
-    <style jsx>{`
-      :global(.paragraph-link) {
-        color: var(--highlight);
-        padding: 2px 10px;
-        background-color: var(--link-bg);
-        border-radius: 6px;
-        transition: background-color var(--transition);
-        white-space: nowrap;
-      }
-      :global(.paragraph-link:hover) {
-        background-color: var(--highlight);
-        color: white;
-      }
-    `}</style>
-  </>
-);
-
 const KaizenLink: React.FC = () => {
   const [hovered, setHovered] = React.useState(false);
   return (
-    <ParagraphLink
+    <ButtonLink
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       href="https://en.wikipedia.org/wiki/Kaizen"
     >
       {hovered ? 'kaizen' : '改善'}
-    </ParagraphLink>
+    </ButtonLink>
   );
 };
 
@@ -154,6 +117,23 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
   </ExternalLink>
 );
 
+async function getProjects() {
+  const projects: Project[] = await fetch(
+    'https://api.github.com/users/cevr/repos?page=1&per_page=100',
+    {
+      headers: {
+        Authorization: `token ${process.env.TOKEN}`,
+      },
+    }
+  ).then(res => res.json());
+
+  const filteredProjects = projects
+    .filter(project => !project.fork && project.stargazers_count > 0)
+    .sort((a, b) => b.stargazers_count - a.stargazers_count);
+
+  return filteredProjects;
+}
+
 const ProjectsSection: React.FC = () => {
   const { data = [], status } = useAsync(getProjects);
 
@@ -214,9 +194,9 @@ const AboutMeSection: React.FC = () => (
       passion for improvement, believing fully in <KaizenLink />.
     </p>
     <p className="interests">
-      I specialize in <ParagraphLink href="https://reactjs.org/">React</ParagraphLink>, I'm invested
-      in <ParagraphLink href="https://graphql.org/">GraphQL</ParagraphLink>, and I love{' '}
-      <ParagraphLink href="https://nextjs.org/#features">Next.js</ParagraphLink>.
+      I specialize in <ButtonLink href="https://reactjs.org/">React</ButtonLink>, I'm invested in{' '}
+      <ButtonLink href="https://graphql.org/">GraphQL</ButtonLink>, and I love{' '}
+      <ButtonLink href="https://nextjs.org/#features">Next.js</ButtonLink>.
     </p>
     <style jsx>
       {`
@@ -238,7 +218,7 @@ const AboutMeSection: React.FC = () => (
 
         p {
           font-size: 18px;
-          font-weight: 100;
+          font-weight: 200;
         }
         .desc {
           grid-area: desc;
