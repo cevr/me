@@ -73,7 +73,7 @@ interface ProjectProps {
 }
 
 const Project: React.FC<ProjectProps> = ({ project }) => (
-  <ExternalLink href={project.svn_url}>
+  <ExternalLink href={project.svn_url} aria-label={project.name}>
     <article className="project">
       <div className="project-language">{project.language}</div>
       <div className="project-name">{project.name}</div>

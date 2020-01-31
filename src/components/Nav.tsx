@@ -6,11 +6,10 @@ const classNameLight = 'light';
 
 const toggleTheme = () => {
   const lightMode = JSON.parse(localStorage.getItem(storageKey));
+  localStorage.setItem(storageKey, JSON.stringify(!lightMode));
   lightMode
     ? document.body.classList.remove(classNameLight)
     : document.body.classList.add(classNameLight);
-
-  localStorage.setItem(storageKey, JSON.stringify(!lightMode));
 };
 
 const Nav = () => {
@@ -30,7 +29,7 @@ const Nav = () => {
           type="button"
           className="theme-toggler"
           onClick={toggleTheme}
-        ></button>
+        />
       </div>
       <style jsx>{`
         nav {
@@ -46,6 +45,7 @@ const Nav = () => {
           font-family: Megrim;
           font-size: 2.5rem;
           user-select: none;
+          color: var(--fg);
         }
         .logo:hover {
           transition: color var(--transition);
