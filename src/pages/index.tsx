@@ -73,8 +73,8 @@ interface ProjectProps {
 }
 
 const Project: React.FC<ProjectProps> = ({ project }) => (
-  <article className="project">
-    <ExternalLink href={project.svn_url}>
+  <ExternalLink href={project.svn_url}>
+    <article className="project">
       <div className="project-language">{project.language}</div>
       <div className="project-name">{project.name}</div>
       <div className="project-description">{project.description}</div>
@@ -84,7 +84,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
         </span>
         {project.stargazers_count}
       </div>
-    </ExternalLink>
+    </article>
     <style jsx>{`
       .project {
         display: block;
@@ -151,7 +151,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
         }
       }
     `}</style>
-  </article>
+  </ExternalLink>
 );
 
 const ProjectsSection: React.FC = () => {
