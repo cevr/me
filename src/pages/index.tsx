@@ -101,6 +101,7 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
       }
 
       .project:hover .project-name,
+      .project:hover .stargazers-star,
       .project:hover .project-language {
         color: var(--highlight);
       }
@@ -109,12 +110,14 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
         text-transform: uppercase;
         font-size: 12px;
         letter-spacing: 2px;
+        color: var(--fg);
       }
 
       .project-name {
         text-transform: capitalize;
         font-size: 26px;
         font-weight: 500;
+        color: var(--fg);
       }
 
       .project-description {
