@@ -12,6 +12,7 @@
   --bg: #f8f9fa;
   --fg: #212529;
   --link-bg: #e9ecef;
+  --link-hover-fg: #f8f9fa;
   --accent: #495057;
   --highlight: #0b7285;
 }
@@ -19,10 +20,13 @@ body {
   --bg: #212529;
   --fg: #f8f9fa;
   --link-bg: #343a40;
+  --link-hover-fg: #212529;
   --accent: #adb5bd;
   --highlight: salmon;
+
   --transition: 0.15s;
   --grid-gap-sm: 10px;
+
   transition: all var(--transition);
   font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica, sans-serif;
   background: var(--bg);

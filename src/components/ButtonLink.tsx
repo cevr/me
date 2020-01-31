@@ -19,7 +19,7 @@ const ButtonLink: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = ({
       }
       :global(.paragraph-link:hover) {
         background-color: var(--highlight);
-        color: white;
+        color: var(--link-hover-fg);
       }
     `}</style>
   </>
