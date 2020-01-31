@@ -38,12 +38,12 @@ interface ProjectProps {
 const Project: React.FC<ProjectProps> = ({ project }) => (
   <ExternalLink href={project.svn_url} aria-label={project.name}>
     <article className="project">
-      <div className="project-language">{project.language}</div>
-      <div className="project-name">{project.name}</div>
-      <div className="project-description">{project.description}</div>
+      <caption className="project-language">{project.language}</caption>
+      <h2 className="project-name">{project.name}</h2>
+      <p className="project-description">{project.description}</p>
       <div className="project-stargazers">
         <span className="stargazers-star">
-          <Star />
+          <Star aria-hidden />
         </span>
         {project.stargazers_count}
       </div>
