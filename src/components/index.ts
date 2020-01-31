@@ -4,3 +4,4 @@ export { default as Head } from './Head';
 export { default as ExternalLink } from './ExternalLink';
 export { default as ButtonLink } from './ButtonLink';
 export { default as KaizenLoading } from './KaizenLoading';
+export * from './icons';
