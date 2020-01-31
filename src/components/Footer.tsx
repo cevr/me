@@ -25,22 +25,19 @@ const Footer: React.FC = () => {
           grid-gap: 1.5rem;
           grid-area: footer;
         }
-        :global(footer .icon) {
+
+        :global(a) {
+          color: var(--accent);
+          transition: color var(--transition);
+          font-weight: 300;
+        }
+        :global(a:hover) {
+          color: var(--highlight);
+        }
+
+        :global(.icon) {
           height: 1.5rem;
           width: 1.5rem;
-          color: var(--accent);
-          transition: color var(--transition);
-        }
-        :global(footer .icon:hover) {
-          color: var(--highlight);
-        }
-        a {
-          font-weight: 300;
-          color: var(--accent);
-          transition: color var(--transition);
-        }
-        a:hover {
-          color: var(--highlight);
         }
       `}</style>
     </footer>

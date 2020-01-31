@@ -3,7 +3,7 @@ import fetch from 'isomorphic-unfetch';
 import { NextPage } from 'next';
 import { useAsync } from 'react-async';
 
-import { Nav, Footer, Head, ExternalLink } from 'components';
+import { Nav, Footer, Head, ExternalLink, KaizenLoading } from 'components';
 import { Star } from 'components/icons';
 import Layout from 'layouts/Layout';
 
@@ -73,18 +73,20 @@ interface ProjectProps {
 }
 
 const Project: React.FC<ProjectProps> = ({ project }) => (
-  <ExternalLink className="project" href={project.svn_url}>
-    <div className="project-language">{project.language}</div>
-    <div className="project-name">{project.name}</div>
-    <div className="project-description">{project.description}</div>
-    <div className="project-stargazers">
-      <span className="stargazers-star">
-        <Star />
-      </span>
-      {project.stargazers_count}
-    </div>
+  <article className="project">
+    <ExternalLink href={project.svn_url}>
+      <div className="project-language">{project.language}</div>
+      <div className="project-name">{project.name}</div>
+      <div className="project-description">{project.description}</div>
+      <div className="project-stargazers">
+        <span className="stargazers-star">
+          <Star />
+        </span>
+        {project.stargazers_count}
+      </div>
+    </ExternalLink>
     <style jsx>{`
-      :global(.project) {
+      .project {
         display: block;
         border: 2px solid;
         border-color: transparent;
@@ -92,12 +94,14 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
         padding: 30px;
         transition: border-color, transform, var(--transition);
       }
-      :global(.project:hover) {
+
+      .project:hover {
         border-color: var(--highlight);
         transform: scale(1.04);
       }
 
-      :global(.project:hover .project-name, .project:hover .project-language) {
+      .project:hover .project-name,
+      .project:hover .project-language {
         color: var(--highlight);
       }
 
@@ -133,91 +137,86 @@ const Project: React.FC<ProjectProps> = ({ project }) => (
         margin-right: 4px;
         display: block;
       }
+
+      @media (max-width: 800px) {
+        .project {
+          padding: 20px;
+        }
+
+        .project:hover {
+          transform: none !important;
+        }
+      }
     `}</style>
-  </ExternalLink>
+  </article>
 );
 
-const KaizenLoading = () => (
-  <div>
-    改善
-    <style jsx>
-      {`
-        div {
-          grid-area: projects;
-          animation-name: color;
-          animation-duration: 2s;
-          animation-iteration-count: infinite;
-          font-size: 64px;
-          display: grid;
-          justify-content: center;
-          align-content: center;
-          max-height: 100%;
-        }
-
-        @keyframes color {
-          0% {
-            color: var(--fg);
-          }
-          50% {
-            color: var(--highlight);
-          }
-          100 {
-            color: var(--fg);
-          }
-        }
-      `}
-    </style>
-  </div>
-);
-
-const Home: NextPage = () => {
+const ProjectsSection: React.FC = () => {
   const { data = [], status } = useAsync(getProjects);
 
   const isLoading = status === 'pending';
   return (
-    <Layout>
-      <Head>
-        <title>Me | Cristian</title>
-      </Head>
-      <Nav />
-      <main>
-        <section className="about">
-          <h1>
-            Hi, <br />
-            I'm Cristian.
-          </h1>
-          <p className="desc">
-            I'm a frontend developer though sometimes I call myself a software developer too. I have
-            a passion for improvement, believing fully in <KaizenLink />.
-          </p>
-          <p className="interests">
-            I love <ParagraphLink href="https://reactjs.org/">React</ParagraphLink>, I love{' '}
-            <ParagraphLink href="https://graphql.org/">GraphQL</ParagraphLink>, and I love{' '}
-            <ParagraphLink href="https://nextjs.org/#features">Next.js</ParagraphLink>.
-          </p>
+    <>
+      {isLoading ? (
+        <KaizenLoading />
+      ) : (
+        <section className="projects">
+          {data.map(project => (
+            <Project project={project} key={project.id} />
+          ))}
         </section>
-        {isLoading ? (
-          <KaizenLoading />
-        ) : (
-          <section className="projects">
-            {data.map(project => (
-              <Project project={project} key={project.id} />
-            ))}
-          </section>
-        )}
-      </main>
-      <Footer />
+      )}
       <style jsx>{`
-        main {
-          grid-area: content;
-          display: grid;
-          grid-template-areas: 'about projects';
-          grid-template-columns: 1fr 1fr;
-          grid-gap: var(--grid-gap-sm);
+        .projects {
+          grid-area: projects;
           max-height: 100%;
-          padding: 50px 0;
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-auto-rows: minmax(min-content, max-content);
+          grid-gap: var(--grid-gap-sm);
+          overflow-y: auto;
+          padding: 10px;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
 
+        .projects:after {
+          content: '';
+          display: block;
+          height: 10px;
+          width: 100%;
+        }
+
+        .projects::-webkit-scrollbar {
+          display: none;
+        }
+        @media (max-width: 800px) {
+          .projects {
+            padding: 0;
+          }
+        }
+      `}</style>
+    </>
+  );
+};
+
+const AboutMeSection: React.FC = () => (
+  <section className="about">
+    <h1>
+      Hi, <br />
+      I'm Cristian.
+    </h1>
+    <p className="desc">
+      I'm a frontend developer though sometimes I call myself a full-stack developer too. I have a
+      passion for improvement, believing fully in <KaizenLink />.
+    </p>
+    <p className="interests">
+      I specialize in <ParagraphLink href="https://reactjs.org/">React</ParagraphLink>, I'm invested
+      in <ParagraphLink href="https://graphql.org/">GraphQL</ParagraphLink>, and I love{' '}
+      <ParagraphLink href="https://nextjs.org/#features">Next.js</ParagraphLink>.
+    </p>
+    <style jsx>
+      {`
         .about {
           grid-area: about;
           display: grid;
@@ -234,7 +233,7 @@ const Home: NextPage = () => {
           grid-area: name;
         }
 
-        .about p {
+        p {
           font-size: 18px;
           font-weight: 100;
         }
@@ -245,29 +244,41 @@ const Home: NextPage = () => {
         .interests {
           grid-area: interests;
         }
+        @media (max-width: 800px) {
+          h1 {
+            font-size: 2.5rem;
+          }
 
-        .projects {
-          grid-area: projects;
-          max-height: 100%;
+          .about p {
+            font-size: 16px;
+          }
+        }
+      `}
+    </style>
+  </section>
+);
+
+const Home: NextPage = () => {
+  return (
+    <Layout>
+      <Head>
+        <title>Me | Cristian</title>
+      </Head>
+      <Nav />
+      <main>
+        <AboutMeSection />
+        <ProjectsSection />
+      </main>
+      <Footer />
+      <style jsx>{`
+        main {
+          grid-area: content;
           display: grid;
-          grid-template-columns: 1fr;
-          grid-auto-rows: minmax(min-content, max-content);
+          grid-template-areas: 'about projects';
+          grid-template-columns: 1fr 1fr;
           grid-gap: var(--grid-gap-sm);
-          overflow-y: auto;
-          padding: 10px;
-          -ms-overflow-style: none; /* IE 11 */
-          scrollbar-width: none; /* Firefox 64 */
-        }
-
-        .projects:after {
-          content: '';
-          display: block;
-          height: 10px;
-          width: 100%;
-        }
-
-        .projects::-webkit-scrollbar {
-          display: none;
+          max-height: 100%;
+          padding: 50px 0;
         }
 
         @media (max-width: 800px) {
@@ -279,26 +290,6 @@ const Home: NextPage = () => {
             padding: 0;
             grid-gap: 1.5rem;
             margin-bottom: 1.5rem;
-          }
-
-          h1 {
-            font-size: 2.5rem;
-          }
-
-          .about p {
-            font-size: 16px;
-          }
-
-          .projects {
-            padding: 0;
-          }
-
-          .project {
-            padding: 20px;
-          }
-
-          :global(.project:hover) {
-            transform: none !important;
           }
         }
       `}</style>
