@@ -71,9 +71,9 @@ function ProjectsSection() {
       ) : (
         <section className="projects">
           {data.map(project => (
-            <ExternalLink href={project.svn_url} aria-label={project.name}>
+            <ExternalLink href={project.svn_url} aria-label={project.name} key={project.id}>
               <article className="project">
-                <caption className="project-language">{project.language}</caption>
+                <div className="project-language">{project.language}</div>
                 <h2 className="project-name">{project.name}</h2>
                 <p className="project-description">{project.description}</p>
                 <div className="project-stargazers">

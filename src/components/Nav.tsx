@@ -2,14 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 
 const storageKey = '__LIGHT';
-const classNameLight = 'light';
+const lightModeClassName = 'light';
 
 const toggleTheme = () => {
-  const lightMode = JSON.parse(localStorage.getItem(storageKey));
-  localStorage.setItem(storageKey, JSON.stringify(!lightMode));
-  lightMode
-    ? document.body.classList.remove(classNameLight)
-    : document.body.classList.add(classNameLight);
+  const lightModeOn = document.body.classList.contains(lightModeClassName);
+  localStorage.setItem(storageKey, JSON.stringify(!lightModeOn));
+  lightModeOn
+    ? document.body.classList.remove(lightModeClassName)
+    : document.body.classList.add(lightModeClassName);
 };
 
 const Nav = () => {
