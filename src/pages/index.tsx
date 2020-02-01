@@ -32,12 +32,12 @@ const Home: NextPage = () => {
         @media (max-width: 800px) {
           main {
             grid-template-areas:
-              'name     name'
-              'about    about'
-              'projects projects';
-            padding: 0;
-            grid-gap: 1.5rem;
+              'about'
+              'projects';
+            grid-template-columns: 1fr;
             margin-bottom: 1.5rem;
+            grid-gap: 2rem;
+            padding: 0;
           }
         }
       `}</style>

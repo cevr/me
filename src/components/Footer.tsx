@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
       <style jsx>{`
         footer {
           display: grid;
-          justify-content: center;
+          justify-content: start;
           align-content: center;
           grid-auto-flow: column;
           grid-gap: 1.5rem;
@@ -38,6 +38,12 @@ const Footer: React.FC = () => {
         :global(.icon) {
           height: 1.5rem;
           width: 1.5rem;
+        }
+
+        @media (max-width: 800px) {
+          footer {
+            justify-content: center;
+          }
         }
       `}</style>
     </footer>
