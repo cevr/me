@@ -26,7 +26,7 @@ const Home: NextPage = () => {
           grid-template-columns: 1fr 1fr;
           grid-gap: var(--grid-gap-sm);
           max-height: 100%;
-          padding: 50px 0;
+          padding-top: 50px;
         }
 
         @media (max-width: 800px) {
