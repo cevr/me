@@ -11,6 +11,7 @@ const Home: NextPage = () => {
     <Layout>
       <Head>
         <title>Me | Cristian</title>
+        <link rel="preconnect" href="https://api.github.com" />
       </Head>
       <Nav />
       <main>
