@@ -21,7 +21,7 @@ function Projects() {
         main {
           grid-area: content;
           display: grid;
-          grid-gap: var(--grid-gap-sm);
+          grid-gap: var(--grid-gap);
           max-height: 100%;
           padding: 50px 0;
           grid-template:

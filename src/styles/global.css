@@ -25,12 +25,18 @@ body {
   --highlight: salmon;
 
   --transition: 0.15s;
-  --grid-gap-sm: 10px;
+  --grid-gap: 10px;
 
   transition: all var(--transition);
   font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica, sans-serif;
   background: var(--bg);
   color: var(--fg);
+}
+
+@media (max-width: 800px) {
+  body {
+    --grid-gap: 20px;
+  }
 }
 
 *::selection {

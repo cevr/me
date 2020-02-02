@@ -24,7 +24,7 @@ const Home: NextPage = () => {
           display: grid;
           grid-template-areas: 'about projects';
           grid-template-columns: 1fr 1fr;
-          grid-gap: var(--grid-gap-sm);
+          grid-gap: var(--grid-gap);
           max-height: 100%;
           padding-top: 50px;
         }
@@ -36,7 +36,6 @@ const Home: NextPage = () => {
               'projects';
             grid-template-columns: 1fr;
             margin-bottom: 1.5rem;
-            grid-gap: 2rem;
             padding: 0;
           }
         }
@@ -70,11 +69,12 @@ function ProjectsSection() {
         <KaizenLoading />
       ) : (
         <section className="projects">
+          <h2>Projects</h2>
           {data.map(project => (
             <ExternalLink href={project.svn_url} aria-label={project.name} key={project.id}>
               <article className="project">
                 <div className="project-language">{project.language}</div>
-                <h2 className="project-name">{project.name}</h2>
+                <h3 className="project-name">{project.name}</h3>
                 <p className="project-description">{project.description}</p>
                 <div className="project-stargazers">
                   <span className="stargazers-star">
@@ -94,7 +94,7 @@ function ProjectsSection() {
           display: grid;
           grid-template-columns: 1fr;
           grid-auto-rows: minmax(min-content, max-content);
-          grid-gap: var(--grid-gap-sm);
+          grid-gap: var(--grid-gap);
           overflow-y: auto;
           padding: 10px;
           -ms-overflow-style: none;
@@ -109,6 +109,10 @@ function ProjectsSection() {
         }
 
         .projects::-webkit-scrollbar {
+          display: none;
+        }
+
+        h2 {
           display: none;
         }
 
@@ -172,6 +176,11 @@ function ProjectsSection() {
             padding: 0;
           }
 
+          h2 {
+            display: initial;
+            font-size: 28px;
+          }
+
           .project {
             padding: 20px;
           }
@@ -211,7 +220,7 @@ function AboutMeSection() {
               'desc'
               'interests';
             grid-auto-rows: min-content;
-            grid-gap: var(--grid-gap-sm);
+            grid-gap: var(--grid-gap);
           }
 
           h1 {

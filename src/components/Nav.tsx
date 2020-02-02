@@ -36,7 +36,7 @@ const Nav = () => {
           display: grid;
           position: sticky;
           grid-area: nav;
-          grid-gap: var(--grid-gap-sm);
+          grid-gap: var(--grid-gap);
           grid-template-columns: 10rem 1fr;
           align-items: center;
         }
