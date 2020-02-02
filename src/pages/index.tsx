@@ -125,30 +125,26 @@ function ProjectsSection() {
   const { data = [], status } = useAsync(getProjects);
 
   const isLoading = status === 'pending';
-  return (
-    <>
-      {isLoading ? (
-        <KaizenLoading />
-      ) : (
-        <section className="projects">
-          <h2>Projects</h2>
-          {data.map(project => (
-            <ExternalLink href={project.svn_url} aria-label={project.name} key={project.id}>
-              <article className="project">
-                <div className="project-language">{project.language}</div>
-                <h3 className="project-name">{project.name}</h3>
-                <p className="project-description">{project.description}</p>
-                <div className="project-stargazers">
-                  <span className="stargazers-star">
-                    <Star aria-hidden />
-                  </span>
-                  {project.stargazers_count}
-                </div>
-              </article>
-            </ExternalLink>
-          ))}
-        </section>
-      )}
+  return isLoading ? (
+    <KaizenLoading />
+  ) : (
+    <section className="projects">
+      <h2>Projects</h2>
+      {data.map(project => (
+        <ExternalLink href={project.svn_url} aria-label={project.name} key={project.id}>
+          <article className="project">
+            <div className="project-language">{project.language}</div>
+            <h3 className="project-name">{project.name}</h3>
+            <p className="project-description">{project.description}</p>
+            <div className="project-stargazers">
+              <span className="stargazers-star">
+                <Star aria-hidden />
+              </span>
+              {project.stargazers_count}
+            </div>
+          </article>
+        </ExternalLink>
+      ))}
       <style jsx>{`
         .projects {
           grid-area: projects;
@@ -252,6 +248,6 @@ function ProjectsSection() {
           }
         }
       `}</style>
-    </>
+    </section>
   );
 }
