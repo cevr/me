@@ -230,7 +230,8 @@ function AboutMeSection() {
 
           p {
             font-size: 18px;
-            font-weight: 200;
+            font-weight: 300;
+            color: var(--accent);
           }
           .desc {
             grid-area: desc;
