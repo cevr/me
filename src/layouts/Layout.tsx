@@ -18,8 +18,7 @@ const Layout: React.FC = ({ children }) => (
 
       @media (min-width: 800px) {
         .layout {
-          grid-template-rows: 60px calc(100vh - (140px + 2rem)) 60px;
-          max-height: 100vh;
+          grid-template-rows: 60px calc(100vh - (120px + 2rem + (var(--grid-gap) * 2))) 60px;
         }
       }
     `}</style>

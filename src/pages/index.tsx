@@ -90,12 +90,12 @@ function AboutMeSection() {
           }
 
           h1 {
-            font-size: 56px;
+            font-size: 3.5rem;
             grid-area: name;
           }
 
           p {
-            font-size: 18px;
+            font-size: 1.125rem;
             font-weight: 300;
             color: var(--accent);
           }
@@ -109,10 +109,6 @@ function AboutMeSection() {
           @media (max-width: 800px) {
             h1 {
               font-size: 2.5rem;
-            }
-
-            .about p {
-              font-size: 16px;
             }
           }
         `}
@@ -196,36 +192,36 @@ function ProjectsSection() {
 
         .project-language {
           text-transform: uppercase;
-          font-size: 12px;
+          font-size: 0.75rem;
           letter-spacing: 2px;
           color: var(--fg);
         }
 
         .project-name {
           text-transform: capitalize;
-          font-size: 26px;
+          font-size: 1.5rem;
           font-weight: 500;
           color: var(--fg);
         }
 
         .project-description {
           color: var(--accent);
-          font-size: 14px;
+          font-size: 0.875rem;
           font-weight: 300;
         }
 
         .project-stargazers {
           color: var(--accent);
-          font-size: 10px;
+          font-size: 0.625rem;
           font-weight: 400;
           margin-top: 8px;
           display: flex;
         }
 
         .stargazers-star {
-          height: 12px;
-          width: 12px;
-          margin-right: 4px;
+          height: 0.75rem;
+          width: 0.75rem;
+          margin-right: 0.25rem;
           display: block;
         }
 
@@ -236,11 +232,11 @@ function ProjectsSection() {
 
           h2 {
             display: initial;
-            font-size: 28px;
+            font-size: 1.75rem;
           }
 
           .project {
-            padding: 20px;
+            padding: 1.25rem;
           }
 
           .project:hover {
