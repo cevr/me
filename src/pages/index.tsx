@@ -60,6 +60,67 @@ function KaizenLink() {
   );
 }
 
+function AboutMeSection() {
+  return (
+    <section className="about">
+      <h1>
+        Hi, <br />
+        I'm Cristian.
+      </h1>
+      <p className="desc">
+        I'm a frontend developer though sometimes I call myself a full-stack developer too. I have a
+        passion for improvement, believing fully in <KaizenLink />.
+      </p>
+      <p className="interests">
+        I specialize in <ButtonLink href="https://reactjs.org/">React</ButtonLink>, I'm invested in{' '}
+        <ButtonLink href="https://graphql.org/">GraphQL</ButtonLink>, and I love{' '}
+        <ButtonLink href="https://nextjs.org/#features">Next.js</ButtonLink>.
+      </p>
+      <style jsx>
+        {`
+          .about {
+            grid-area: about;
+            display: grid;
+            grid-template-areas:
+              'name'
+              'desc'
+              'interests';
+            grid-auto-rows: min-content;
+            grid-gap: var(--grid-gap);
+          }
+
+          h1 {
+            font-size: 56px;
+            grid-area: name;
+          }
+
+          p {
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--accent);
+          }
+          .desc {
+            grid-area: desc;
+          }
+
+          .interests {
+            grid-area: interests;
+          }
+          @media (max-width: 800px) {
+            h1 {
+              font-size: 2.5rem;
+            }
+
+            .about p {
+              font-size: 16px;
+            }
+          }
+        `}
+      </style>
+    </section>
+  );
+}
+
 function ProjectsSection() {
   const { data = [], status } = useAsync(getProjects);
 
@@ -192,66 +253,5 @@ function ProjectsSection() {
         }
       `}</style>
     </>
-  );
-}
-
-function AboutMeSection() {
-  return (
-    <section className="about">
-      <h1>
-        Hi, <br />
-        I'm Cristian.
-      </h1>
-      <p className="desc">
-        I'm a frontend developer though sometimes I call myself a full-stack developer too. I have a
-        passion for improvement, believing fully in <KaizenLink />.
-      </p>
-      <p className="interests">
-        I specialize in <ButtonLink href="https://reactjs.org/">React</ButtonLink>, I'm invested in{' '}
-        <ButtonLink href="https://graphql.org/">GraphQL</ButtonLink>, and I love{' '}
-        <ButtonLink href="https://nextjs.org/#features">Next.js</ButtonLink>.
-      </p>
-      <style jsx>
-        {`
-          .about {
-            grid-area: about;
-            display: grid;
-            grid-template-areas:
-              'name'
-              'desc'
-              'interests';
-            grid-auto-rows: min-content;
-            grid-gap: var(--grid-gap);
-          }
-
-          h1 {
-            font-size: 56px;
-            grid-area: name;
-          }
-
-          p {
-            font-size: 18px;
-            font-weight: 300;
-            color: var(--accent);
-          }
-          .desc {
-            grid-area: desc;
-          }
-
-          .interests {
-            grid-area: interests;
-          }
-          @media (max-width: 800px) {
-            h1 {
-              font-size: 2.5rem;
-            }
-
-            .about p {
-              font-size: 16px;
-            }
-          }
-        `}
-      </style>
-    </section>
   );
 }
