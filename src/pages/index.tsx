@@ -120,10 +120,11 @@ function AboutMeSection() {
 function ProjectsSection() {
   const { data = [], status } = useAsync(getProjects);
 
-  const isLoading = status === 'pending';
-  return isLoading ? (
-    <KaizenLoading />
-  ) : (
+  if (status === 'pending') {
+    return <KaizenLoading />;
+  }
+
+  return (
     <section className="projects">
       <h2>Projects</h2>
       {data.map(project => (
