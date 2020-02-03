@@ -8,7 +8,7 @@ const KaizenLoading = () => (
           animation-name: color;
           animation-duration: 2s;
           animation-iteration-count: infinite;
-          font-size: 64px;
+          font-size: 4rem;
           display: grid;
           justify-content: center;
           align-content: center;

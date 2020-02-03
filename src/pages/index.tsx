@@ -98,6 +98,7 @@ function AboutMeSection() {
             font-size: 1.125rem;
             font-weight: 300;
             color: var(--accent);
+            line-height: 2rem;
           }
           .desc {
             grid-area: desc;

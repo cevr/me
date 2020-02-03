@@ -33,9 +33,12 @@ const Nav = () => {
       </div>
       <style jsx>{`
         nav {
-          display: grid;
-          position: sticky;
           grid-area: nav;
+          position: sticky;
+          top: 0;
+          background-color: var(--bg);
+          transition: background-color var(--transition);
+          display: grid;
           grid-gap: var(--grid-gap);
           grid-template-columns: 10rem 1fr;
           align-items: center;

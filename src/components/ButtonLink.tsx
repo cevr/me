@@ -11,7 +11,7 @@ const ButtonLink: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = ({
     <style jsx>{`
       :global(.paragraph-link) {
         color: var(--highlight);
-        padding: 2px 10px;
+        padding: 0.25rem 0.5rem;
         background-color: var(--link-bg);
         border-radius: 6px;
         transition: background-color var(--transition);
