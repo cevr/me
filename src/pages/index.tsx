@@ -27,10 +27,10 @@ const Home: NextPage = () => {
           grid-template-columns: 1fr 1fr;
           grid-gap: var(--grid-gap);
           max-height: 100%;
-          padding-top: 50px;
+          padding-top: var(--main-padding);
         }
 
-        @media (max-width: 800px) {
+        @media (max-width: 50rem) {
           main {
             grid-template-areas:
               'about'
@@ -107,7 +107,7 @@ function AboutMeSection() {
           .interests {
             grid-area: interests;
           }
-          @media (max-width: 800px) {
+          @media (max-width: 50rem) {
             h1 {
               font-size: 2.5rem;
             }
@@ -152,7 +152,7 @@ function ProjectsSection() {
           grid-auto-rows: minmax(min-content, max-content);
           grid-gap: var(--grid-gap);
           overflow-y: auto;
-          padding: 10px;
+          padding: 0.625rem;
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
@@ -160,7 +160,7 @@ function ProjectsSection() {
         .projects:after {
           content: '';
           display: block;
-          height: 10px;
+          height: 0.625rem;
           width: 100%;
         }
 
@@ -177,7 +177,7 @@ function ProjectsSection() {
           border: 2px solid;
           border-color: transparent;
           background-color: var(--link-bg);
-          padding: 30px;
+          padding: 1.875rem;
           transition: border-color, transform, var(--transition);
         }
 
@@ -216,7 +216,7 @@ function ProjectsSection() {
           color: var(--accent);
           font-size: 0.625rem;
           font-weight: 400;
-          margin-top: 8px;
+          margin-top: 0.5rem;
           display: flex;
         }
 
@@ -227,7 +227,7 @@ function ProjectsSection() {
           display: block;
         }
 
-        @media (max-width: 800px) {
+        @media (max-width: 50rem) {
           .projects {
             padding: 0;
           }

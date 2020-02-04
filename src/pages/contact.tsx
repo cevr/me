@@ -1,6 +1,8 @@
 import { Nav, Footer, Head, ExternalLink } from 'components';
 import Layout from 'layouts/Layout';
 
+const email = 'hello@cvr.im';
+
 function Projects() {
   return (
     <Layout>
@@ -9,10 +11,10 @@ function Projects() {
       </Head>
       <Nav />
       <main>
-        <h1>Let's get in touch</h1>
+        <h1>Don't be shy</h1>
         <blockquote>
-          <ExternalLink className="email" href="mailto:hello@cevr.ca?subject=Hi Cristian!">
-            hello@cevr.ca
+          <ExternalLink className="email" href={`mailto:${email}?subject=Hi Cristian!`}>
+            {email}
           </ExternalLink>
         </blockquote>
       </main>
@@ -23,7 +25,7 @@ function Projects() {
           display: grid;
           grid-gap: var(--grid-gap);
           max-height: 100%;
-          padding: 50px 0;
+          padding-top: var(--main-padding);
           grid-template:
             'title'
             'email';
@@ -53,6 +55,12 @@ function Projects() {
         }
         :global(.email:hover) {
           color: var(--highlight);
+        }
+
+        @media (max-width: 50rem) {
+          main {
+            padding: 0;
+          }
         }
       `}</style>
     </Layout>

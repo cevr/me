@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
           width: 1.5rem;
         }
 
-        @media (max-width: 800px) {
+        @media (max-width: 50rem) {
           footer {
             justify-content: center;
           }

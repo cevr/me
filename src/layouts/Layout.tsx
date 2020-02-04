@@ -5,20 +5,31 @@ const Layout: React.FC = ({ children }) => (
     {children}
     <style jsx>{`
       .layout {
+        --nav-height: 3.75rem;
+        --footer-height: 3.75rem;
+        --vertical-padding: 1rem;
+        --min-content: calc(
+          100vh -
+            (
+              var(--nav-height) + var(--footer-height) + (var(--vertical-padding) * 2) +
+                (var(--grid-gap) * 2)
+            )
+        );
         display: grid;
         grid-template-areas:
           'nav'
           'content'
           'footer';
+        grid-template-rows: var(--nav-height) minmax(var(--min-content), 1fr) var(--footer-height);
         grid-gap: var(--grid-gap);
-        padding: 1rem 2.5rem;
-        max-width: 1080px;
+        padding: var(--vertical-padding) 2.5rem;
+        max-width: 67.5rem;
         margin: auto;
       }
 
-      @media (min-width: 800px) {
+      @media (min-width: 50rem) {
         .layout {
-          grid-template-rows: 60px calc(100vh - (120px + 2rem + (var(--grid-gap) * 2))) 60px;
+          grid-template-rows: var(--nav-height) var(--min-content) var(--footer-height);
         }
       }
     `}</style>

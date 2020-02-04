@@ -25,7 +25,8 @@ body {
   --highlight: salmon;
 
   --transition: 0.15s;
-  --grid-gap: 10px;
+  --grid-gap: 0.625rem;
+  --main-padding: 3.125rem;
 
   transition: all var(--transition);
   font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica, sans-serif;
@@ -33,9 +34,9 @@ body {
   color: var(--fg);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 50rem) {
   body {
-    --grid-gap: 20px;
+    --grid-gap: 1.25rem;
   }
 }
 
