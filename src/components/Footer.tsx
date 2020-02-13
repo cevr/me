@@ -1,17 +1,24 @@
 import React from 'react';
 import Link from 'next/link';
 
-import { Github, Twitter } from './icons';
+import { Github, Twitter, LinkedIn } from './icons';
 import ExternalLink from './ExternalLink';
 
 const Footer: React.FC = () => {
   return (
     <footer>
-      <ExternalLink className="icon" href="https://github.com/cevr" aria-label="Github icon">
+      <ExternalLink className="icon" href="https://github.com/cevr" aria-label="Github profile">
         <Github />
       </ExternalLink>
-      <ExternalLink className="icon" href="https://twitter.com/_cevr_" aria-label="Twitter icon">
+      <ExternalLink className="icon" href="https://twitter.com/_cevr_" aria-label="Twitter profile">
         <Twitter />
+      </ExternalLink>
+      <ExternalLink
+        className="icon"
+        href="https://linkedin.com/in/cevram"
+        aria-label="LinkedIn profile"
+      >
+        <LinkedIn />
       </ExternalLink>
       <Link href="/contact">
         <a>Contact</a>
