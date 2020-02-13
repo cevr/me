@@ -69,11 +69,13 @@ function AboutMeSection() {
       </h1>
       <p className="desc">
         I'm a frontend developer though sometimes I call myself a full-stack developer too. I have a
-        passion for improvement, believing fully in <KaizenLink />.
+        passion for improvement, believing fully in <KaizenLink />. I'm looking to do what I can
+        with a keyboard at hand.
       </p>
       <p className="interests">
         I specialize in <ButtonLink href="https://reactjs.org/">React</ButtonLink>, I'm invested in{' '}
-        <ButtonLink href="https://graphql.org/">GraphQL</ButtonLink>, and I love{' '}
+        <ButtonLink href="https://graphql.org/">GraphQL</ButtonLink>, I'm super interested in{' '}
+        <ButtonLink href="https://reasonml.github.io/">ReasonML</ButtonLink>and I love{' '}
         <ButtonLink href="https://nextjs.org/#features">Next.js</ButtonLink>.
       </p>
       <style jsx>
