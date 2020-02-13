@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
       </ExternalLink>
       <ExternalLink
         className="icon"
-        href="https://linkedin.com/in/cevram"
+        href="https://linkedin.com/in/cristianvr"
         aria-label="LinkedIn profile"
       >
         <LinkedIn />
