@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
       <ExternalLink className="icon" href="https://github.com/cevr" aria-label="Github profile">
         <Github />
       </ExternalLink>
-      <ExternalLink className="icon" href="https://twitter.com/_cevr_" aria-label="Twitter profile">
+      <ExternalLink className="icon" href="https://twitter.com/_cristianvr_" aria-label="Twitter profile">
         <Twitter />
       </ExternalLink>
       <ExternalLink
