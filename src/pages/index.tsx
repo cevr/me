@@ -75,7 +75,7 @@ function AboutMeSection() {
       <p className="interests">
         I specialize in <ButtonLink href="https://reactjs.org/">React</ButtonLink>, I'm invested in{' '}
         <ButtonLink href="https://graphql.org/">GraphQL</ButtonLink>, I'm super interested in{' '}
-        <ButtonLink href="https://reasonml.github.io/">ReasonML</ButtonLink>and I love{' '}
+        <ButtonLink href="https://reasonml.github.io/">ReasonML</ButtonLink> and I love{' '}
         <ButtonLink href="https://nextjs.org/#features">Next.js</ButtonLink>.
       </p>
       <style jsx>
