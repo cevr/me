@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 
+import LightSwitch from './icons/LightSwitch';
+
 const storageKey = '__LIGHT';
 const lightModeClassName = 'light';
 
@@ -22,15 +24,9 @@ const Nav = () => {
           </a>
         </Link>
       </div>
-      <div className="toggler-container">
-        <button
-          aria-label="Toggle Theme"
-          title="Toggle Theme"
-          type="button"
-          className="theme-toggler"
-          onClick={toggleTheme}
-        />
-      </div>
+      <button className="switch" onClick={toggleTheme}>
+        <LightSwitch aria-label="Toggle Theme" />
+      </button>
       <style jsx>{`
         nav {
           grid-area: nav;
@@ -55,22 +51,24 @@ const Nav = () => {
           color: var(--highlight);
         }
 
-        .toggler-container {
+        .switch {
           justify-self: end;
-        }
-
-        .theme-toggler {
-          --size: 1.25rem;
+          --size: 2.5rem;
           height: var(--size);
           width: var(--size);
-          border: 2px solid var(--fg);
-          border-radius: 50%;
-          background: transparent;
+          color: var(--fg);
           cursor: pointer;
-          transition: border-color var(--transition) ease-in-out;
+          transition: color var(--transition) ease-in-out;
+          border-radius: 0.25rem;
         }
-        .theme-toggler:hover {
-          border-color: var(--highlight);
+        .switch:hover {
+          color: var(--highlight);
+        }
+
+        @media (min-width: 50rem) {
+          .switch {
+            margin-right: 0.625rem;
+          }
         }
       `}</style>
     </nav>

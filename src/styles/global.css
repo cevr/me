@@ -16,6 +16,22 @@
   --accent: #495057;
   --highlight: #0b7285;
 }
+.light #switch-on {
+  visibility: hidden;
+}
+
+.light #switch-off {
+  visibility: visible;
+}
+
+#switch-off {
+  visibility: hidden;
+}
+
+#switch-on {
+  visibility: visible;
+}
+
 body {
   --bg: #212529;
   --fg: #f8f9fa;
