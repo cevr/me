@@ -8,6 +8,7 @@ function LightSwitch(props: React.SVGProps<SVGSVGElement>) {
       height="100%"
       width="100%"
       fill="currentColor"
+      aria-role="presentation"
       {...props}
     >
       <title>Light Switch</title>
