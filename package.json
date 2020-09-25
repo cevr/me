@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"yarn res:start\" \"next dev\"",
     "vercel:dev": "concurrently \"yarn res:start\" \"vercel dev\"",
-    "build": "res:build && next build",
+    "build": "yarn res:build && next build",
     "start": "next start",
     "res:build": "bsb -make-world",
     "res:clean": "bsb -clean-world",
