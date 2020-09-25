@@ -1,5 +1,9 @@
+let lightModeClassName = "light";
+
 [@react.component]
-let make = (~children: option(React.element)=?) =>
+let make = (~children: option(React.element)=?) => {
+  let lightModeOn = Document.bodyClassListContains(lightModeClassName);
+
   <Next.Head>
     {switch (children) {
      | Some(children) => children
@@ -23,9 +27,10 @@ let make = (~children: option(React.element)=?) =>
       href="/favicon-16x16.png"
     />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#121315" />
+    <meta name="theme-color" content={lightModeOn ? "#0b7285" : "#FF8C69"} />
     <meta
       name="Description"
       content="A developer who's interested in working with you. Let's find out more!"
     />
   </Next.Head>;
+};

@@ -26,11 +26,8 @@ let getServerSideProps = _context => {
          ),
        )
      })
-  |> Js.Promise.then_(projects => {
-       Js.Promise.resolve({
-         "props": {
-           "projects": projects,
-         },
-       })
+  |> Js.Promise.then_(result => {
+       let props: props = {projects: result};
+       Js.Promise.resolve({"props": props});
      });
 };

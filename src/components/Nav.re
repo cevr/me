@@ -1,19 +1,3 @@
-module Document = {
-  [@val]
-  external bodyClassListContains: string => bool =
-    "document.body.classList.contains";
-  [@val]
-  external bodyClassListRemove: string => unit =
-    "document.body.classList.remove";
-  [@val]
-  external bodyClassListAdd: string => unit = "document.body.classList.add";
-};
-
-module LocalStorage = {
-  [@val] external set: (string, string) => unit = "localStorage.setItem";
-  [@val] external remove: string => unit = "localStorage.removeItem";
-};
-
 type styles = {
   nav: string,
   logo: string,
@@ -27,12 +11,9 @@ let lightModeClassName = "light";
 
 let toggleTheme = (_event: ReactEvent.Mouse.t) => {
   let lightModeOn = Document.bodyClassListContains(lightModeClassName);
-  let nextLightModeValue = Js.Json.stringifyAny(!lightModeOn);
+  let nextLightModeValue = Js.Json.boolean(!lightModeOn);
 
-  switch (nextLightModeValue) {
-  | Some(string) => LocalStorage.set(storageKey, string)
-  | None => LocalStorage.remove(storageKey)
-  };
+  LocalStorage.set(storageKey, nextLightModeValue);
 
   lightModeOn
     ? Document.bodyClassListRemove(lightModeClassName)

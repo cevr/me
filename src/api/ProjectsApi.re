@@ -53,17 +53,6 @@ let unsafeRemoveUndefined = [%raw
   "(obj) => Object.fromEntries(Object.entries(obj).filter(([_key, value]) => value !== undefined))"
 ];
 
-module GraphqlRequest = {
-  type clientOptions('options) = Js.t('options);
-  type client;
-  type data = Js.Json.t;
-  [@new] [@module "graphql-request"]
-  external make: (string, clientOptions('options)) => client =
-    "GraphQLClient";
-  [@bs.send]
-  external request: (client, string) => Js.Promise.t(data) = "request";
-};
-
 let client =
   GraphqlRequest.make(
     "https://api.github.com/graphql",
