@@ -4,6 +4,8 @@ type styles = {
 };
 [@module "./Footer.module.css"] external styles: styles = "default";
 
+let email = "hello@cvr.im";
+
 [@react.component]
 let make = () =>
   <footer className={styles.footer}>
@@ -25,5 +27,10 @@ let make = () =>
       ariaLabel="LinkedIn profile">
       <LinkedIn />
     </ExternalLink>
-    <Next.Link href="/contact"> <a> "Contact"->React.string </a> </Next.Link>
+    <ExternalLink
+      className={styles.icon}
+      href={j|mailto:$email?subject=Hi Cristian!|j}
+      ariaLabel="email">
+      <Email />
+    </ExternalLink>
   </footer>;
