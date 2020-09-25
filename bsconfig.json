@@ -9,11 +9,7 @@
     "decco",
     "@reasonml-community/graphql-ppx"
   ],
-  "ppx-flags": [
-    "bs-let/ppx",
-    "decco/ppx",
-    "@reasonml-community/graphql-ppx/ppx"
-  ],
+  "ppx-flags": ["decco/ppx", "@reasonml-community/graphql-ppx/ppx"],
   "sources": [{ "dir": "src", "subdirs": true }, "bindings"],
   "package-specs": {
     "module": "es6",
@@ -24,10 +20,5 @@
     "error": "+101+8",
     "number": "-44"
   },
-  "bsc-flags": ["-bs-no-version-header", "-bs-super-errors"],
-  "gentypeconfig": {
-    "language": "untyped",
-    "shims": [],
-    "module": "es6"
-  }
+  "bsc-flags": ["-bs-no-version-header", "-bs-super-errors"]
 }

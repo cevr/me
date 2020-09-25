@@ -1,6 +1,3 @@
-%raw
-"import 'isomorphic-unfetch'";
-
 type styles = {home: string};
 [@module "./index.module.css"] external styles: styles = "default";
 
