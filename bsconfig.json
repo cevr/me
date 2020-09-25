@@ -3,9 +3,9 @@
   "namespace": false,
   "reason": { "react-jsx": 3 },
   "refmt": 3,
+  "sources": [{ "dir": "src", "subdirs": true }],
   "bs-dependencies": ["reason-react", "re-classnames", "decco"],
   "ppx-flags": ["decco/ppx"],
-  "sources": [{ "dir": "src", "subdirs": true }, "bindings"],
   "package-specs": {
     "module": "es6",
     "in-source": true

@@ -9,7 +9,6 @@ module.exports = withTM(
       TOKEN: process.env.TOKEN,
     },
     target: "serverless",
-    transpileModules: ["bs-platform"].concat(bsconfig["bs-dependencies"]),
     transformManifest: (manifest) => ["/"].concat(manifest),
     webpack(config) {
       config.resolve.modules.push(`${__dirname}/src`);
