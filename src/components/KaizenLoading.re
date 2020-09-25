@@ -6,4 +6,4 @@ type styles = {
 
 [@react.component]
 let make = () =>
-  <div className={styles.kaizenLoading}> {|改善|}->React.string </div>;
+  <div className={styles.kaizenLoading}> {j|改善|j}->React.string </div>;

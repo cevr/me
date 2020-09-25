@@ -10,7 +10,7 @@ let make = () =>
     <g
       id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <image
-        id={|改善|}
+        id={j|改善|j}
         x="-3"
         y="-2"
         width="500"

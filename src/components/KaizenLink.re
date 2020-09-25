@@ -6,6 +6,6 @@ let make = () => {
     onMouseEnter={_ => setHovered(_ => true)}
     onMouseLeave={_ => setHovered(_ => false)}
     href="https://en.wikipedia.org/wiki/Kaizen">
-    {hovered ? "kaizen" : {|改善|}}->React.string
+    {hovered ? "kaizen" : {j|改善|j}}->React.string
   </ButtonLink>;
 };
