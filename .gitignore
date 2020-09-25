@@ -23,5 +23,11 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-yarn.lock
-.now
+.vercel
+
+# rescript
+**.js
+!_document.js
+.bsb.lock
+.merlin
+lib/

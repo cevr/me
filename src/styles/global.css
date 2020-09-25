@@ -1,11 +1,11 @@
 /* purgecss start ignore */
-@import 'tailwindcss/base';
+@import "tailwindcss/base";
 
 @font-face {
   font-family: Megrim;
   font-style: normal;
   font-weight: 400;
-  src: local('Megrim'), url('/fonts/megrim.ttf') format('truetype');
+  src: local("Megrim"), url("/fonts/megrim.ttf") format("truetype");
 }
 
 .light {
@@ -45,7 +45,8 @@ body {
   --main-padding: 3.125rem;
 
   transition: all var(--transition);
-  font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica,
+    sans-serif;
   background: var(--bg);
   color: var(--fg);
 }
@@ -60,4 +61,18 @@ body {
   background: var(--fg);
   color: var(--bg);
 }
+
+.paragraph-link {
+  color: var(--highlight);
+  padding: 0.25rem 0.5rem;
+  background-color: var(--link-bg);
+  border-radius: 6px;
+  transition: background-color var(--transition);
+  white-space: nowrap;
+}
+.paragraph-link:hover {
+  background-color: var(--highlight);
+  color: var(--link-hover-fg);
+}
+
 /* purgecss end ignore */
