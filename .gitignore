@@ -26,7 +26,8 @@ yarn-error.log*
 .vercel
 
 # rescript
-**.js
+src/**/*.js
+bindings/**/*.js
 !_document.js
 .bsb.lock
 .merlin
