@@ -1,13 +1,23 @@
 type styles = {home: string};
 [@module "./index.module.css"] external styles: styles = "default";
 
+let lightModeClassName = "light";
+
 type props = {projects: array(ProjectsApi.project)};
 
 let default = (props: props) => {
+  let (lightMode, setLightMode) = React.useState(() => true);
+
+  React.useEffect0(() => {
+    let lightModeOn = Document.bodyClassListContains(lightModeClassName);
+    setLightMode(_ => lightModeOn);
+    None;
+  });
+
   <Layout>
     <Head>
       <title> "Me | Cristian"->React.string </title>
-      <link rel="preconnect" href="https://api.github.com" />
+      <meta name="theme-color" content={lightMode ? "#0b7285" : "#FF8C69"} />
     </Head>
     <Nav />
     <main className={styles.home}>

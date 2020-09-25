@@ -19,7 +19,6 @@
       "purpose": "any maskable"
     }
   ],
-  "theme_color": "#FF8C69",
   "background_color": "#212529",
   "display": "standalone",
   "start_url": "/?source=pwa",
