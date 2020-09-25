@@ -1,8 +1,7 @@
 [@val] external token: string = "process.env.token";
 
-module Me = [%graphql
-  {|
-  query Me {
+let repositoriesQuery = {|
+  query {
      user(login: "cevr") {
       repositories(first: 25, orderBy: {field: STARGAZERS, direction: DESC}, isFork: false, affiliations: [OWNER]) {
         edges {
@@ -21,8 +20,7 @@ module Me = [%graphql
       }
     }
   }
-|}
-];
+|};
 
 [@decco.decode]
 type primaryLanguage = {name: string};
@@ -51,7 +49,7 @@ type user = {repositories};
 type grapqhqlResponse = {user};
 
 // had to use this escape hatch since null doesnt work well in reason
-let removeUndefined = [%raw
+let unsafeRemoveUndefined = [%raw
   "(obj) => Object.fromEntries(Object.entries(obj).filter(([_key, value]) => value !== undefined))"
 ];
 
@@ -71,13 +69,13 @@ let client =
     "https://api.github.com/graphql",
     {
       "headers": {
-        "Authorization": {j|Bearer $token|j},
+        "Authorization": {|Bearer $token|},
       },
     },
   );
 
 let get = () =>
-  GraphqlRequest.request(client, Me.query)
+  GraphqlRequest.request(client, repositoriesQuery)
   |> Js.Promise.then_(data => {
        Js.Promise.resolve(data->grapqhqlResponse_decode)
      })
@@ -87,7 +85,7 @@ let get = () =>
          Js.Promise.resolve(
            data.user.repositories.edges
            // decco decodes null as undefined, but nextjs cant serialize explicitly undefined values
-           ->Belt.Array.map(edge => removeUndefined(edge.node)),
+           ->Belt.Array.map(edge => unsafeRemoveUndefined(edge.node)),
          )
        | Error(_) => Js.Promise.resolve([||])
        }

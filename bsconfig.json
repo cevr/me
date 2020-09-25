@@ -3,13 +3,8 @@
   "namespace": false,
   "reason": { "react-jsx": 3 },
   "refmt": 3,
-  "bs-dependencies": [
-    "reason-react",
-    "re-classnames",
-    "decco",
-    "@reasonml-community/graphql-ppx"
-  ],
-  "ppx-flags": ["decco/ppx", "@reasonml-community/graphql-ppx/ppx"],
+  "bs-dependencies": ["reason-react", "re-classnames", "decco"],
+  "ppx-flags": ["decco/ppx"],
   "sources": [{ "dir": "src", "subdirs": true }, "bindings"],
   "package-specs": {
     "module": "es6",
@@ -20,5 +15,5 @@
     "error": "+101+8",
     "number": "-44"
   },
-  "bsc-flags": ["-bs-no-version-header", "-bs-super-errors"]
+  "bsc-flags": ["-bs-no-version-header", "-bs-super-errors", "-bs-g"]
 }
