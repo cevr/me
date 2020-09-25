@@ -4,7 +4,7 @@ module Me = [%graphql
   {|
   query Me {
      user(login: "cevr") {
-      repositories(first: 25, orderBy: {field: STARGAZERS, direction: DESC}, isFork: false) {
+      repositories(first: 25, orderBy: {field: STARGAZERS, direction: DESC}, isFork: false, affiliations: [OWNER]) {
         edges {
           node {
             description
