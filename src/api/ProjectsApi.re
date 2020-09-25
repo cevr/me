@@ -69,7 +69,7 @@ let client =
     "https://api.github.com/graphql",
     {
       "headers": {
-        "Authorization": {|Bearer $token|},
+        "Authorization": {j|Bearer $token|j},
       },
     },
   );

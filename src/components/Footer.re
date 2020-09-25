@@ -29,7 +29,7 @@ let make = () =>
     </ExternalLink>
     <ExternalLink
       className={styles.icon}
-      href={|mailto:$email?subject=Hi Cristian!|}
+      href={j|mailto:$email?subject=Hi Cristian!|j}
       ariaLabel="email">
       <Email />
     </ExternalLink>
