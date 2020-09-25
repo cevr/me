@@ -15,5 +15,5 @@
     "error": "+101+8",
     "number": "-44"
   },
-  "bsc-flags": ["-bs-no-version-header", "-bs-super-errors", "-bs-g"]
+  "bsc-flags": ["-bs-no-version-header", "-bs-super-errors"]
 }
