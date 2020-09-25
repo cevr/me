@@ -9,20 +9,32 @@ type styles = {
 let storageKey = "__LIGHT";
 let lightModeClassName = "light";
 
-let toggleTheme = (_event: ReactEvent.Mouse.t) => {
-  let lightModeOn = Document.bodyClassListContains(lightModeClassName);
-  let nextLightModeValue = Js.Json.boolean(!lightModeOn);
-
-  LocalStorage.set(storageKey, nextLightModeValue);
-
-  lightModeOn
-    ? Document.bodyClassListRemove(lightModeClassName)
-    : Document.bodyClassListAdd(lightModeClassName);
-};
-
 [@react.component]
-let make = () =>
+let make = () => {
+  let (lightMode, setLightMode) = React.useState(() => false);
+
+  React.useEffect0(() => {
+    let lightModeOn = Document.bodyClassListContains(lightModeClassName);
+    setLightMode(_ => lightModeOn);
+    None;
+  });
+
+  let toggleTheme = (_event: ReactEvent.Mouse.t) => {
+    let lightModeOn = Document.bodyClassListContains(lightModeClassName);
+    let nextLightModeValue = !lightModeOn;
+
+    setLightMode(_ => nextLightModeValue);
+    LocalStorage.set(storageKey, Js.Json.boolean(nextLightModeValue));
+
+    lightModeOn
+      ? Document.bodyClassListRemove(lightModeClassName)
+      : Document.bodyClassListAdd(lightModeClassName);
+  };
+
   <nav className={styles.nav}>
+    <Head>
+      <meta name="theme-color" content={lightMode ? "#0b7285" : "#FF8C69"} />
+    </Head>
     <div>
       <Next.Link href="/">
         <a className={styles.logo} ariaLabel="logo" title="Logo">
@@ -34,3 +46,4 @@ let make = () =>
       <LightSwitch ariaLabel="Toggle Theme" />
     </button>
   </nav>;
+};
