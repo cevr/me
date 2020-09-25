@@ -61,8 +61,7 @@ let make = () => {
       </span>
     </h1>
     <p className={styles.desc}>
-      "I'm a frontend developer though sometimes I call myself a full-stack
-        developer too. I have a passion for improvement, believing fully in "
+      "I tell people I'm a software developer because for some reason it feels better than saying I'm web developer. I have a passion for improvement, believing fully in "
       ->React.string
       <KaizenLink />
       ". I'm looking to do what I can with a keyboard at hand."->React.string
@@ -72,7 +71,7 @@ let make = () => {
       <ButtonLink href="https://reactjs.org/">
         "React"->React.string
       </ButtonLink>
-      ", I'm invested in "->React.string
+      ", I'm a fan of "->React.string
       <ButtonLink href="https://graphql.org/">
         "GraphQL"->React.string
       </ButtonLink>
@@ -89,9 +88,9 @@ let make = () => {
       <br />
       "In fact, "->React.string
       <ButtonLink href="https://github.com/cevr/me">
-        "this project"->React.string
+        "this website"->React.string
       </ButtonLink>
-      " is using all of those technologies!"->React.string
+      " is using all of them!"->React.string
     </p>
   </section>;
 };
