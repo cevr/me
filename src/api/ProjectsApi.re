@@ -46,7 +46,7 @@ type repositories = {edges: array(edge)};
 type user = {repositories};
 
 [@decco.decode]
-type grapqhqlResponse = {user};
+type response = {user};
 
 // had to use this escape hatch since null doesnt work well in reason
 let unsafeRemoveUndefined = [%raw
@@ -65,9 +65,7 @@ let client =
 
 let get = () =>
   GraphqlRequest.request(client, repositoriesQuery)
-  |> Js.Promise.then_(data => {
-       Js.Promise.resolve(data->grapqhqlResponse_decode)
-     })
+  |> Js.Promise.then_(data => {Js.Promise.resolve(data->response_decode)})
   |> Js.Promise.then_(data => {
        switch (data) {
        | Ok(data) =>

@@ -10,8 +10,34 @@
 }
 
 .about h1 {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   grid-area: name;
+  font-family: "megrim";
+  max-width: 100%;
+}
+
+.first-name {
+  display: inline-flex;
+  overflow: hidden;
+  width: 0;
+  animation: first-name 1s ease-in forwards;
+  animation-iteration-count: 1;
+}
+
+.first-family-name {
+  display: inline-flex;
+  overflow: hidden;
+  width: 0;
+  animation: first-family-name 1s ease-in forwards;
+  animation-iteration-count: 1;
+}
+
+.second-family-name {
+  display: inline-flex;
+  overflow: hidden;
+  width: 0;
+  animation: second-family-name 1s ease-in forwards;
+  animation-iteration-count: 1;
 }
 
 .about p {
@@ -20,6 +46,7 @@
   color: var(--accent);
   line-height: 2rem;
 }
+
 .about .desc {
   grid-area: desc;
 }
@@ -27,8 +54,31 @@
 .about .interests {
   grid-area: interests;
 }
+
+@keyframes first-name {
+  100% {
+    width: 130px;
+  }
+}
+
+@keyframes first-family-name {
+  100% {
+    width: 175px;
+  }
+}
+
+@keyframes second-family-name {
+  100% {
+    width: 95px;
+  }
+}
+
 @media (max-width: 50rem) {
   .about h1 {
     font-size: 2.5rem;
+  }
+
+  .name {
+    display: block;
   }
 }
