@@ -1,4 +1,3 @@
-/* purgecss start ignore */
 @import "tailwindcss/base";
 
 @font-face {
@@ -75,5 +74,3 @@ body {
   background-color: var(--highlight);
   color: var(--link-hover-fg);
 }
-
-/* purgecss end ignore */
