@@ -22,18 +22,16 @@ type styles = {
 };
 [@module "./AboutMe.module.css"] external styles: styles = "default";
 
-[@react.component]
-let make = () => {
-  let (showFull, setShowFull) = React.useState(() => false);
+module NameTitle = {
+  [@react.component]
+  let make = () => {
+    let (showFull, setShowFull) = React.useState(() => false);
 
-  React.useEffect0(() => {
-    let onFocus = () => setTimeout(() => setShowFull(_ => true), 1000);
-    onFocus();
-    windowAddEventListener("focus", onFocus);
-    Some(() => windowRemoveEventListener("focus", onFocus));
-  });
+    React.useEffect0(() => {
+      setTimeout(() => setShowFull(_ => true), 1500);
+      None;
+    });
 
-  <section className={styles.about}>
     <h1>
       <span className={styles.name}>
         <span> "C"->React.string </span>
@@ -59,7 +57,14 @@ let make = () => {
              </span>
            : React.null}
       </span>
-    </h1>
+    </h1>;
+  };
+};
+
+[@react.component]
+let make = () => {
+  <section className={styles.about}>
+    <NameTitle />
     <p className={styles.desc}>
       "I tell people I'm a software developer because for some reason it feels better than saying I'm web developer. I have a passion for improvement, believing fully in "
       ->React.string
