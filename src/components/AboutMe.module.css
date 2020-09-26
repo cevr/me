@@ -20,7 +20,7 @@
   display: inline-flex;
   overflow: hidden;
   width: 0;
-  animation: first-name 1s ease-in forwards;
+  animation: first-name 1.5s ease-in-out forwards;
   animation-iteration-count: 1;
 }
 
@@ -28,7 +28,7 @@
   display: inline-flex;
   overflow: hidden;
   width: 0;
-  animation: first-family-name 1s ease-in forwards;
+  animation: first-family-name 1.5s ease-in-out forwards;
   animation-iteration-count: 1;
 }
 
@@ -36,7 +36,7 @@
   display: inline-flex;
   overflow: hidden;
   width: 0;
-  animation: second-family-name 1s ease-in forwards;
+  animation: second-family-name 1.5s ease-in-out forwards;
   animation-iteration-count: 1;
 }
 
