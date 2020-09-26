@@ -5,15 +5,7 @@ const withTM = require("next-transpile-modules")(transpileModules);
 
 module.exports = withTM(
   withOffline({
-    env: {
-      TOKEN: process.env.TOKEN,
-    },
     target: "serverless",
-    transformManifest: (manifest) => ["/"].concat(manifest),
-    webpack(config) {
-      config.resolve.modules.push(`${__dirname}/src`);
-      return config;
-    },
     workboxOpts: {
       swDest: "static/service-worker.js",
       runtimeCaching: [

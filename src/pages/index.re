@@ -14,7 +14,7 @@ let default = (props: props) => {
     <Footer />
   </Layout>;
 };
-let getServerSideProps = _context => {
+let getStaticProps = _context => {
   ProjectsApi.get()
   |> Js.Promise.then_((result: array(ProjectsApi.project)) => {
        Js.Promise.resolve(
@@ -25,6 +25,6 @@ let getServerSideProps = _context => {
      })
   |> Js.Promise.then_(result => {
        let props: props = {projects: result};
-       Js.Promise.resolve({"props": props});
+       Js.Promise.resolve({"props": props, "revalidate": 1});
      });
 };

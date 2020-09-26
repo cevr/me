@@ -34,7 +34,12 @@ module GetStaticProps = {
   };
 
   type t('props, 'params, 'previewData) =
-    context('props, 'params, 'previewData) => Js.Promise.t({. "props": 'props});
+    context('props, 'params, 'previewData) =>
+    Js.Promise.t({
+      .
+      "props": 'props,
+      "revalidate": int,
+    });
 };
 
 module GetStaticPaths = {

@@ -48,7 +48,7 @@ type user = {repositories};
 [@decco.decode]
 type response = {user};
 
-// had to use this escape hatch since null doesnt work well in reason
+// had to use this escape hatch since nextjs encodes/decodes props themselves within get{Static|ServerSide}Props
 let unsafeRemoveUndefined = [%raw
   "(obj) => Object.fromEntries(Object.entries(obj).filter(([_key, value]) => value !== undefined))"
 ];
