@@ -17,7 +17,7 @@ let minContent = {|calc(
 [@react.component]
 let make = (~children: React.element) => {
   let divRef = React.useRef(Js.Nullable.null);
-  React.useEffect0(() => {
+  React.useLayoutEffect0(() => {
     switch (Js.Nullable.toOption(divRef.current)) {
     | Some(ref) => ref->setProperty("--min-content", minContent)
     | None => ()

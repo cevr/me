@@ -13,7 +13,7 @@ let lightModeClassName = "light";
 let make = () => {
   let (lightMode, setLightMode) = React.useState(() => false);
 
-  React.useEffect0(() => {
+  React.useLayoutEffect0(() => {
     let lightModeOn = Document.bodyClassListContains(lightModeClassName);
     setLightMode(_ => lightModeOn);
     None;
