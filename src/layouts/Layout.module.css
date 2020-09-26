@@ -2,13 +2,6 @@
   --nav-height: 3.75rem;
   --footer-height: 3.75rem;
   --vertical-padding: 1rem;
-  --min-content: calc(
-    100vh -
-      (
-        var(--nav-height) + var(--footer-height) + (var(--vertical-padding) * 2) +
-          (var(--grid-gap) * 2)
-      )
-  );
   display: grid;
   grid-template-areas:
     "nav"
