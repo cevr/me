@@ -49,7 +49,7 @@ type user = {repositories};
 type response = {user};
 
 // had to use this escape hatch since nextjs encodes/decodes props themselves within get{Static|ServerSide}Props
-let unsafeRemoveUndefined = [%raw
+let unsafeRemoveUndefined: project => project = [%raw
   "(obj) => Object.fromEntries(Object.entries(obj).filter(([_key, value]) => value !== undefined))"
 ];
 
