@@ -72,7 +72,10 @@ let get = () =>
          Js.Promise.resolve(
            data.user.repositories.edges
            // decco decodes null as undefined, but nextjs cant serialize explicitly undefined values
-           ->Belt.Array.map(edge => unsafeRemoveUndefined(edge.node)),
+           ->Belt.Array.map(edge => unsafeRemoveUndefined(edge.node))
+           ->Belt.Array.keep(project =>
+               project.stargazerCount > 1 && !project.isArchived
+             ),
          )
        | Error(_) => Js.Promise.resolve([||])
        }
