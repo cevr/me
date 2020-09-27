@@ -15,6 +15,7 @@
     "graphql": "^15.3.0",
     "graphql-request": "^3.1.0",
     "next": "9.5.3",
+    "preflight.css": "^0.1.1",
     "re-classnames": "^5.0.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -25,9 +26,6 @@
     "concurrently": "5.3.0",
     "next-offline": "5.0.2",
     "next-transpile-modules": "4.1.0",
-    "postcss-import": "12.0.1",
-    "postcss-preset-env": "6.7.0",
-    "tailwindcss": "1.8.10",
     "vercel": "20.1.1"
   }
 }

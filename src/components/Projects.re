@@ -44,7 +44,7 @@ let make = (~projects: array(ProjectsApi.project)) =>
                {{
                   project.stargazerCount;
                 }
-                ->string_of_int
+                ->Belt.Int.toString
                 ->React.string}
              </div>
            </article>

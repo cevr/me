@@ -1,4 +1,6 @@
 %raw
+"import 'preflight.css'";
+%raw
 "import '../styles/global.css'";
 
 type pageProps = {.};
