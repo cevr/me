@@ -11,6 +11,8 @@ type styles = {
   desc: string,
   interests: string,
   name: string,
+  [@as "animating-name"]
+  animatingName: string,
   [@as "name-hidden"]
   nameHidden: string,
   [@as "first-name"]
@@ -36,7 +38,7 @@ module NameTitle = {
       <span className={styles.name}>
         <span> "C"->React.string </span>
         {showFull
-           ? <span className={styles.firstName}>
+           ? <span className=Cn.(styles.animatingName + styles.firstName)>
                "ristian "->React.string
              </span>
            : React.null}
@@ -44,7 +46,8 @@ module NameTitle = {
       <span className={styles.name}>
         <span> "V"->React.string </span>
         {showFull
-           ? <span className={styles.firstFamilyName}>
+           ? <span
+               className=Cn.(styles.animatingName + styles.firstFamilyName)>
                "elasquez "->React.string
              </span>
            : React.null}
@@ -52,7 +55,8 @@ module NameTitle = {
       <span className={styles.name}>
         <span> "R"->React.string </span>
         {showFull
-           ? <span className={styles.secondFamilyName}>
+           ? <span
+               className=Cn.(styles.animatingName + styles.secondFamilyName)>
                "amos"->React.string
              </span>
            : React.null}

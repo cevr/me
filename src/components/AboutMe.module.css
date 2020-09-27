@@ -16,28 +16,23 @@
   max-width: 100%;
 }
 
-.first-name {
+.animating-name {
   display: inline-flex;
   overflow: hidden;
   width: 0;
-  animation: first-name 1.5s ease-in-out forwards;
   animation-iteration-count: 1;
+}
+
+.first-name {
+  animation: first-name 1.5s ease-in-out forwards;
 }
 
 .first-family-name {
-  display: inline-flex;
-  overflow: hidden;
-  width: 0;
   animation: first-family-name 1.5s ease-in-out forwards;
-  animation-iteration-count: 1;
 }
 
 .second-family-name {
-  display: inline-flex;
-  overflow: hidden;
-  width: 0;
   animation: second-family-name 1.5s ease-in-out forwards;
-  animation-iteration-count: 1;
 }
 
 .about p {
