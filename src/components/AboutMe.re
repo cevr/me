@@ -70,7 +70,7 @@ let make = () => {
   <section className={styles.about}>
     <NameTitle />
     <p className={styles.desc}>
-      "I tell people I'm a software developer because for some reason it feels better than saying I'm web developer. I have a passion for improvement, believing fully in "
+      "A growing developer with a heart of code. I have a passion for improvement, believing fully in "
       ->React.string
       <KaizenLink />
       ". I'm looking to do what I can with a keyboard at hand."->React.string
