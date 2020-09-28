@@ -1,10 +1,10 @@
 [@val] external setTimeout: (unit => unit, int) => unit = "setTimeout";
-[@val]
+[@val] [@scope "window"]
 external windowAddEventListener: (string, unit => unit) => unit =
-  "window.addEventListener";
-[@val]
+  "addEventListener";
+[@val] [@scope "window"]
 external windowRemoveEventListener: (string, unit => unit) => unit =
-  "window.removeEventListener";
+  "removeEventListener";
 
 type styles = {
   about: string,

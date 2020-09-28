@@ -1,4 +1,4 @@
-[@val] external token: string = "process.env.token";
+[@val] [@scope ("process", "env")] external token: string = "token";
 
 let repositoriesQuery = {|
   query {
@@ -22,61 +22,47 @@ let repositoriesQuery = {|
   }
 |};
 
-[@decco.decode]
 type primaryLanguage = {name: string};
 
-[@decco.decode]
 type project = {
-  description: option(string),
+  description: Js.nullable(string),
   name: string,
   stargazerCount: int,
   url: string,
   id: string,
-  primaryLanguage: option(primaryLanguage),
+  primaryLanguage: Js.nullable(primaryLanguage),
   isArchived: bool,
 };
 
-[@decco.decode]
 type edge = {node: project};
 
-[@decco.decode]
-type repositories = {edges: array(edge)};
-
-[@decco.decode]
-type user = {repositories};
-
-[@decco.decode]
-type response = {user};
+let decodeResponse: Js.Json.t => array(edge) =
+  (data: Js.Json.t) =>
+    Obj.magic(Js.Json.(data->stringify->parseExn))##user##repositories##edges;
 
 // had to use this escape hatch since nextjs encodes/decodes props themselves within get{Static|ServerSide}Props
 let unsafeRemoveUndefined: project => project = [%raw
   "(obj) => Object.fromEntries(Object.entries(obj).filter(([_key, value]) => value !== undefined))"
 ];
 
+let headers = {"Authorization": {j|Bearer $token|j}};
+
 let client =
   GraphqlRequest.make(
     "https://api.github.com/graphql",
-    {
-      "headers": {
-        "Authorization": {j|Bearer $token|j},
-      },
-    },
+    GraphqlRequest.Options.make(~headers, ()),
   );
 
 let get = () =>
   GraphqlRequest.request(client, repositoriesQuery)
-  |> Js.Promise.then_(data => {Js.Promise.resolve(data->response_decode)})
+  |> Js.Promise.then_(data => {Js.Promise.resolve(data->decodeResponse)})
   |> Js.Promise.then_(data => {
-       switch (data) {
-       | Ok(data) =>
-         Js.Promise.resolve(
-           data.user.repositories.edges
-           // decco decodes null as undefined, but nextjs cant serialize explicitly undefined values
-           ->Belt.Array.map(edge => unsafeRemoveUndefined(edge.node))
-           ->Belt.Array.keep(project =>
-               project.stargazerCount > 1 && !project.isArchived
-             ),
-         )
-       | Error(_) => Js.Promise.resolve([||])
-       }
+       Js.Promise.resolve(
+         data
+         // decco decodes null as undefined, but nextjs cant serialize explicitly undefined values
+         ->Belt.Array.map(edge => unsafeRemoveUndefined(edge.node))
+         ->Belt.Array.keep(project =>
+             project.stargazerCount > 1 && !project.isArchived
+           ),
+       )
      });

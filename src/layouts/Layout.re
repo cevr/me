@@ -1,10 +1,6 @@
 type styles = {layout: string};
 [@module "./Layout.module.css"] external styles: styles = "default";
 
-[@send] [@scope "style"]
-external setProperty: (Dom.element_like('any), string, string) => unit =
-  "setProperty";
-
 // workaround for https://github.com/vercel/next.js/issues/17350
 let minContent = {|calc(
     100vh -

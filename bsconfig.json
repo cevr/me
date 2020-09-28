@@ -4,8 +4,7 @@
   "reason": { "react-jsx": 3 },
   "refmt": 3,
   "sources": [{ "dir": "src", "subdirs": true }],
-  "bs-dependencies": ["reason-react", "re-classnames", "decco"],
-  "ppx-flags": ["decco/ppx"],
+  "bs-dependencies": ["reason-react", "re-classnames"],
   "package-specs": {
     "module": "es6",
     "in-source": true

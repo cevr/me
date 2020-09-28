@@ -24,7 +24,7 @@ let make = (~projects: array(ProjectsApi.project)) =>
            href={project.url} ariaLabel={project.name} key={project.id}>
            <article className={styles.project}>
              <div className={styles.projectLanguage}>
-               {switch (project.primaryLanguage) {
+               {switch (project.primaryLanguage->Js.Nullable.toOption) {
                 | Some(language) => language.name->React.string
                 | None => React.null
                 }}
@@ -32,7 +32,7 @@ let make = (~projects: array(ProjectsApi.project)) =>
              <h3 className={styles.projectName}>
                project.name->React.string
              </h3>
-             {switch (project.description) {
+             {switch (project.description->Js.Nullable.toOption) {
               | Some(description) =>
                 <p className={styles.projectDescription}>
                   description->React.string

@@ -1,8 +1,6 @@
-[@val]
-external bodyClassListContains: string => bool =
-  "document.body.classList.contains";
-[@val]
-external bodyClassListRemove: string => unit =
-  "document.body.classList.remove";
-[@val]
-external bodyClassListAdd: string => unit = "document.body.classList.add";
+[@val] [@scope ("document", "body", "classList")]
+external bodyClassListContains: string => bool = "contains";
+[@val] [@scope ("document", "body", "classList")]
+external bodyClassListRemove: string => unit = "remove";
+[@val] [@scope ("document", "body", "classList")]
+external bodyClassListAdd: string => unit = "add";

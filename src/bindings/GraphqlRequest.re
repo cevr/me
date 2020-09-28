@@ -1,7 +1,15 @@
-type clientOptions('options) = Js.t('options);
+module Options = {
+  [@deriving abstract]
+  type t('headers) = {
+    [@optional]
+    headers: Js.t('headers),
+  };
+  let make = t;
+};
+
 type client;
 type data = Js.Json.t;
 [@new] [@module "graphql-request"]
-external make: (string, clientOptions('options)) => client = "GraphQLClient";
+external make: (string, Options.t('any)) => client = "GraphQLClient";
 [@bs.send]
 external request: (client, string) => Js.Promise.t(data) = "request";
