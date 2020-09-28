@@ -16,16 +16,13 @@ let minContent = {|calc(
 
 [@react.component]
 let make = (~children: React.element) => {
-  let divRef = React.useRef(Js.Nullable.null);
-  Hooks.useIsomorphicLayoutEffect0(() => {
-    switch (Js.Nullable.toOption(divRef.current)) {
-    | Some(ref) => ref->setProperty("--min-content", minContent)
-    | None => ()
-    };
-    None;
-  });
-
-  <div ref={ReactDOM.Ref.domRef(divRef)} className={styles.layout}>
+  <div
+    style={ReactDOM.Style.unsafeAddProp(
+      ReactDOM.Style.make(),
+      "--min-content",
+      minContent,
+    )}
+    className={styles.layout}>
     children
   </div>;
 };
