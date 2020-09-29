@@ -15,10 +15,9 @@ let default = (props: props) => {
   </Layout>;
 };
 
-let getStaticProps = _context => {
-  ProjectsApi.get()
-  |> Js.Promise.then_(result => {
-       let props = {projects: result};
-       Js.Promise.resolve({"props": props, "revalidate": 1});
-     });
-};
+let getStaticProps = _context =>
+  ProjectsApi.query()
+  ->Promise.map(result => {
+      let props = {projects: result};
+      {"props": props, "revalidate": 1};
+    });

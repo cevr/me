@@ -8,4 +8,4 @@ type project = {
   primaryLanguage: Js.nullable(primaryLanguage),
   isArchived: bool,
 };
-let get: unit => Js.Promise.t(array(project));
+let query: unit => Promise.t(array(project));

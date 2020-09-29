@@ -36,17 +36,11 @@ type project = {
 
 type edge = {node: project};
 
-let decodeResponse: Js.Json.t => result(array(edge), unit) =
-  (data: Js.Json.t) =>
-    Belt.Result.(
-      try(
-        Ok(
-          Obj.magic(Js.Json.(data->Obj.magic->parseExn))##user##repositories##edges,
-        )
-      ) {
-      | Js.Exn.Error(_) => Error()
-      }
-    );
+type repositories = {edges: array(edge)};
+
+type user = {repositories};
+
+type response = {user};
 
 let headers = {"Authorization": {j|Bearer $token|j}};
 
@@ -56,21 +50,16 @@ let client =
     GraphqlRequest.Options.make(~headers, ()),
   );
 
-let get = () =>
-  Js.Promise.(
-    GraphqlRequest.request(client, repositoriesQuery)
-    |> then_(data => {resolve(data->decodeResponse)})
-    |> then_(data => {
-         switch (data) {
-         | Ok(data) =>
-           resolve(
-             data
-             ->Js.Array2.map(edge => edge.node)
-             ->Js.Array2.filter(project =>
-                 project.stargazerCount > 1 && !project.isArchived
-               ),
-           )
-         | Error(_) => resolve([||])
-         }
-       })
-  );
+let query = () =>
+  GraphqlRequest.request(client, repositoriesQuery)
+  ->Promise.map(response => {
+      switch (response) {
+      | Ok(data) =>
+        data.user.repositories.edges
+        ->Js.Array2.map(edge => edge.node)
+        ->Js.Array2.filter(project =>
+            project.stargazerCount > 1 && !project.isArchived
+          )
+      | Error(_) => [||]
+      }
+    });

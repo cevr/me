@@ -4846,6 +4846,11 @@ readdirp@~3.4.0:
   dependencies:
     picomatch "^2.2.1"
 
+reason-promise@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/reason-promise/-/reason-promise-1.1.1.tgz#966133fed21e748a50ffb8839a1da04912bcf380"
+  integrity sha512-xMXDiyzTjn7t9pq9aQrkgu8CLB5DILU70oWQ+LI20YecshypUwsw37TKOvCxgoFR3vo30ucF0/iWe2BZ181/jw==
+
 reason-react@0.9.1:
   version "0.9.1"
   resolved "https://registry.yarnpkg.com/reason-react/-/reason-react-0.9.1.tgz#30a887158200b659aa03e2d75ff4cc54dc462bb0"

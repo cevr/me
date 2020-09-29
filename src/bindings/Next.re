@@ -20,7 +20,7 @@ module GetServerSideProps = {
   };
 
   type t('props, 'params) =
-    context('props, 'params) => Js.Promise.t({. "props": 'props});
+    context('props, 'params) => Promise.t({. "props": 'props});
 };
 
 module GetStaticProps = {
@@ -35,7 +35,7 @@ module GetStaticProps = {
 
   type t('props, 'params, 'previewData) =
     context('props, 'params, 'previewData) =>
-    Js.Promise.t({
+    Promise.t({
       .
       "props": 'props,
       "revalidate": int,
@@ -52,7 +52,7 @@ module GetStaticPaths = {
     fallback: bool,
   };
 
-  type t('params) = unit => Js.Promise.t(return('params));
+  type t('params) = unit => Promise.t(return('params));
 };
 
 module Link = {
@@ -139,7 +139,7 @@ module Dynamic = {
   };
 
   [@bs.module "next/dynamic"]
-  external dynamic: (unit => Js.Promise.t('a), options) => 'a = "default";
+  external dynamic: (unit => Promise.t('a), options) => 'a = "default";
 
-  [@bs.val] external import: string => Js.Promise.t('a) = "import";
+  [@bs.val] external import: string => Promise.t('a) = "import";
 };

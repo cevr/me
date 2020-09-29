@@ -26,6 +26,16 @@
   display: none;
 }
 
+.projects-not-found {
+  grid-area: projects;
+  color: var(--highlight);
+  font-size: 7rem;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  padding-bottom: 75%;
+}
+
 .project {
   display: block;
   border: 2px solid;
@@ -97,5 +107,9 @@
 
   .project:hover {
     transform: none !important;
+  }
+
+  .projects-not-found {
+    padding-bottom: 0;
   }
 }

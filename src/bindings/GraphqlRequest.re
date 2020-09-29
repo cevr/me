@@ -8,8 +8,22 @@ module Options = {
 };
 
 type client;
-type data = Js.Json.t;
+
+type errorLocation = {
+  line: int,
+  column: int,
+};
+type graphqlError = {
+  message: string,
+  path: array(string),
+  locations: array(errorLocation),
+};
+
 [@new] [@module "graphql-request"]
 external make: (string, Options.t('any)) => client = "GraphQLClient";
 [@bs.send]
-external request: (client, string) => Js.Promise.t(data) = "request";
+external requestRaw: (client, string) => Promise.Js.t('any, graphqlError) =
+  "request";
+
+let request = (client, string) =>
+  requestRaw(client, string)->Promise.Js.toResult;
