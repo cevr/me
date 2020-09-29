@@ -19,7 +19,7 @@ let make = (~projects: array(ProjectsApi.project)) =>
   <section className={styles.projects}>
     <h2> "Projects"->React.string </h2>
     {projects
-     ->Belt.Array.map(project =>
+     ->Js.Array2.map(project =>
          <ExternalLink
            href={project.url} ariaLabel={project.name} key={project.id}>
            <article className={styles.project}>
@@ -44,7 +44,7 @@ let make = (~projects: array(ProjectsApi.project)) =>
                {{
                   project.stargazerCount;
                 }
-                ->Belt.Int.toString
+                ->Js.Int.toString
                 ->React.string}
              </div>
            </article>
