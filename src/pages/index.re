@@ -28,10 +28,10 @@ let default = (props: props) => {
   };
 
   <Layout>
-    <Head>
+    <Next.Head>
       <title> "Me | Cristian"->React.string </title>
       <meta name="theme-color" content={lightMode ? "#0b7285" : "#FF8C69"} />
-    </Head>
+    </Next.Head>
     <Nav lightMode toggleTheme />
     <main className={styles.home}>
       <AboutMe />
