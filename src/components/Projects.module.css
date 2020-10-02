@@ -23,7 +23,8 @@
 }
 
 .projects h2 {
-  display: none;
+  visibility: hidden;
+  height: 0;
 }
 
 .projects-not-found {
@@ -97,7 +98,8 @@
   }
 
   .projects h2 {
-    display: initial;
+    height: auto;
+    visibility: visible;
     font-size: 1.75rem;
   }
 
