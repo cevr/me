@@ -43,7 +43,7 @@ let make = () => {
       </Next.Link>
     </div>
     <button className={styles._switch} onClick=toggleTheme>
-      <LightSwitch ariaLabel="Toggle Theme" />
+      <LightSwitch ariaLabel="Toggle Theme" on={lightMode} />
     </button>
   </nav>;
 };

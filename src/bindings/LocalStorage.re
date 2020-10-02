@@ -1,4 +1,4 @@
 [@val] [@scope "localStorage"]
-external set: (string, Js.Json.t) => unit = "localStorage.setItem";
+external set: (string, Js.Json.t) => unit = "setItem";
 [@val] [@scope "localStorage"]
-external remove: string => unit = "localStorage.removeItem";
+external remove: string => unit = "removeItem";
