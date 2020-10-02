@@ -29,9 +29,9 @@ let make = (~projects: array(ProjectsApi.project)) =>
                 | None => React.null
                 }}
              </div>
-             <h3 className={styles.projectName}>
+             <h1 className={styles.projectName}>
                project.name->React.string
-             </h3>
+             </h1>
              {switch (project.description->Js.Nullable.toOption) {
               | Some(description) =>
                 <p className={styles.projectDescription}>
