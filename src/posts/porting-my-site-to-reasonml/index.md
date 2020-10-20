@@ -28,7 +28,7 @@ module Component = {
 
 As you can see, I haven't declared a single type. The prop `name` is inferred to be a string because it's used with `React.string`!
 
-The the type of `React.string` is something like this:
+The type of `React.string` is something like this:
 
 ```reason
 module React {
