@@ -11,7 +11,7 @@
   font-size: 1rem;
   font-weight: 300;
   color: var(--fg);
-  line-height: 1.75rem;
+  line-height: 1.9rem;
   margin: 1rem 0;
 }
 
@@ -20,7 +20,7 @@
   color: var(--highlight);
   font-family: SFMono-Regular, monospace;
   font-size: 0.9rem;
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
 }
 
