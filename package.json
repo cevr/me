@@ -3,29 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"yarn res:start\" \"next dev\"",
+    "dev": "next dev",
+    "serve": "next start",
+    "start": "concurrently \"yarn res:start\" \"next dev\"",
     "build": "yarn res:build && next build",
-    "start": "next start",
-    "res:build": "bsb -make-world",
+    "res:build": "yarn res:clean && bsb -make-world",
     "res:clean": "bsb -clean-world",
-    "res:start": "bsb -make-world -w"
+    "res:start": "yarn res:clean && bsb -make-world -w"
   },
   "dependencies": {
+    "date-fns": "^2.16.1",
     "graphql": "^15.3.0",
-    "graphql-request": "^3.1.0",
-    "next": "9.5.3",
+    "graphql-request": "^3.2.0",
+    "next": "9.5.5",
+    "next-mdx-remote": "^1.0.0",
     "preflight.css": "^0.1.1",
+    "prism-react-renderer": "^1.1.1",
     "re-classnames": "^5.0.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "reason-promise": "^1.1.1",
+    "react": "16.14.0",
+    "react-dom": "16.14.0",
+    "reason-nodejs": "^13.0.0-beta.1",
+    "reason-promise": "^1.1.2",
     "reason-react": "0.9.1"
   },
   "devDependencies": {
-    "bs-platform": "8.3.0",
+    "bs-platform": "8.3.1",
     "concurrently": "5.3.0",
+    "gray-matter": "^4.0.2",
     "next-offline": "5.0.2",
     "next-transpile-modules": "4.1.0",
-    "vercel": "20.1.1"
+    "vercel": "20.1.2"
   }
 }

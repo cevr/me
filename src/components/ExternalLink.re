@@ -1,17 +1,17 @@
 [@react.component]
 let make =
     (
-      ~href: string,
-      ~className: option(string)=?,
-      ~ariaLabel: option(string)=?,
-      ~children: option(React.element)=?,
-      ~onMouseEnter: option(ReactEvent.Mouse.t => unit)=?,
-      ~onMouseLeave: option(ReactEvent.Mouse.t => unit)=?,
+      ~href=?,
+      ~className=?,
+      ~ariaLabel=?,
+      ~children=?,
+      ~onMouseEnter=?,
+      ~onMouseLeave=?,
     ) =>
   <a
     target="_blank"
     rel="noopener noreferrer"
-    href
+    ?href
     ?className
     ?ariaLabel
     ?onMouseEnter

@@ -1,0 +1,62 @@
+.date {
+  color: var(--accent);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.paragraph {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--fg);
+  line-height: 1.75rem;
+  margin: 1rem 0;
+}
+
+.paragraph code {
+  background-color: var(--code-bg);
+  color: var(--highlight);
+  font-family: SFMono-Regular, monospace;
+  font-size: 0.9rem;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.code {
+  margin: 0.5rem 0;
+}
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.post-nav-item {
+  color: var(--accent);
+  transition: color var(--transition);
+}
+
+.post-nav-item:hover {
+  color: var(--highlight);
+}
+
+.post-nav-item-date {
+  font-size: 0.75rem;
+}
+
+.post-nav-item-date.newer {
+  text-align: right;
+}
+
+.post-nav-item-title {
+  font-size: 1.25rem;
+  font-weight: bolder;
+}

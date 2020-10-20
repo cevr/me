@@ -1,0 +1,12 @@
+.layout {
+  grid-area: content;
+  padding-top: var(--main-padding);
+  width: 100%;
+}
+
+@media (min-width: 50rem) {
+  .layout {
+    width: 600px;
+    margin: 0 auto;
+  }
+}

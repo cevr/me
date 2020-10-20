@@ -9,6 +9,13 @@
 }
 
 .light {
+  --code-bg: #fdf0ed;
+  --code-comment: #868e96;
+  --code-keyword: #0b7285;
+  --code-string: #d77b6a;
+  --code-punc: #212529;
+  --code-func: #dd4a68;
+
   --bg: #f8f9fa;
   --fg: #212529;
   --link-bg: #e9ecef;
@@ -18,6 +25,13 @@
 }
 
 body {
+  --code-bg: #1c1e26;
+  --code-comment: #868e96;
+  --code-keyword: salmon;
+  --code-string: #fac29a;
+  --code-punc: #999999;
+  --code-func: #dd4a68;
+
   --bg: #212529;
   --fg: #f8f9fa;
   --link-bg: #343a40;
@@ -45,17 +59,4 @@ body {
 *::selection {
   background: var(--fg);
   color: var(--bg);
-}
-
-.paragraph-link {
-  color: var(--highlight);
-  padding: 0.25rem 0.5rem;
-  background-color: var(--link-bg);
-  border-radius: 6px;
-  transition: background-color var(--transition);
-  white-space: nowrap;
-}
-.paragraph-link:hover {
-  background-color: var(--highlight);
-  color: var(--link-hover-fg);
 }

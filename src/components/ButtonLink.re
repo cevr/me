@@ -7,7 +7,7 @@ type styles = {
 [@react.component]
 let make =
     (
-      ~href,
+      ~href=?,
       ~className: option(string)=?,
       ~onMouseEnter: option(ReactEvent.Mouse.t => unit)=?,
       ~onMouseLeave: option(ReactEvent.Mouse.t => unit)=?,
@@ -15,7 +15,7 @@ let make =
     ) =>
   <ExternalLink
     className=Cn.(styles.paragraphLink + className->take)
-    href
+    ?href
     ?onMouseEnter
     ?onMouseLeave
     ?children

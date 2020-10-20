@@ -17,6 +17,11 @@ type props = {
 
 let default = (props: props): React.element => {
   let {component, pageProps} = props;
+  let router = Next.Router.useRouter();
 
-  React.createElement(component, pageProps);
+  <Layout home={router.route === "/"}>
+    <Nav />
+    {React.createElement(component, pageProps)}
+    <Footer />
+  </Layout>;
 };

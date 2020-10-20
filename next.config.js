@@ -6,6 +6,16 @@ const withTM = require("next-transpile-modules")(transpileModules);
 module.exports = withTM(
   withOffline({
     target: "serverless",
+    webpack: (config, { isServer }) => {
+      // Fixes npm packages that depend on `fs` module
+      if (!isServer) {
+        config.node = {
+          fs: "empty",
+        };
+      }
+
+      return config;
+    },
     workboxOpts: {
       swDest: "static/service-worker.js",
       runtimeCaching: [
