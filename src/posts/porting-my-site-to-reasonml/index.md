@@ -36,7 +36,7 @@ module React {
 }
 ```
 
-A major pain point I have though is that modeling data can be a bit of a hassle. There is no extending base types within Reason/Rescript (there is in ocaml), so something as simple as this is impossible to accomplish:
+A major pain point I have though is that modeling data can be a bit of a hassle. There is no extending base types within Reason/Rescript (there is in ocaml), so something as simple as this requires copy pasting:
 
 ```ts
 interface Person {
@@ -48,7 +48,7 @@ interface Employee extends Person {
 }
 ```
 
-The Reason equiavalent is:
+The Reason equivalent is:
 
 ```reason
 type person = {
