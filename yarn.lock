@@ -2642,10 +2642,10 @@ browserslist@^4.12.0, browserslist@^4.8.5:
     escalade "^3.1.0"
     node-releases "^1.1.61"
 
-bs-platform@8.3.1:
-  version "8.3.1"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.3.1.tgz#49ac0d7b84bcec190a7361353557cae965f92c67"
-  integrity sha512-U7nKEGF1BfvODzcv1g2loeltE8YRCgX8mMlCojImsgI0HwfQKEq7ggO5dF1ae9ZfFxiLaI0069ZyoK5GLBO2OQ==
+bs-platform@^8.4.0-dev.1:
+  version "8.4.0-dev.1"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.4.0-dev.1.tgz#285d3a21fa26cefb2b373dfac0458749cec215e5"
+  integrity sha512-8p6TGGX8G55qWa5GTq+4ZdfEClJRun3phCh8s3M7T3B2UB3k6GgR2DfkKM43lOfxMejt4GJYyI+GsK13bx7cfA==
 
 buffer-from@^1.0.0, buffer-from@^1.1.1:
   version "1.1.1"
