@@ -9,7 +9,8 @@
 }
 
 .light {
-  --code-bg: #fdf0ed;
+  --code-bg: #e9ecef;
+  --code-highlight-bg: #0b728520;
   --code-comment: #868e96;
   --code-keyword: #0b7285;
   --code-string: #d77b6a;
@@ -26,6 +27,7 @@
 
 body {
   --code-bg: #1c1e26;
+  --code-highlight-bg: #fa807220;
   --code-comment: #868e96;
   --code-keyword: salmon;
   --code-string: #fac29a;

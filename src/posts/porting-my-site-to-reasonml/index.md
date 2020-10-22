@@ -1,6 +1,6 @@
 ---
 title: "Porting my site to Reason"
-date: "2020-10-20"
+date: "10-20-2020"
 ---
 
 I've heard of [ReasonML](https://reasonml.github.io/) for a while now.

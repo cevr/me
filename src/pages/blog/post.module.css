@@ -22,6 +22,7 @@
   font-size: 0.9rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
+  transition: all var(--transition);
 }
 
 .subtitle {
@@ -31,6 +32,28 @@
 
 .code {
   margin: 0.5rem 0;
+}
+
+.code :global(.line-number) {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding-right: 1.5rem;
+  width: 1.2rem;
+  user-select: none;
+  opacity: 0.3;
+  text-align: center;
+  position: relative;
+}
+
+.code :global(.highlight-line) {
+  background-color: var(--code-highlight-bg);
+  border-left: 4px solid var(--highlight);
+}
+
+.code :global(.highlight-line .line-number) {
+  opacity: 0.5;
+  width: calc(1.2em - 4px);
+  left: -4px;
 }
 
 .post-nav {
