@@ -19,7 +19,7 @@ I upgraded our app to CRA 4.0 at work, but noticed that the build and rebuild ti
 
 Looked around to find [this comment](https://github.com/facebook/create-react-app/issues/9886#issuecomment-716234004) inside a github issue that matched my problem.
 
-Went to the `node_modules/react-scripts/config/webpack.config.js` like it said and plopped this in:
+Went to `node_modules/react-scripts/config/webpack.config.js` like the comment said and plopped this in:
 
 ```js {3}
 new ESLintPlugin({
