@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@opam/ocaml-lsp-server": "1.1.0",
+    "@opam/ocamlfind-secondary": "*",
+    "@opam/reason": "*",
+    "ocaml": "*"
+  },
+  "resolutions": {
+    "ocaml": {
+      "source": "esy-ocaml/ocaml#1805622dc40c1c569a1720078b5707eeba32b07d",
+      "override": {
+        "build": [
+          "./esy-configure -no-cfi -cc \"gcc -Wno-implicit-function-declaration\" -prefix $cur__install",
+          "./esy-build"
+        ]
+      }
+    }
+  }
+}
