@@ -32,10 +32,11 @@ function Blog({ posts }: BlogProps) {
 
 export default Blog;
 
-export function getStaticProps() {
+export async function getStaticProps() {
+  let posts = await postsApi.query();
   return {
     props: {
-      posts: postsApi.getAllPosts(),
+      posts,
     },
     revalidate: 600,
   };

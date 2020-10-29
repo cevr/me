@@ -1,4 +1,6 @@
 import { GetStaticProps } from "next";
+import Head from "next/head";
+import Link from "next/link";
 import renderToString from "next-mdx-remote/render-to-string";
 import hydrate from "next-mdx-remote/hydrate";
 import { format } from "date-fns";
@@ -6,10 +8,8 @@ import clsx from "clsx";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "../../components";
 import { postsApi } from "../../api";
-import styles from "./post.module.css";
 import { BlogLayout } from "../../layouts";
-import Head from "next/head";
-import Link from "next/link";
+import styles from "./post.module.css";
 
 let components = {
   code: CodeBlock,
@@ -35,7 +35,7 @@ function Post({ post, newerPost, olderPost }: PostProps) {
         <title> {`${post.title} | Cristian`} </title>
       </Head>
       <div className={styles.date}>
-        {format(new Date(post.date), "MMMM d, y")}
+        {format(new Date(post.published_at), "MMMM d, y")}
       </div>
       <h1 className={styles.title}> {post.title} </h1>
       <VerticalSpacer size="lg" />
@@ -74,7 +74,7 @@ function PostNavItem({ post, newer }: PostNavItemProps) {
 }
 
 export let getStaticProps: GetStaticProps = async ({ params }) => {
-  let posts = postsApi.getAllPosts();
+  let posts = await postsApi.query();
   let postIndex = posts.findIndex((post) => post.slug === params?.slug);
 
   let post = posts[postIndex];
@@ -91,22 +91,20 @@ export let getStaticProps: GetStaticProps = async ({ params }) => {
     return isWithinPosts ? posts[newIndex] : null;
   })();
 
-  console.log(posts);
-
   return {
     props: {
       olderPost,
       newerPost,
       post: {
         ...post,
-        content: await renderToString(post.content, { components }),
+        content: await renderToString(post.body_markdown, { components }),
       },
     },
   };
 };
 
-export function getStaticPaths() {
-  let posts = postsApi.getAllPosts();
+export async function getStaticPaths() {
+  let posts = await postsApi.query();
 
   return {
     paths: posts.map((post) => ({
