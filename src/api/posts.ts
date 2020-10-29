@@ -1,5 +1,7 @@
 import matter from "gray-matter";
-import * as cache from "./cache";
+import fs from "fs";
+import path from "path";
+import { addSeconds, isAfter } from "date-fns";
 
 type Maybe<T> = T | null;
 
@@ -32,18 +34,45 @@ export interface Post {
   matter: { data: Record<string, any>; content: string };
 }
 
+let cachePath = path.join(process.cwd(), "cache");
+let cacheValuePath = path.join(cachePath, "value");
+let cacheTtlPath = path.join(cachePath, "ttl");
+
+let cache = {
+  set: (value: any) => {
+    if (!fs.existsSync(cachePath)) fs.mkdirSync(cachePath);
+    let revalidate = addSeconds(new Date(), 1).getTime();
+    fs.appendFileSync(cacheValuePath, JSON.stringify(value));
+    fs.appendFileSync(cacheTtlPath, JSON.stringify(revalidate));
+  },
+  get: <T>(): T | null => {
+    if (!fs.existsSync(cacheValuePath) || !fs.existsSync(cacheTtlPath)) {
+      return null;
+    }
+    const ttl = JSON.parse(fs.readFileSync(cacheTtlPath).toString());
+    const now = Date.now();
+    const shouldRevalidate = isAfter(now, ttl);
+    return shouldRevalidate
+      ? null
+      : JSON.parse(fs.readFileSync(cacheValuePath).toString());
+  },
+};
+
 let normalizePost = (post: Post): Post => {
   const { data, content } = matter(post.body_markdown);
   return {
     ...post,
+    // remove the last bit (its a 4 digit identifier, not needed here)
     slug: post.slug.split("-").slice(0, -1).join("-"),
     matter: { data, content },
   };
 };
 
 export let query = async () => {
+  // we cache the response
+  // otherwise we'll hit the 429 error "Too many requests" during build times
   let cached = cache.get<Post[]>();
-  if (cached && process.env.NODE_ENV !== "development") return cached;
+  if (cached) return cached;
 
   let posts: Post[] = [];
   let page = 0;
@@ -60,10 +89,12 @@ export let query = async () => {
         },
       }
     )
-      .then((res) => res.json())
+      .then((res) =>
+        res.status !== 200 ? Promise.reject(res.statusText) : res.json()
+      )
       .then((x) => (posts = posts.concat(x)))
       .catch((err) => {
-        throw new Error(`error fetching page ${page}, ${JSON.stringify(err)}`);
+        throw new Error(`error fetching page ${page}, ${err}`);
       });
   } while (latestResult.length === per_page);
   posts = posts.map(normalizePost);

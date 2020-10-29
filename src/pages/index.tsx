@@ -28,6 +28,6 @@ export async function getStaticProps() {
   const projects = await projectsApi.query();
   return {
     props: { projects },
-    revalidate: 600,
+    revalidate: 1,
   };
 }

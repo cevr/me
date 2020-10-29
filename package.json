@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "start": "next start",
-    "prebuild": "rimraf cache",
     "build": "next build",
     "type-check": "tsc"
   },
