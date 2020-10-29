@@ -48,23 +48,35 @@ function NameTitle() {
       <span className={styles.name}>
         <span>C</span>
         {showFull ? (
-          <span className={clsx(styles.animatingName, styles.firstName)}>
-            ristian
+          <span
+            className={clsx(styles["animating-name"], styles["first-name"])}
+          >
+            ristian{" "}
           </span>
-        ) : null}{" "}
+        ) : null}
       </span>
       <span className={styles.name}>
         <span>V</span>
         {showFull ? (
-          <span className={clsx(styles.animatingName, styles.firstFamilyName)}>
-            elasquez
+          <span
+            className={clsx(
+              styles["animating-name"],
+              styles["first-family-name"]
+            )}
+          >
+            elasquez{" "}
           </span>
-        ) : null}{" "}
+        ) : null}
       </span>
       <span className={styles.name}>
         <span>R</span>
         {showFull ? (
-          <span className={clsx(styles.animatingName, styles.secondFamilyName)}>
+          <span
+            className={clsx(
+              styles["animating-name"],
+              styles["second-family-name"]
+            )}
+          >
             amos
           </span>
         ) : null}
