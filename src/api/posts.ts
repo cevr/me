@@ -45,13 +45,7 @@ let normalizePost = (post: Post): Post => {
   };
 };
 
-let cache = {
-  current: null as Post[] | null,
-};
-
 export let query = async () => {
-  if (cache.current) return cache.current;
-  console.log(cache);
   let posts: Post[] = [];
   let page = 0;
   let per_page = 30; // can go up to 1000
@@ -75,7 +69,5 @@ export let query = async () => {
         throw new Error(`error fetching page ${page}, ${JSON.stringify(err)}`);
       });
   } while (latestResult.length === per_page);
-  posts = posts.map(normalizePost);
-  cache.current = posts;
-  return posts;
+  return posts.map(normalizePost);
 };
