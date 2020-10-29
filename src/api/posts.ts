@@ -42,8 +42,8 @@ let cache = {
   set: (value: any) => {
     if (!fs.existsSync(cachePath)) fs.mkdirSync(cachePath);
     let revalidate = addSeconds(new Date(), 1).getTime();
-    fs.appendFileSync(cacheValuePath, JSON.stringify(value));
-    fs.appendFileSync(cacheTtlPath, JSON.stringify(revalidate));
+    fs.writeFileSync(cacheValuePath, JSON.stringify(value));
+    fs.writeFileSync(cacheTtlPath, JSON.stringify(revalidate));
   },
   get: <T>(): T | null => {
     if (!fs.existsSync(cacheValuePath) || !fs.existsSync(cacheTtlPath)) {
