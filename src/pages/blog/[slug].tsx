@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import renderToString from "next-mdx-remote/render-to-string";
@@ -97,13 +97,13 @@ export let getStaticProps: GetStaticProps = async ({ params }) => {
       newerPost,
       post: {
         ...post,
-        content: await renderToString(post.body_markdown, { components }),
+        content: await renderToString(post.matter.content, { components }),
       },
     },
   };
 };
 
-export async function getStaticPaths() {
+export let getStaticPaths: GetStaticPaths = async () => {
   let posts = await postsApi.query();
 
   return {
@@ -114,4 +114,4 @@ export async function getStaticPaths() {
     })),
     fallback: false,
   };
-}
+};

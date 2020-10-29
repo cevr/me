@@ -1,3 +1,5 @@
+import matter from "gray-matter";
+
 type Maybe<T> = T | null;
 
 export interface Post {
@@ -26,6 +28,7 @@ export interface Post {
   crossposted_at: Maybe<string>;
   last_comment_at: string;
   content: string;
+  matter: matter.GrayMatterFile<string>;
 }
 
 export let query = async () => {
@@ -44,15 +47,23 @@ export let query = async () => {
         },
       }
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        throw new Error(res.statusText);
+      })
       .then((x) => (posts = posts.concat(x)))
       .catch((err) => {
-        console.error(err);
-        throw new Error(`error fetching page ${page}, {err}`);
+        throw new Error(`error fetching page ${page}, ${JSON.stringify(err)}`);
       });
   } while (latestResult.length === per_page);
-  return posts.map((post) => ({
-    ...post,
-    slug: post.slug.split("-").slice(0, -1).join("-"),
-  }));
+  return posts.map((post) => {
+    const { data, content } = matter(post.body_markdown);
+    return {
+      ...post,
+      slug: post.slug.split("-").slice(0, -1).join("-"),
+      matter: { data, content },
+    };
+  });
 };
