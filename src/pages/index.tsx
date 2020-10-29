@@ -1,6 +1,7 @@
 import Head from "next/head";
-import { projectsApi } from "../api";
-import { AboutMe, Projects } from "../components";
+
+import { projectsApi } from "@api/index";
+import { AboutMe, Projects } from "@components/index";
 import styles from "./index.module.css";
 
 interface IndexProps {

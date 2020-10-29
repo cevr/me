@@ -1,9 +1,5 @@
 import matter from "gray-matter";
-import makeFetch from "make-fetch-happen";
-
-const fetch = makeFetch.defaults({
-  cacheManager: "./cache",
-});
+import * as cache from "./cache";
 
 type Maybe<T> = T | null;
 
@@ -46,6 +42,9 @@ let normalizePost = (post: Post): Post => {
 };
 
 export let query = async () => {
+  let cached = cache.get<Post[]>();
+  if (cached && process.env.NODE_ENV !== "development") return cached;
+
   let posts: Post[] = [];
   let page = 0;
   let per_page = 30; // can go up to 1000
@@ -57,17 +56,17 @@ export let query = async () => {
       `https://dev.to/api/articles/me/published?page=${page}&per_page=${per_page}`,
       {
         headers: {
-          "api-key": process.env.dev_token as any,
+          "api-key": process.env.dev_token as string,
         },
       }
     )
-      .then((res) => {
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((x) => (posts = posts.concat(x)))
       .catch((err) => {
         throw new Error(`error fetching page ${page}, ${JSON.stringify(err)}`);
       });
   } while (latestResult.length === per_page);
-  return posts.map(normalizePost);
+  posts = posts.map(normalizePost);
+  cache.set(posts);
+  return posts;
 };

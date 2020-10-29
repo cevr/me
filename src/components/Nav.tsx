@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import clsx from "clsx";
 
-import { useIsomorphicLayoutEffect } from "../shared";
+import { useIsomorphicLayoutEffect } from "@shared/index";
 import { LightSwitch } from "./icons";
 import styles from "./Nav.module.css";
 

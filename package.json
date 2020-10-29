@@ -1,10 +1,11 @@
 {
-  "name": "portfolio",
+  "name": "me",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "start": "next start",
+    "prebuild": "rimraf cache",
     "build": "next build",
     "type-check": "tsc"
   },
@@ -13,7 +14,6 @@
     "date-fns": "^2.16.1",
     "graphql": "^15.4.0",
     "graphql-request": "^3.3.0",
-    "make-fetch-happen": "^8.0.10",
     "next": "10.0.0",
     "next-mdx-remote": "^1.0.0",
     "preflight.css": "^0.1.1",
@@ -28,6 +28,7 @@
     "gray-matter": "^4.0.2",
     "next-offline": "5.0.2",
     "next-transpile-modules": "4.1.0",
+    "rimraf": "^3.0.2",
     "typescript": "4.0",
     "vercel": "^20.1.2"
   }

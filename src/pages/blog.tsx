@@ -1,8 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
-import { postsApi } from "../api";
-import { VerticalSpacer } from "../components";
-import { BlogLayout } from "../layouts";
+
+import { postsApi } from "@api/index";
+import { VerticalSpacer } from "@components/index";
+import { BlogLayout } from "@layouts/index";
 import styles from "./blog.module.css";
 
 interface BlogProps {
