@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import Image from "next/image";
 import renderToString from "next-mdx-remote/render-to-string";
 import hydrate from "next-mdx-remote/hydrate";
 import { format } from "date-fns";
@@ -19,6 +20,9 @@ let components = {
   strong: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   b: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   h2: (props: any) => <h2 className={styles.subtitle} {...props} />,
+  img: (props: any) => (
+    <Image unsized className={styles.image} {...props} />
+  ),
 };
 
 interface PostProps {

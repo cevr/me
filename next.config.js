@@ -12,6 +12,13 @@ module.exports = withOffline({
 
     return config;
   },
+  images: {
+    deviceSizes: [320, 420, 768, 1024, 1200],
+    iconSizes: [],
+    domains: ["thepracticaldev.s3.amazonaws.com"],
+    path: "/_next/image",
+    loader: "default",
+  },
   workboxOpts: {
     swDest: "static/service-worker.js",
     runtimeCaching: [
