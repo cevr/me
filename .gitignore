@@ -25,16 +25,4 @@ yarn-debug.log*
 yarn-error.log*
 .vercel
 
-# rescript
-src/**/*.js
-bindings/**/*.js
-!_document.js
-.bsb.lock
-.merlin
-lib/
-_build
-_esy
-_release
-*.byte
-*.native
-*.install
+cache

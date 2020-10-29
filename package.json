@@ -13,6 +13,7 @@
     "date-fns": "^2.16.1",
     "graphql": "^15.4.0",
     "graphql-request": "^3.3.0",
+    "make-fetch-happen": "^8.0.10",
     "next": "10.0.0",
     "next-mdx-remote": "^1.0.0",
     "preflight.css": "^0.1.1",

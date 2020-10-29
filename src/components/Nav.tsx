@@ -20,12 +20,12 @@ function Nav() {
     setLightMode(lightModeOn);
   });
 
-  let toggleTheme = (_event: React.MouseEvent) => {
+  let toggleTheme = () => {
     let lightModeOn = document.body.classList.contains(lightModeClassName);
     let nextLightModeValue = !lightModeOn;
 
     setLightMode(nextLightModeValue);
-    localStorage.set(storageKey, JSON.stringify(nextLightModeValue));
+    localStorage.setItem(storageKey, JSON.stringify(nextLightModeValue));
 
     lightModeOn
       ? document.body.classList.remove(lightModeClassName)

@@ -1,4 +1,9 @@
 import matter from "gray-matter";
+import makeFetch from "make-fetch-happen";
+
+const fetch = makeFetch.defaults({
+  cacheManager: "./cache",
+});
 
 type Maybe<T> = T | null;
 
@@ -28,10 +33,25 @@ export interface Post {
   crossposted_at: Maybe<string>;
   last_comment_at: string;
   content: string;
-  matter: matter.GrayMatterFile<string>;
+  matter: { data: Record<string, any>; content: string };
 }
 
+let normalizePost = (post: Post): Post => {
+  const { data, content } = matter(post.body_markdown);
+  return {
+    ...post,
+    slug: post.slug.split("-").slice(0, -1).join("-"),
+    matter: { data, content },
+  };
+};
+
+let cache = {
+  current: null as Post[] | null,
+};
+
 export let query = async () => {
+  if (cache.current) return cache.current;
+  console.log(cache);
   let posts: Post[] = [];
   let page = 0;
   let per_page = 30; // can go up to 1000
@@ -48,22 +68,14 @@ export let query = async () => {
       }
     )
       .then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        }
-        throw new Error(res.statusText);
+        return res.json();
       })
       .then((x) => (posts = posts.concat(x)))
       .catch((err) => {
         throw new Error(`error fetching page ${page}, ${JSON.stringify(err)}`);
       });
   } while (latestResult.length === per_page);
-  return posts.map((post) => {
-    const { data, content } = matter(post.body_markdown);
-    return {
-      ...post,
-      slug: post.slug.split("-").slice(0, -1).join("-"),
-      matter: { data, content },
-    };
-  });
+  posts = posts.map(normalizePost);
+  cache.current = posts;
+  return posts;
 };
