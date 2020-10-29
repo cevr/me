@@ -78,16 +78,20 @@ export let getStaticProps: GetStaticProps = async ({ params }) => {
   let postIndex = posts.findIndex((post) => post.slug === params?.slug);
 
   let post = posts[postIndex];
+
   let olderPost = (() => {
     let newIndex = postIndex + 1;
     let isWithinPosts = newIndex <= posts.length - 1;
-    return isWithinPosts ? posts[postIndex] : null;
+    return isWithinPosts ? posts[newIndex] : null;
   })();
+
   let newerPost = (() => {
     let newIndex = postIndex - 1;
     let isWithinPosts = newIndex >= 0;
-    return isWithinPosts ? posts[postIndex] : null;
+    return isWithinPosts ? posts[newIndex] : null;
   })();
+
+  console.log(posts);
 
   return {
     props: {
