@@ -23,6 +23,7 @@
   --link-hover-fg: #f8f9fa;
   --accent: #495057;
   --highlight: #0b7285;
+  --contrast: salmon;
 }
 
 body {
@@ -40,6 +41,7 @@ body {
   --link-hover-fg: #212529;
   --accent: #adb5bd;
   --highlight: salmon;
+  --contrast: #0b7285;
 
   --transition: 0.15s;
   --grid-gap: 0.625rem;

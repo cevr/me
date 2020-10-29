@@ -32,6 +32,7 @@ export interface Post {
   last_comment_at: string;
   content: string;
   matter: { data: Record<string, any>; content: string };
+  read_estimate: string;
 }
 
 let cachePath = path.join(process.cwd(), "cache");
@@ -49,22 +50,47 @@ let cache = {
     if (!fs.existsSync(cacheValuePath) || !fs.existsSync(cacheTtlPath)) {
       return null;
     }
-    const ttl = JSON.parse(fs.readFileSync(cacheTtlPath).toString());
-    const now = Date.now();
-    const shouldRevalidate = isAfter(now, ttl);
+    let ttl = JSON.parse(fs.readFileSync(cacheTtlPath).toString());
+    let now = Date.now();
+    let shouldRevalidate = isAfter(now, ttl);
     return shouldRevalidate
       ? null
       : JSON.parse(fs.readFileSync(cacheValuePath).toString());
   },
 };
 
+function stripWhitespace(string: string) {
+  return string.replace(/^\s+/, "").replace(/\s+$/, "");
+}
+
+function wordCount(string: string) {
+  let pattern = "\\w+";
+  let reg = new RegExp(pattern, "g");
+  return (string.match(reg) || []).length;
+}
+
+function humanReadableTime(time: number) {
+  if (time < 0.5) {
+    return "less than a minute";
+  }
+  return `${Math.ceil(time)} minute`;
+}
+
+let getReadEstimate = (content: string) => {
+  let avergageWordsPerMinute = 225;
+  content = stripWhitespace(content);
+  let minutes = wordCount(content) / avergageWordsPerMinute;
+  return humanReadableTime(minutes);
+};
+
 let normalizePost = (post: Post): Post => {
-  const { data, content } = matter(post.body_markdown);
+  let { data, content } = matter(post.body_markdown);
   return {
     ...post,
     // remove the last bit (its a 4 digit identifier, not needed here)
     slug: post.slug.split("-").slice(0, -1).join("-"),
     matter: { data, content },
+    read_estimate: getReadEstimate(post.body_markdown),
   };
 };
 

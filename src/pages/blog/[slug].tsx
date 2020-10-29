@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import renderToString from "next-mdx-remote/render-to-string";
 import hydrate from "next-mdx-remote/hydrate";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import clsx from "clsx";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "../../components";
@@ -20,8 +20,9 @@ let components = {
   strong: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   b: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   h2: (props: any) => <h2 className={styles.subtitle} {...props} />,
-  img: (props: any) => (
-    <Image unsized className={styles.image} {...props} />
+  img: (props: any) => <Image unsized className={styles.image} {...props} />,
+  blockquote: (props: any) => (
+    <blockquote className={styles.blockquote} {...props} />
   ),
 };
 
@@ -40,8 +41,24 @@ function Post({ post, newerPost, olderPost }: PostProps) {
       </Head>
       <div className={styles.date}>
         {format(new Date(post.published_at), "MMMM d, y")}
+
+        {post.edited_at ? (
+          <span className={styles.edited}>
+            {formatDistanceToNow(new Date(post.edited_at))}
+          </span>
+        ) : null}
+
+        <span> | {post.read_estimate} read</span>
       </div>
       <h1 className={styles.title}> {post.title} </h1>
+      <VerticalSpacer size="sm" />
+      <div>
+        {post.tag_list.map((tag) => (
+          <span key={tag} className={styles.tag}>
+            #{tag}
+          </span>
+        ))}
+      </div>
       <VerticalSpacer size="lg" />
       {content}
       <VerticalSpacer size="lg" />
