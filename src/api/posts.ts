@@ -94,40 +94,41 @@ let normalizePost = (post: Post): Post => {
   };
 };
 
+let fetchArticle = async (page: number) =>
+  fetch(`https://dev.to/api/articles/me/published?page=${page}&per_page=100`, {
+    headers: {
+      "api-key": process.env.dev_token as string,
+    },
+  });
+
+let fetchAllArticles = async (page = 1, results = []): Promise<Post[]> => {
+  let latestResults = await fetchArticle(page)
+    .then((res) => {
+      if (res.status !== 200) {
+        return Promise.reject(res.statusText);
+      }
+      return res.json();
+    })
+    .catch((err) => {
+      throw new Error(`error fetching page ${page}, ${err}`);
+    });
+
+  if (latestResults.length === 100)
+    return fetchAllArticles(page + 1, results.concat(latestResults));
+
+  return results.concat(latestResults);
+};
+
+let sleep = (ms: number = 0) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
 export let query = async () => {
+  await sleep(1000);
   // we cache the response
   // otherwise we'll hit the 429 error "Too many requests" during build times
   let cached = cache.get<Post[]>();
-  if (cached) return console.log("using cache"), cached;
-
-  let posts: Post[] = [];
-  let page = 0;
-  let per_page = 30; // can go up to 1000
-  let latestResult = [];
-
-  do {
-    page += 1; // bump page up by 1 every loop
-    latestResult = await fetch(
-      `https://dev.to/api/articles/me/published?page=${page}&per_page=${per_page}`,
-      {
-        headers: {
-          "api-key": process.env.dev_token as string,
-        },
-      }
-    )
-      .then((res) => {
-        if (res.status !== 200) {
-          console.log("Retry-After seconds", res.headers.get("Retry-After"));
-          return Promise.reject(res.statusText);
-        }
-        return res.json();
-      })
-      .then((x) => (posts = posts.concat(x)))
-      .catch((err) => {
-        throw new Error(`error fetching page ${page}, ${err}`);
-      });
-  } while (latestResult.length === per_page);
-  posts = posts.map(normalizePost);
+  if (cached) return cached;
+  let posts = (await fetchAllArticles()).map(normalizePost);
   cache.set(posts);
   return posts;
 };
