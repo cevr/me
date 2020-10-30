@@ -11,6 +11,7 @@ function Footer() {
         className={styles.icon}
         href="https://github.com/cevr"
         aria-label="Github profile"
+        rel="me"
       >
         <Github />
       </ExternalLink>
@@ -18,6 +19,7 @@ function Footer() {
         className={styles.icon}
         href="https://twitter.com/_cristianvr_"
         aria-label="Twitter profile"
+        rel="me"
       >
         <Twitter />
       </ExternalLink>
@@ -32,6 +34,7 @@ function Footer() {
         className={styles.icon}
         href={`mailto:${email}?subject=Hi Cristian!`}
         aria-label="email"
+        rel="me"
       >
         <Email />
       </ExternalLink>

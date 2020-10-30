@@ -98,7 +98,7 @@ export let query = async () => {
   // we cache the response
   // otherwise we'll hit the 429 error "Too many requests" during build times
   let cached = cache.get<Post[]>();
-  if (cached) return cached;
+  if (cached) return console.log("using cache"), cached;
 
   let posts: Post[] = [];
   let page = 0;
@@ -117,7 +117,7 @@ export let query = async () => {
     )
       .then((res) => {
         if (res.status !== 200) {
-          console.log(res.headers.get("Retry-After"));
+          console.log("Retry-After seconds", res.headers.get("Retry-After"));
           return Promise.reject(res.statusText);
         }
         return res.json();
