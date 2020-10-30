@@ -10,7 +10,7 @@ const theme = {
   },
   styles: [
     {
-      types: ["prolog", "constant", "builtin", "function", "boolean"],
+      types: ["prolog", "constant", "builtin", "function", "boolean", "number", "maybe-class-name"],
       style: {
         color: "var(--code-func)",
       },

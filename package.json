@@ -15,12 +15,16 @@
     "graphql-request": "^3.3.0",
     "next": "10.0.0",
     "next-mdx-remote": "^1.0.0",
+    "preact": "^10.5.4",
+    "preact-render-to-string": "^5.1.10",
     "preflight.css": "^0.1.1",
     "prism-react-renderer": "^1.1.1",
-    "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react": "npm:@preact/compat@^0.0.3",
+    "react-dom": "npm:@preact/compat@^0.0.3",
+    "react-ssr-prepass": "npm:preact-ssr-prepass@^1.1.2"
   },
   "devDependencies": {
+    "@prefresh/next": "^1.3.0",
     "@types/node": "^14.14.6",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",

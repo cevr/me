@@ -59,22 +59,22 @@ let cache = {
   },
 };
 
-function stripWhitespace(string: string) {
+let stripWhitespace = (string: string) => {
   return string.replace(/^\s+/, "").replace(/\s+$/, "");
-}
+};
 
-function wordCount(string: string) {
+let wordCount = (string: string) => {
   let pattern = "\\w+";
   let reg = new RegExp(pattern, "g");
   return (string.match(reg) || []).length;
-}
+};
 
-function humanReadableTime(time: number) {
+let humanReadableTime = (time: number) => {
   if (time < 0.5) {
     return "less than a minute";
   }
   return `${Math.ceil(time)} minute`;
-}
+};
 
 let getReadEstimate = (content: string) => {
   let avergageWordsPerMinute = 225;
@@ -115,9 +115,13 @@ export let query = async () => {
         },
       }
     )
-      .then((res) =>
-        res.status !== 200 ? Promise.reject(res.statusText) : res.json()
-      )
+      .then((res) => {
+        if (res.status !== 200) {
+          console.log(res.headers.get("Retry-After"));
+          return Promise.reject(res.statusText);
+        }
+        return res.json();
+      })
       .then((x) => (posts = posts.concat(x)))
       .catch((err) => {
         throw new Error(`error fetching page ${page}, ${err}`);
