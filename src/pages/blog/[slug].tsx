@@ -121,6 +121,7 @@ export let getStaticProps: GetStaticProps = async ({ params }) => {
         content: await renderToString(post.matter.content, { components }),
       },
     },
+    revalidate: 1,
   };
 };
 
@@ -133,6 +134,6 @@ export let getStaticPaths: GetStaticPaths = async () => {
         slug: post.slug,
       },
     })),
-    fallback: false,
+    fallback: true,
   };
 };
