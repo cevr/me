@@ -40,7 +40,6 @@ interface PostProps {
 
 function Post({ post, newerPost, olderPost }: PostProps) {
   let router = useRouter();
-  let content = hydrate(post.content, { components });
 
   if (router.isFallback) {
     return (
@@ -50,6 +49,7 @@ function Post({ post, newerPost, olderPost }: PostProps) {
     );
   }
 
+  let content = hydrate(post.content, { components });
   return (
     <BlogLayout>
       <Head>
