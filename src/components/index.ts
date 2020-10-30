@@ -7,3 +7,4 @@ export { default as KaizenLink } from "./KaizenLink";
 export { default as Nav } from "./Nav";
 export { default as Projects } from "./Projects";
 export { default as VerticalSpacer } from "./VerticalSpacer";
+export { default as KaizenLoading } from "./KaizenLoading";

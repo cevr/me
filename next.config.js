@@ -69,7 +69,10 @@ let config = {
   images: {
     deviceSizes: [320, 420, 768, 1024, 1200],
     iconSizes: [],
-    domains: ["thepracticaldev.s3.amazonaws.com"],
+    domains: [
+      "thepracticaldev.s3.amazonaws.com",
+      "dev-to-uploads.s3.amazonaws.com",
+    ],
     path: "/_next/image",
     loader: "default",
   },

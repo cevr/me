@@ -1,0 +1,19 @@
+.kaizen {
+  animation-name: color;
+  animation-duration: 2.5s;
+  animation-iteration-count: infinite;
+  font-size: 4rem;
+  display: grid;
+  place-items: center;
+}
+@keyframes color {
+  0% {
+    color: var(--fg);
+  }
+  50% {
+    color: var(--highlight);
+  }
+  100% {
+    color: var(--fg);
+  }
+}

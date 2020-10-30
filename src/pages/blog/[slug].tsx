@@ -2,14 +2,20 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import renderToString from "next-mdx-remote/render-to-string";
 import hydrate from "next-mdx-remote/hydrate";
 import { format, formatDistanceToNow } from "date-fns";
 import clsx from "clsx";
 
-import { ButtonLink, CodeBlock, VerticalSpacer } from "../../components";
-import { postsApi } from "../../api";
-import { BlogLayout } from "../../layouts";
+import {
+  ButtonLink,
+  CodeBlock,
+  KaizenLoading,
+  VerticalSpacer,
+} from "@components/index";
+import { postsApi } from "@api/index";
+import { BlogLayout } from "@layouts/index";
 import styles from "./post.module.css";
 
 let components = {
@@ -33,7 +39,17 @@ interface PostProps {
 }
 
 function Post({ post, newerPost, olderPost }: PostProps) {
+  let router = useRouter();
   let content = hydrate(post.content, { components });
+
+  if (router.isFallback) {
+    return (
+      <BlogLayout>
+        <KaizenLoading />
+      </BlogLayout>
+    );
+  }
+
   return (
     <BlogLayout>
       <Head>
