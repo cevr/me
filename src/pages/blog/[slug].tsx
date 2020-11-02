@@ -140,6 +140,7 @@ export let getStaticProps: GetStaticProps = async ({ params }) => {
         : null,
     },
     revalidate: 1,
+    notFound: !post,
   };
 };
 
