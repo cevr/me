@@ -1,23 +1,28 @@
 import Link from "next/link";
 
-import styles from "./fallback.module.css";
+import Fallback from "@layouts/Fallback";
+import styles from "./404.module.css";
 
 function Custom404() {
   return (
-    <main className={styles.main}>
+    <Fallback>
       <div>
-        <p>There's nothing here but you...</p>
+        <p>Nope! This page definitely doesn't exist. Just checked.</p>
         <p>
-          And this{" "}
+          Take this{" "}
           <Link href="/">
-            <a className={styles["link-home"]} aria-title="home link" aria-label="home link">
+            <a
+              className={styles["link-home"]}
+              aria-title="home link"
+              aria-label="home link"
+            >
               link
             </a>
           </Link>{" "}
           back home
         </p>
       </div>
-    </main>
+    </Fallback>
   );
 }
 

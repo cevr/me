@@ -3,9 +3,9 @@
   animation-duration: 2.5s;
   animation-iteration-count: infinite;
   font-size: 4rem;
-  display: grid;
-  place-items: center;
+  line-height: 4rem;
 }
+
 @keyframes color {
   0% {
     color: var(--fg);

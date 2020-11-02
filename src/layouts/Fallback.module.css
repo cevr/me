@@ -1,4 +1,4 @@
-.main {
+.fallback {
   display: grid;
   place-items: center;
   text-align: center;
@@ -6,13 +6,5 @@
   line-height: 2rem;
   transition: color var(--transition);
   font-size: 1.25rem;
-}
-
-.link-home {
-  transition: border var(--transition);
-  border-bottom: 3px solid var(--highlight);
-}
-
-.link-home:hover {
-  color: var(--highlight);
+  height: 100%;
 }

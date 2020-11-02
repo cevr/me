@@ -1,10 +1,11 @@
 import Link from "next/link";
 
-import styles from "./fallback.module.css";
+import Fallback from "@layouts/Fallback";
+import styles from "./404.module.css";
 
 function Error() {
   return (
-    <main className={styles.main}>
+    <Fallback>
       <div>
         <p>What??! Something went wrong you say?</p>
         <p>
@@ -21,7 +22,7 @@ function Error() {
           back home and pretend you never saw anything.
         </p>
       </div>
-    </main>
+    </Fallback>
   );
 }
 
