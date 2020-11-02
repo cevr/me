@@ -75,7 +75,7 @@
   font-size: 0.75rem;
 }
 
-.post-nav-item-date.newer {
+.post-nav-item.newer {
   text-align: right;
 }
 
@@ -114,4 +114,10 @@
   padding: 0.25rem 0.5rem;
   margin-right: 0.5rem;
   transition: all var(--transition);
+}
+
+@media (max-width: 50rem) {
+  .post-nav-item-title {
+    font-size: 1rem;
+  }
 }

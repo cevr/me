@@ -95,12 +95,12 @@ interface PostNavItemProps {
 
 function PostNavItem({ post, newer }: PostNavItemProps) {
   return (
-    <div className={styles["post-nav-item"]}>
-      <div
-        className={clsx(styles["post-nav-item-date"], {
-          [styles.newer]: newer,
-        })}
-      >
+    <div
+      className={clsx(styles["post-nav-item"], {
+        [styles.newer]: newer,
+      })}
+    >
+      <div className={styles["post-nav-item-date"]}>
         {newer ? "Newer →" : "← Older"}
       </div>
       <Link as={`/blog/${post.slug}`} href="/blog/[slug]">
