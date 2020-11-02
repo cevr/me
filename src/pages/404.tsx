@@ -1,10 +1,10 @@
 import Link from "next/link";
 
-import styles from "./404.module.css";
+import styles from "./fallback.module.css";
 
 function Custom404() {
   return (
-    <main className={styles.four}>
+    <main className={styles.main}>
       <div>
         <p>There's nothing here but you...</p>
         <p>
