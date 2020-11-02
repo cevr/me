@@ -21,7 +21,7 @@
     "paths": {
       "@components/*": ["components/*"],
       "@layouts/*": ["layouts/*"],
-      "@api/*": ["api/*"],
+      "@lib/*": ["lib/*"],
       "@shared/*": ["shared/*"],
       "@styles/*": ["styles/*"]
     }

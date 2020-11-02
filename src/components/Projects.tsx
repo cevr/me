@@ -1,4 +1,4 @@
-import { Project } from "@api/projects";
+import { Project } from "@lib/projects";
 import ExternalLink from "./ExternalLink";
 import { Star } from "./icons";
 import styles from "./Projects.module.css";

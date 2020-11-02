@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-import { projectsApi } from "@api/index";
+import { projectsApi } from "@lib/index";
 import { AboutMe, Projects } from "@components/index";
 import styles from "./index.module.css";
 
