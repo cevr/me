@@ -14,7 +14,7 @@ import {
   KaizenLoading,
   VerticalSpacer,
 } from "@components/index";
-import { postsApi } from "@api/index";
+import { postsApi } from "@lib/index";
 import { BlogLayout } from "@layouts/index";
 import styles from "./post.module.css";
 
