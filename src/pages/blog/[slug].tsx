@@ -132,10 +132,12 @@ export let getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       olderPost,
       newerPost,
-      post: {
-        ...post,
-        content: await renderToString(post.matter.content, { components }),
-      },
+      post: post
+        ? {
+            ...post,
+            content: await renderToString(post.matter.content, { components }),
+          }
+        : null,
     },
     revalidate: 1,
   };
