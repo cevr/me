@@ -7,12 +7,26 @@
   font-weight: bold;
 }
 
-.paragraph {
+.post .paragraph,
+.post ol {
   font-size: 1rem;
   font-weight: 300;
   color: var(--fg);
   line-height: 1.9rem;
   margin: 1rem 0;
+}
+
+.post li {
+  margin-left: 1rem;
+}
+
+.post li::before {
+  content: "\2022";
+  color: var(--highlight);
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
 }
 
 .paragraph code {

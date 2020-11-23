@@ -51,7 +51,7 @@ function Post({ post, newerPost, olderPost }: PostProps) {
 
   let content = hydrate(post.content, { components });
   return (
-    <BlogLayout>
+    <BlogLayout className={styles.post}>
       <Head>
         <title> {`${post.title} | Cristian`} </title>
       </Head>
