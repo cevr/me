@@ -1,8 +1,0 @@
-.link-home {
-  transition: border var(--transition);
-  border-bottom: 3px solid var(--highlight);
-}
-
-.link-home:hover {
-  color: var(--highlight);
-}

@@ -1,0 +1,137 @@
+.date {
+  color: var(--accent);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.post .paragraph,
+.post ol {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--fg);
+  line-height: 1.9rem;
+  margin: 1rem 0;
+}
+
+.post li {
+  margin-left: 1rem;
+}
+
+.post li::before {
+  content: '\2022';
+  color: var(--highlight);
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.paragraph code {
+  background-color: var(--code-bg);
+  color: var(--highlight);
+  font-family: SFMono-Regular, monospace;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: all var(--transition);
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.code {
+  margin: 0.5rem 0;
+}
+
+.code :global(.line-number) {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding-right: 1.5rem;
+  width: 1.2rem;
+  user-select: none;
+  opacity: 0.3;
+  text-align: center;
+  position: relative;
+}
+
+.code :global(.highlight-line) {
+  background-color: var(--code-highlight-bg);
+  border-left: 4px solid var(--highlight);
+}
+
+.code :global(.highlight-line .line-number) {
+  opacity: 0.5;
+  width: calc(1.2em - 4px);
+  left: -4px;
+}
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.post-nav-item {
+  color: var(--accent);
+  transition: color var(--transition);
+}
+
+.post-nav-item:hover {
+  color: var(--highlight);
+}
+
+.post-nav-item-date {
+  font-size: 0.75rem;
+}
+
+.post-nav-item.newer {
+  text-align: right;
+}
+
+.post-nav-item-title {
+  font-size: 1.25rem;
+  font-weight: bolder;
+}
+
+.image {
+  margin: 0 auto;
+}
+
+.blockquote {
+  padding: 0.5rem 1rem;
+  border-left: 4px solid var(--highlight);
+  background-color: #00000030;
+  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.blockquote .paragraph {
+  margin: 0;
+}
+
+.edited {
+  font-style: italic;
+  font-size: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.tag {
+  border-radius: 0.5rem;
+  background-color: var(--highlight);
+  color: var(--bg);
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+  transition: all var(--transition);
+}
+
+@media (max-width: 50rem) {
+  .post-nav-item-title {
+    font-size: 1rem;
+  }
+}
