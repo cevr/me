@@ -30,7 +30,7 @@ export function Footer() {
         <LinkedIn />
       </ExternalLink>
       <ExternalLink
-        className="styles.icon"
+        className="icon"
         href={`mailto:${email}?subject=Hi Cristian!`}
         aria-label="email"
         rel="me"

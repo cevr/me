@@ -1,5 +1,9 @@
-import { LinksFunction, MetaFunction, LoaderFunction } from "remix";
+import * as React from "react";
 import {
+  LinksFunction,
+  MetaFunction,
+  LoaderFunction,
+  ActionFunction,
   Meta,
   Links,
   Scripts,
@@ -7,16 +11,17 @@ import {
   useCatch,
   Outlet,
   Link,
+  redirect,
+  useLoaderData,
 } from "remix";
+import clsx from "clsx";
 
 import rootStyles from "./styles/root.css";
-import layoutStyles from "./styles/layout.css";
 import navStyles from "./styles/nav.css";
 import footerStyles from "./styles/footer.css";
 import boundaryStyles from "./styles/boundary.css";
 import { Footer, Nav } from "./components";
-import { useIsomorphicLayoutEffect } from "./lib/useIsomorphicLayoutEffect";
-import { COLOR_MODE_KEY } from "./lib/constants";
+import { colorModeCookie, useIsomorphicLayoutEffect } from "./lib";
 
 export let links: LinksFunction = () => {
   return [
@@ -46,7 +51,6 @@ export let links: LinksFunction = () => {
       href: "https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.0.2/preflight.css",
     },
     { rel: "stylesheet", href: rootStyles },
-    { rel: "stylesheet", href: layoutStyles },
     { rel: "stylesheet", href: navStyles },
     { rel: "stylesheet", href: footerStyles },
     { rel: "stylesheet", href: boundaryStyles },
@@ -59,29 +63,47 @@ export let meta: MetaFunction = () => {
   };
 };
 
-export let loader: LoaderFunction = async () => {
-  return { date: new Date() };
+export let loader: LoaderFunction = async ({ request }) => {
+  let value = (await colorModeCookie.parse(request.headers.get("cookie"))) ?? {};
+  value.colorMode ??= null;
+  return { date: new Date(), colorMode: value.colorMode };
+};
+
+export let action: ActionFunction = async ({ request }) => {
+  let value = (await colorModeCookie.parse(request.headers.get("cookie"))) ?? {};
+  let params = new URLSearchParams(await request.text());
+  value.colorMode = params.get("colorMode") ?? value.colorMode ?? null;
+  return redirect(request.headers.get("Referer") ?? "/", {
+    headers: {
+      "Set-Cookie": await colorModeCookie.serialize(value),
+    },
+  });
 };
 
 export default function App() {
-  // let data = useLoaderData();
+  let data =
+    useLoaderData<{ date: string; colorMode: "dark" | "light" | null }>();
+
+  const colorMode = React.useMemo(() => {
+    if (typeof window === "undefined") {
+      return "dark";
+    }
+    let lightColorScheme = window.matchMedia("(prefers-color-scheme: light)");
+    return data.colorMode ?? lightColorScheme.matches ? "light" : "dark";
+  }, [data.colorMode]);
+
   useIsomorphicLayoutEffect(() => {
     if (typeof window !== "undefined") {
-      let lightColorScheme = window.matchMedia("(prefers-color-scheme: light)");
-      const colorMode = localStorage.getItem(COLOR_MODE_KEY);
-      if (
-        (colorMode === null && lightColorScheme.matches) ||
-        colorMode === "light"
-      ) {
-        document.body.classList.add("light");
-      }
+      colorMode === "light"
+        ? document.body.classList.add("light")
+        : document.body.classList.remove("light");
     }
   }, []);
 
   return (
     <Document>
-      <div className="layout">
-        <Nav />
+      <div className={clsx("layout", colorMode)}>
+        <Nav colorMode={colorMode} />
         <Outlet />
         <Footer />
       </div>

@@ -43,6 +43,12 @@
   color: var(--highlight);
 }
 
+.nav form {
+  justify-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+}
+
 .nav .switch {
   justify-self: end;
   height: var(--item-size);
