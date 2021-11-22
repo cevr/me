@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   LinksFunction,
   MetaFunction,
@@ -20,8 +19,10 @@ import rootStyles from "./styles/root.css";
 import navStyles from "./styles/nav.css";
 import footerStyles from "./styles/footer.css";
 import boundaryStyles from "./styles/boundary.css";
+import tailwindStyles from "./styles/tailwind.css";
 import { Footer, Nav } from "./components";
 import { colorModeCookie, useIsomorphicLayoutEffect } from "./lib";
+import { useMemo } from "react";
 
 export let links: LinksFunction = () => {
   return [
@@ -48,7 +49,7 @@ export let links: LinksFunction = () => {
     },
     {
       rel: "stylesheet",
-      href: "https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.0.2/preflight.css",
+      href: tailwindStyles,
     },
     { rel: "stylesheet", href: rootStyles },
     { rel: "stylesheet", href: navStyles },
@@ -64,13 +65,15 @@ export let meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
-  let value = (await colorModeCookie.parse(request.headers.get("cookie"))) ?? {};
+  let value =
+    (await colorModeCookie.parse(request.headers.get("cookie"))) ?? {};
   value.colorMode ??= null;
   return { date: new Date(), colorMode: value.colorMode };
 };
 
 export let action: ActionFunction = async ({ request }) => {
-  let value = (await colorModeCookie.parse(request.headers.get("cookie"))) ?? {};
+  let value =
+    (await colorModeCookie.parse(request.headers.get("cookie"))) ?? {};
   let params = new URLSearchParams(await request.text());
   value.colorMode = params.get("colorMode") ?? value.colorMode ?? null;
   return redirect(request.headers.get("Referer") ?? "/", {
@@ -84,12 +87,15 @@ export default function App() {
   let data =
     useLoaderData<{ date: string; colorMode: "dark" | "light" | null }>();
 
-  const colorMode = React.useMemo(() => {
-    if (typeof window === "undefined") {
-      return "dark";
+  const colorMode = useMemo(() => {
+    if (data.colorMode) {
+      return data.colorMode;
     }
-    let lightColorScheme = window.matchMedia("(prefers-color-scheme: light)");
-    return data.colorMode ?? lightColorScheme.matches ? "light" : "dark";
+    if (typeof window !== "undefined") {
+      let lightColorScheme = window.matchMedia("(prefers-color-scheme: light)");
+      return data.colorMode ?? lightColorScheme.matches ? "light" : "dark";
+    }
+    return "dark";
   }, [data.colorMode]);
 
   useIsomorphicLayoutEffect(() => {
@@ -98,14 +104,14 @@ export default function App() {
         ? document.body.classList.add("light")
         : document.body.classList.remove("light");
     }
-  }, []);
+  }, [colorMode]);
 
   return (
     <Document>
-      <div className={clsx("layout", colorMode)}>
+      <div className="layout">
         <Nav colorMode={colorMode} />
         <Outlet />
-        <Footer />
+        <Footer date={data.date}/>
       </div>
     </Document>
   );

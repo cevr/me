@@ -1,8 +1,7 @@
 .footer {
-  display: grid;
-  justify-content: start;
-  align-content: center;
-  grid-auto-flow: column;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   grid-gap: 1.5rem;
   grid-area: footer;
 }

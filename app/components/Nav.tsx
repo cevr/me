@@ -38,6 +38,7 @@ export function Nav({ colorMode }: NavProps) {
       <form method="POST">
         <button
           className="switch"
+          name="colorMode"
           value={colorMode === "dark" ? "light" : "dark"}
         >
           <LightSwitch aria-label="Toggle Theme" on={colorMode === "light"} />

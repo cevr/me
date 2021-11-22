@@ -8,6 +8,11 @@
     U+FEFF, U+FFFD;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 .light {
   --code-bg: #e9ecef;
   --code-highlight-bg: #0b728520;
@@ -69,7 +74,7 @@ body {
   --nav-height: 3.75rem;
   --footer-height: 3.75rem;
   --vertical-padding: 1rem;
-  height: 100vh;
+  height: 100%;
   min-height: 0;
   display: grid;
   grid-template-areas:
@@ -80,7 +85,7 @@ body {
   grid-template-columns: 100%;
   grid-gap: var(--grid-gap);
   padding: var(--vertical-padding) 2.5rem;
-  max-width: 67.5rem;
+  max-width: 1200px;
   margin: auto;
 }
 

@@ -51,14 +51,14 @@ export default function Index() {
             Typescript
           </ButtonLink>{" "}
           daily, and I love{" "}
-          <ButtonLink href="https://nextjs.org/#features">Next.js</ButtonLink>
+          <ButtonLink href="https://remix.run/">Remix</ButtonLink>
           .
           <br />
           In fact,{" "}
           <ButtonLink href="https://github.com/cevr/me">
             this website
           </ButtonLink>{" "}
-          is using all of them!
+          is built with all of them!
         </p>
       </section>
       <section className={"projects"}>

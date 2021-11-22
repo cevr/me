@@ -4,6 +4,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { bundleMDX,  } from "mdx-bundler";
+import {getMDXComponent} from 'mdx-bundler/client'
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
@@ -45,7 +47,7 @@ export let loader: LoaderFunction = async ({ params }) => {
     newerPost,
     post: {
       ...post,
-      content: await serialize(post.matter.content),
+      content: (await bundleMDX({ source: post.matter.content })).code,
     },
   };
 };
@@ -58,6 +60,8 @@ export default function Screen() {
     newerPost: Post;
     olderPost: Post;
   }>();
+
+  const Component = getMDXComponent(post.content);
 
   return (
     <div className="post">
@@ -80,7 +84,7 @@ export default function Screen() {
         ))}
       </div>
       <VerticalSpacer size="lg" />
-      <MDXRemote {...post.content} components={components} />
+      <Component components={components} />
       <VerticalSpacer size="lg" />
       <nav className="post-nav">
         {olderPost ? <PostNavItem post={olderPost} /> : <div />}

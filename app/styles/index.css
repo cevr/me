@@ -4,7 +4,8 @@
   grid-template-areas: 'about projects';
   grid-template-columns: 1fr 1fr;
   grid-gap: var(--grid-gap);
-  max-height: 100%;
+  height: 100%;
+  overflow-y: auto;
   padding-top: var(--main-padding);
 }
 
@@ -101,10 +102,9 @@
 
 .projects {
   grid-area: projects;
-  max-height: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-auto-rows: minmax(min-content, max-content);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   grid-gap: var(--grid-gap);
   overflow-y: auto;
   padding: 0.625rem;
