@@ -22,7 +22,7 @@ import footerStyles from "./styles/footer.css";
 import boundaryStyles from "./styles/boundary.css";
 import tailwindStyles from "./styles/tailwind.css";
 import { Footer, Nav } from "./components";
-import { colorModeCookie } from "./lib";
+import { getTheme } from "./lib";
 import { useMemo } from "react";
 
 export let links: LinksFunction = () => {
@@ -70,45 +70,28 @@ export let meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
-  let value =
-    (await colorModeCookie.parse(request.headers.get("cookie"))) ?? {};
-  value.colorMode ??= null;
-  return { date: new Date(), colorMode: value.colorMode };
-};
-
-export let action: ActionFunction = async ({ request }) => {
-  let value =
-    (await colorModeCookie.parse(request.headers.get("cookie"))) ?? {};
-  let params = new URLSearchParams(await request.text());
-  value.colorMode = params.get("colorMode") ?? value.colorMode ?? null;
-  return redirect(request.headers.get("Referer") ?? "/", {
-    headers: {
-      "Set-Cookie": await colorModeCookie.serialize(value),
-    },
-  });
+  let theme = await getTheme(request);
+  return { date: new Date(), theme };
 };
 
 export default function App() {
-  let data =
-    useLoaderData<{ date: string; colorMode: "dark" | "light" | null }>();
+  let data = useLoaderData<{ date: string; theme: "dark" | "light" | null }>();
 
-  const colorMode = useMemo(() => {
-    if (data.colorMode) {
-      return data.colorMode;
+  const theme = useMemo(() => {
+    if (data.theme) {
+      return data.theme;
     }
     if (typeof window !== "undefined") {
       let lightColorScheme = window.matchMedia("(prefers-color-scheme: light)");
-      return data.colorMode ?? lightColorScheme.matches ? "light" : "dark";
+      return data.theme ?? lightColorScheme.matches ? "light" : "dark";
     }
     return "dark";
-  }, [data.colorMode]);
+  }, [data.theme]);
 
   return (
     <Document>
-      {colorMode === "light" ? (
-        <link rel="stylesheet" href={lightStyles} />
-      ) : null}
-      <Nav colorMode={colorMode} />
+      {theme === "light" ? <link rel="stylesheet" href={lightStyles} /> : null}
+      <Nav theme={theme} />
       <Outlet />
       <Footer date={data.date} />
     </Document>

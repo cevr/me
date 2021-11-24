@@ -5,10 +5,10 @@ import { useLocation } from "react-router-dom";
 import { LightSwitch } from "./icons";
 
 type NavProps = {
-  colorMode: "light" | "dark";
+  theme: "light" | "dark";
 };
 
-export function Nav({ colorMode }: NavProps) {
+export function Nav({ theme }: NavProps) {
   let location = useLocation();
 
   return (
@@ -35,13 +35,13 @@ export function Nav({ colorMode }: NavProps) {
           Blog
         </Link>
       </div>
-      <form action="/" method="POST">
+      <form action="/theme" method="POST">
         <button
           className="switch"
-          name="colorMode"
-          value={colorMode === "dark" ? "light" : "dark"}
+          name="theme"
+          value={theme === "dark" ? "light" : "dark"}
         >
-          <LightSwitch aria-label="Toggle Theme" on={colorMode === "light"} />
+          <LightSwitch aria-label="Toggle Theme" on={theme === "light"} />
         </button>
       </form>
     </nav>

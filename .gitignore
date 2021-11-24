@@ -11,8 +11,9 @@ app/styles/tailwind.css
 
 # production
 .cache
-/build
+**/build
 /public/build
+/server/build
 
 # misc
 .DS_Store
