@@ -35,7 +35,7 @@ export function Nav({ colorMode }: NavProps) {
           Blog
         </Link>
       </div>
-      <form method="POST">
+      <form action="/" method="POST">
         <button
           className="switch"
           name="colorMode"

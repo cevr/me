@@ -4,8 +4,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { bundleMDX,  } from "mdx-bundler";
-import {getMDXComponent} from 'mdx-bundler/client'
+
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
@@ -17,7 +16,7 @@ dayjs.extend(relativeTime);
 
 export let meta: MetaFunction = (props) => {
   return {
-    title: `${props.data.title} | Cristian`,
+    title: `${props.data?.title} | Cristian`,
   };
 };
 
@@ -47,7 +46,7 @@ export let loader: LoaderFunction = async ({ params }) => {
     newerPost,
     post: {
       ...post,
-      content: (await bundleMDX({ source: post.matter.content })).code,
+      content: await serialize(post.matter.content)
     },
   };
 };
@@ -61,12 +60,10 @@ export default function Screen() {
     olderPost: Post;
   }>();
 
-  const Component = getMDXComponent(post.content);
-
   return (
     <div className="post">
       <div className="date">
-        {dayjs(post.published_at, "MMMM d, y")}
+        {dayjs(post.published_at).format ("MMMM DD, YYYY")}
 
         {post.edited_at ? (
           <span className="edited">{dayjs().to(post.edited_at)}</span>
@@ -84,7 +81,7 @@ export default function Screen() {
         ))}
       </div>
       <VerticalSpacer size="lg" />
-      <Component components={components} />
+      <MDXRemote {...post.content} components={components}/>
       <VerticalSpacer size="lg" />
       <nav className="post-nav">
         {olderPost ? <PostNavItem post={olderPost} /> : <div />}
@@ -107,7 +104,7 @@ function PostNavItem({ post, newer }: PostNavItemProps) {
       })}
     >
       <div className="post-nav-item-date">{newer ? "Newer →" : "← Older"}</div>
-      <Link to={post.slug} className="post-nav-item-title">
+      <Link to={`../${post.slug}`} className="post-nav-item-title">
         {post.title}
       </Link>
     </div>
@@ -115,7 +112,7 @@ function PostNavItem({ post, newer }: PostNavItemProps) {
 }
 
 let components = {
-  code: CodeBlock,
+  code: CodeBlock ,
   pre: (props: any) => <div className="code" {...props} />,
   a: (props: any) => <ButtonLink {...props} />,
   p: (props: any) => <p className="paragraph" {...props} />,

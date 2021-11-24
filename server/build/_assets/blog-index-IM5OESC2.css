@@ -1,0 +1,26 @@
+.blog {
+  display: block;
+}
+
+.blog h1 {
+  font-size: 3rem;
+}
+
+.blog li {
+  font-size: 1.25rem;
+  color: var(--fg);
+  transition: color var(--transition);
+  margin: 1rem 0;
+}
+
+.blog li:first-child {
+  margin-top: 0;
+}
+
+.blog li:last-child {
+  margin-bottom: 0;
+}
+
+.blog li:hover {
+  color: var(--highlight);
+}

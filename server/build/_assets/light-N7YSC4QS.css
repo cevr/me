@@ -1,0 +1,17 @@
+:root {
+  --code-bg: #e9ecef;
+  --code-highlight-bg: #0b728520;
+  --code-comment: #868e96;
+  --code-keyword: #0b7285;
+  --code-string: #d77b6a;
+  --code-punc: #212529;
+  --code-func: #dd4a68;
+
+  --bg: #f8f9fa;
+  --fg: #212529;
+  --link-bg: #e9ecef;
+  --link-hover-fg: #f8f9fa;
+  --accent: #495057;
+  --highlight: #0b7285;
+  --contrast: salmon;
+}

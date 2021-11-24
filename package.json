@@ -1,7 +1,7 @@
 {
-  "name": "me",
   "private": true,
-  "description": "My personal site.",
+  "name": "me",
+  "description": "My personal website.",
   "license": "",
   "scripts": {
     "cleanup": "rimraf .cache ./build ./public/build ./app/styles/tailwind.css",
@@ -9,32 +9,33 @@
     "build:style": "cross-env NODE_ENV=production tailwindcss -o ./app/styles/tailwind.css --minify",
     "build": "npm run build:style && npm run build:remix",
     "dev:style": "tailwindcss -o ./app/styles/tailwind.css --watch",
-    "dev:remix": "remix dev",
+    "dev:remix": "remix watch",
+    "dev:vercel": "vercel dev",
     "dev": "concurrently \"npm:dev:*\"",
     "prebuild": "npm run cleanup",
     "postinstall": "remix setup node",
-    "start": "remix-serve build"
+    "start": "vercel dev"
   },
   "dependencies": {
-    "@remix-run/react": "^0.21.0",
-    "@remix-run/serve": "^0.21.0",
+    "@remix-run/react": "^1.0.4",
+    "@remix-run/vercel": "^1.0.4",
+    "@vercel/node": "^1.8.3",
     "clsx": "^1.1.1",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
-    "esbuild": "^0.11.16",
-    "graphql": "15",
+    "esbuild": "^0.13.15",
+    "graphql": "15.x",
     "graphql-request": "^3.6.1",
     "gray-matter": "^4.0.3",
-    "mdx-bundler": "^8.0.0",
     "next-mdx-remote": "^3.0.8",
     "prism-react-renderer": "^1.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.0.2",
-    "remix": "^0.21.0"
+    "remix": "^1.0.4"
   },
   "devDependencies": {
-    "@remix-run/dev": "^0.21.0",
+    "@remix-run/dev": "^1.0.4",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "autoprefixer": "^10.4.0",
@@ -43,7 +44,8 @@
     "postcss": "^8.3.11",
     "rimraf": "^3.0.2",
     "tailwindcss": "^2.2.19",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "vercel": "^21.2.2"
   },
   "engines": {
     "node": ">=14"

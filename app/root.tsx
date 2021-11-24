@@ -13,15 +13,16 @@ import {
   redirect,
   useLoaderData,
 } from "remix";
-import clsx from "clsx";
 
+import darkStyles from "./styles/dark.css";
+import lightStyles from "./styles/light.css";
 import rootStyles from "./styles/root.css";
 import navStyles from "./styles/nav.css";
 import footerStyles from "./styles/footer.css";
 import boundaryStyles from "./styles/boundary.css";
 import tailwindStyles from "./styles/tailwind.css";
 import { Footer, Nav } from "./components";
-import { colorModeCookie, useIsomorphicLayoutEffect } from "./lib";
+import { colorModeCookie } from "./lib";
 import { useMemo } from "react";
 
 export let links: LinksFunction = () => {
@@ -50,6 +51,10 @@ export let links: LinksFunction = () => {
     {
       rel: "stylesheet",
       href: tailwindStyles,
+    },
+    {
+      rel: "stylesheet",
+      href: darkStyles,
     },
     { rel: "stylesheet", href: rootStyles },
     { rel: "stylesheet", href: navStyles },
@@ -98,21 +103,14 @@ export default function App() {
     return "dark";
   }, [data.colorMode]);
 
-  useIsomorphicLayoutEffect(() => {
-    if (typeof window !== "undefined") {
-      colorMode === "light"
-        ? document.body.classList.add("light")
-        : document.body.classList.remove("light");
-    }
-  }, [colorMode]);
-
   return (
     <Document>
-      <div className="layout">
-        <Nav colorMode={colorMode} />
-        <Outlet />
-        <Footer date={data.date}/>
-      </div>
+      {colorMode === "light" ? (
+        <link rel="stylesheet" href={lightStyles} />
+      ) : null}
+      <Nav colorMode={colorMode} />
+      <Outlet />
+      <Footer date={data.date} />
     </Document>
   );
 }
