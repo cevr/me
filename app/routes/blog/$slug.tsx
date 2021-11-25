@@ -75,7 +75,7 @@ export default function Screen() {
       <VerticalSpacer size="sm" />
       <div>
         {post.tag_list.map((tag) => (
-          <span key={tag} className="tag">
+          <span key={tag} className="blog-tag">
             #{tag}
           </span>
         ))}

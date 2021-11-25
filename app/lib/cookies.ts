@@ -8,12 +8,12 @@ export let themeCookie = createCookie("theme", {
 });
 
 export let getTheme = async (request: Request) => {
-  let value = await themeCookie.parse(request.headers.get("cookie"));
+  let value = await themeCookie.parse(request.headers.get("cookie")) ?? {};
   return value?.theme ?? null;
 };
 
 export let setTheme = async (request: Request) => {
-  let value = await themeCookie.parse(request.headers.get("cookie"));
+  let value = await themeCookie.parse(request.headers.get("cookie")) ?? {};
   let params = await request.formData();
   value.theme = params.get("theme") ?? value.theme ?? null;
   return value;

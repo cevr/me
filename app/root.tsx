@@ -2,7 +2,6 @@ import {
   LinksFunction,
   MetaFunction,
   LoaderFunction,
-  ActionFunction,
   Meta,
   Links,
   Scripts,
@@ -10,7 +9,6 @@ import {
   useCatch,
   Outlet,
   Link,
-  redirect,
   useLoaderData,
 } from "remix";
 
@@ -20,7 +18,6 @@ import rootStyles from "./styles/root.css";
 import navStyles from "./styles/nav.css";
 import footerStyles from "./styles/footer.css";
 import boundaryStyles from "./styles/boundary.css";
-import tailwindStyles from "./styles/tailwind.css";
 import { Footer, Nav } from "./components";
 import { getTheme } from "./lib";
 import { useMemo } from "react";
@@ -50,7 +47,7 @@ export let links: LinksFunction = () => {
     },
     {
       rel: "stylesheet",
-      href: tailwindStyles,
+      href: '/tailwind',
     },
     {
       rel: "stylesheet",

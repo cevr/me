@@ -48,7 +48,7 @@
   margin: 0.5rem 0;
 }
 
-.code :global(.line-number) {
+.code .line-number {
   display: inline-block;
   margin-left: 0.5rem;
   padding-right: 1.5rem;
@@ -59,12 +59,12 @@
   position: relative;
 }
 
-.code :global(.highlight-line) {
+.code .highlight-line {
   background-color: var(--code-highlight-bg);
   border-left: 4px solid var(--highlight);
 }
 
-.code :global(.highlight-line .line-number) {
+.code .highlight-line .line-number {
   opacity: 0.5;
   width: calc(1.2em - 4px);
   left: -4px;
@@ -121,7 +121,7 @@
   margin-left: 0.5rem;
 }
 
-.tag {
+.blog-tag {
   border-radius: 0.5rem;
   background-color: var(--highlight);
   color: var(--bg);
