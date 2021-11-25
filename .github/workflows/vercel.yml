@@ -23,9 +23,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build Remix App
-        run: |
-          npm ci
-          npm run build
+        run: pnpm build
       - name: Deploy Preview
         uses: amondnet/vercel-action@v20
         id: vercel-deploy-preview
