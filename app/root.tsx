@@ -12,15 +12,12 @@ import {
   useLoaderData,
 } from "remix";
 
-import darkStyles from "./styles/dark.css";
-import lightStyles from "./styles/light.css";
 import rootStyles from "./styles/root.css";
 import navStyles from "./styles/nav.css";
 import footerStyles from "./styles/footer.css";
 import boundaryStyles from "./styles/boundary.css";
 import { Footer, Nav } from "./components";
-import { getTheme } from "./lib";
-import { useMemo } from "react";
+import { getTheme, Theme } from "./lib";
 
 export let links: LinksFunction = () => {
   return [
@@ -47,11 +44,11 @@ export let links: LinksFunction = () => {
     },
     {
       rel: "stylesheet",
-      href: '/tailwind',
+      href: "/tailwind",
     },
     {
       rel: "stylesheet",
-      href: darkStyles,
+      href: "/theme",
     },
     { rel: "stylesheet", href: rootStyles },
     { rel: "stylesheet", href: navStyles },
@@ -72,23 +69,11 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function App() {
-  let data = useLoaderData<{ date: string; theme: "dark" | "light" | null }>();
-
-  const theme = useMemo(() => {
-    if (data.theme) {
-      return data.theme;
-    }
-    if (typeof window !== "undefined") {
-      let lightColorScheme = window.matchMedia("(prefers-color-scheme: light)");
-      return data.theme ?? lightColorScheme.matches ? "light" : "dark";
-    }
-    return "dark";
-  }, [data.theme]);
+  let data = useLoaderData<{ date: string; theme: Theme }>();
 
   return (
     <Document>
-      {theme === "light" ? <link rel="stylesheet" href={lightStyles} /> : null}
-      <Nav theme={theme} />
+      <Nav theme={data.theme} />
       <Outlet />
       <Footer date={data.date} />
     </Document>

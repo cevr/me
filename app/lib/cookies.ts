@@ -7,14 +7,16 @@ export let themeCookie = createCookie("theme", {
   path: "/",
 });
 
-export let getTheme = async (request: Request) => {
-  let value = await themeCookie.parse(request.headers.get("cookie")) ?? {};
-  return value?.theme ?? null;
+export let getTheme = async (request: Request): Promise<Theme> => {
+  let cookie = (await themeCookie.parse(request.headers.get("cookie"))) ?? {
+    theme: "dark",
+  };
+  return cookie?.theme;
 };
 
 export let setTheme = async (request: Request) => {
-  let value = await themeCookie.parse(request.headers.get("cookie")) ?? {};
+  let cookie = (await themeCookie.parse(request.headers.get("cookie"))) ?? {};
   let params = await request.formData();
-  value.theme = params.get("theme") ?? value.theme ?? null;
-  return value;
+  cookie.theme = params.get("theme") ?? cookie.theme ?? "dark";
+  return cookie;
 };

@@ -1,11 +1,12 @@
-import clsx from "clsx";
 import { Link } from "remix";
 import { useLocation } from "react-router-dom";
+import clsx from "clsx";
 
 import { LightSwitch } from "./icons";
+import { Theme } from "~/lib";
 
 type NavProps = {
-  theme: "light" | "dark";
+  theme: Theme;
 };
 
 export function Nav({ theme }: NavProps) {

@@ -8,8 +8,7 @@
     "build": "remix build",
     "dev": "remix dev",
     "prebuild": "npm run cleanup",
-    "postinstall": "remix setup node",
-    "start": "vercel dev"
+    "postinstall": "remix setup node"
   },
   "dependencies": {
     "@remix-run/react": "^1.0.5",
@@ -39,8 +38,7 @@
     "@types/react-dom": "^17.0.11",
     "cross-env": "^7.0.3",
     "rimraf": "^3.0.2",
-    "typescript": "^4.5.2",
-    "vercel": "^23.1.2"
+    "typescript": "^4.5.2"
   },
   "engines": {
     "node": ">=14"
