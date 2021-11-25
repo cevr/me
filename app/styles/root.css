@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "Megrim";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Megrim"), url("/megrim-tiny.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  --transition: 0.15s;
+  --grid-gap: 0.625rem;
+  --main-padding: 3.125rem;
+
+  transition: all var(--transition);
+  font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica,
+    sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+
+  --nav-height: 3.75rem;
+  --footer-height: 3.75rem;
+  --vertical-padding: 1rem;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-areas:
+    "nav"
+    "content"
+    "footer";
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
+  grid-gap: var(--grid-gap);
+  padding: var(--vertical-padding) 2.5rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+@media (max-width: 50rem) {
+  body {
+    --grid-gap: 1.25rem;
+  }
+}
+
+*::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.paragraph-link {
+  color: var(--highlight);
+  padding: 0.25rem 0.5rem;
+  background-color: var(--link-bg);
+  border-radius: 6px;
+  transition: background-color var(--transition);
+  white-space: nowrap;
+}
+.paragraph-link:hover {
+  background-color: var(--highlight);
+  color: var(--link-hover-fg);
+}

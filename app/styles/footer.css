@@ -1,0 +1,27 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  grid-gap: 1.5rem;
+  grid-area: footer;
+}
+
+.footer a {
+  color: var(--accent);
+  transition: color var(--transition);
+  font-weight: 300;
+}
+.footer a:hover {
+  color: var(--highlight);
+}
+
+.footer .icon {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+@media (max-width: 50rem) {
+  .footer {
+    justify-content: center;
+  }
+}

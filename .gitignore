@@ -4,16 +4,16 @@
 /node_modules
 /.pnp
 .pnp.js
+app/styles/tailwind.css
 
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
 # production
-/build
+.cache
+**/build
+/public/build
+/server/build
 
 # misc
 .DS_Store
@@ -24,5 +24,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .vercel
-
-cache

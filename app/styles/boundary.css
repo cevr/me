@@ -1,0 +1,19 @@
+.boundary {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--accent);
+  line-height: 2rem;
+  transition: color var(--transition);
+  font-size: 1.25rem;
+  height: 100%;
+}
+
+.link-home {
+  transition: border var(--transition);
+  border-bottom: 3px solid var(--highlight);
+}
+
+.link-home:hover {
+  color: var(--highlight);
+}
