@@ -11,21 +11,21 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
-      - name: Install and cache dependencies
-        uses: actions/checkout@v2
-      - uses: actions/cache@v1
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.0.1
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          version: 6.20.3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
       - name: Build Remix App
         run: |
           npm ci
           npm run build
-        env:
-          REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
-
       - name: Deploy Preview
         uses: amondnet/vercel-action@v20
         id: vercel-deploy-preview
