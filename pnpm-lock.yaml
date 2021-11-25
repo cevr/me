@@ -25,7 +25,6 @@ specifiers:
   react-dom: ^17.0.2
   react-router-dom: ^6.0.2
   remix: ^1.0.4
-  remix-utils: ^2.1.0
   rimraf: ^3.0.2
   tailwindcss: ^2.2.19
   typescript: ^4.1.2
@@ -48,7 +47,6 @@ dependencies:
   react-dom: 17.0.2_react@17.0.2
   react-router-dom: 6.0.2_react-dom@17.0.2+react@17.0.2
   remix: 1.0.4
-  remix-utils: 2.1.0_01a58b2e73d1474ae4503cc578015071
 
 devDependencies:
   '@remix-run/dev': 1.0.4
@@ -3716,12 +3714,6 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /prettier/2.4.1:
-    resolution: {integrity: sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    dev: false
-
   /pretty-hrtime/1.0.3:
     resolution: {integrity: sha1-t+PqQkNaTJsnWdmeDyAesZWALuE=}
     engines: {node: '>= 0.8'}
@@ -4018,20 +4010,6 @@ packages:
     resolution: {integrity: sha512-8qRqmL9F4nuLPIgl92XUuxI3pFxize+F1H0e/W3llTk0UsjJaj01+RrirkMw7P21RKe4X6goQhYRSvNWX+70Rw==}
     dependencies:
       mdast-squeeze-paragraphs: 4.0.0
-    dev: false
-
-  /remix-utils/2.1.0_01a58b2e73d1474ae4503cc578015071:
-    resolution: {integrity: sha512-oWaUUUHMLPbUKtgwrI8fsHpJFBetCMbXkx1mzSQ0cIxQ+ZUD/eeQJ/BF1Pfmk5aWqOdkuuoio6uZdvnVeAb+PA==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      '@remix-run/react': ^1.0.0
-      '@remix-run/server-runtime': ^1.0.0
-      react: ^17.0.2
-    dependencies:
-      '@remix-run/react': 1.0.4_react-dom@17.0.2+react@17.0.2
-      prettier: 2.4.1
-      react: 17.0.2
-      type-fest: 2.6.0
     dev: false
 
   /remix/1.0.4:
@@ -4531,11 +4509,6 @@ packages:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
     dev: true
-
-  /type-fest/2.6.0:
-    resolution: {integrity: sha512-XN1FDGGtaSDA6CFsCW5iolTQqFsnJ+ZF6JqSz0SqXoh4F8GY0xqUv5RYnTilpmL+sOH8OH4FX8tf9YyAPM2LDA==}
-    engines: {node: '>=12.20'}
-    dev: false
 
   /type-is/1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
