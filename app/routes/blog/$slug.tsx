@@ -16,7 +16,7 @@ dayjs.extend(relativeTime);
 
 export let meta: MetaFunction = (props) => {
   return {
-    title: `${props.data?.title} | Cristian`,
+    title: `${props.data?.post.title} | Cristian`,
   };
 };
 
