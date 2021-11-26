@@ -7,6 +7,7 @@
   transition: color var(--transition);
   font-size: 1.25rem;
   height: 100%;
+  grid-area: content;
 }
 
 .link-home {
