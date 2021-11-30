@@ -4,6 +4,7 @@
   align-items: center;
   grid-gap: 1.5rem;
   grid-area: footer;
+  padding: 1.5rem 0;
 }
 
 .footer a {

@@ -1,4 +1,4 @@
-import { loadTailwindCss } from "~/lib/loadTailwindCss";
+import { loadTailwindCss } from "~/lib";
 
 export let loader = async () => {
   let css = await loadTailwindCss();

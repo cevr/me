@@ -1,4 +1,4 @@
-import matter from 'gray-matter';
+import matter from "gray-matter";
 
 type Maybe<T> = T | null;
 
@@ -33,18 +33,18 @@ export interface Post {
 }
 
 let stripWhitespace = (string: string) => {
-  return string.replace(/^\s+/, '').replace(/\s+$/, '');
+  return string.replace(/^\s+/, "").replace(/\s+$/, "");
 };
 
 let wordCount = (string: string) => {
-  let pattern = '\\w+';
-  let reg = new RegExp(pattern, 'g');
+  let pattern = "\\w+";
+  let reg = new RegExp(pattern, "g");
   return (string.match(reg) || []).length;
 };
 
 let humanReadableTime = (time: number) => {
   if (time < 1) {
-    return 'less than a minute';
+    return "less than a minute";
   }
   return `${Math.ceil(time)} minute`;
 };
@@ -61,7 +61,7 @@ let normalizePost = (post: Post): Post => {
   return {
     ...post,
     // remove the last bit (its a 4 digit identifier, not needed here)
-    slug: post.slug.split('-').slice(0, -1).join('-'),
+    slug: post.slug.split("-").slice(0, -1).join("-"),
     matter: { data, content },
     read_estimate: getReadEstimate(post.body_markdown),
   };
@@ -70,7 +70,7 @@ let normalizePost = (post: Post): Post => {
 let fetchArticle = async (page: number): Promise<Post[]> =>
   fetch(`https://dev.to/api/articles/me/published?page=${page}&per_page=100`, {
     headers: {
-      'api-key': process.env.DEV_TO_TOKEN as string,
+      "api-key": process.env.DEV_TO_TOKEN as string,
     },
   })
     .then((res) => {
@@ -99,3 +99,5 @@ export let query = async () => {
   let posts = (await fetchAllArticles()).map(normalizePost);
   return posts;
 };
+
+export { serialize } from "next-mdx-remote/serialize";

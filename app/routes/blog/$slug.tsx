@@ -2,13 +2,11 @@ import { MetaFunction, LoaderFunction, useLoaderData, Link, json } from "remix";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { serialize } from "next-mdx-remote/serialize";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
-import { Post } from "~/lib/posts";
+import { Post } from "~/lib/posts.server";
 
 import blogPostStyles from "../../styles/blog-post.css";
 
@@ -46,7 +44,7 @@ export let loader: LoaderFunction = async ({ params }) => {
     newerPost,
     post: {
       ...post,
-      content: await serialize(post.matter.content)
+      content: postsApi.serialize(post.matter.content),
     },
   };
 };
@@ -63,7 +61,7 @@ export default function Screen() {
   return (
     <div className="post">
       <div className="date">
-        {dayjs(post.published_at).format ("MMMM DD, YYYY")}
+        {dayjs(post.published_at).format("MMMM DD, YYYY")}
 
         {post.edited_at ? (
           <span className="edited">{dayjs().to(post.edited_at)}</span>
@@ -81,7 +79,7 @@ export default function Screen() {
         ))}
       </div>
       <VerticalSpacer size="lg" />
-      <MDXRemote {...post.content} components={components}/>
+      <MDXRemote {...post.content} components={components} />
       <VerticalSpacer size="lg" />
       <nav className="post-nav">
         {olderPost ? <PostNavItem post={olderPost} /> : <div />}
@@ -112,7 +110,7 @@ function PostNavItem({ post, newer }: PostNavItemProps) {
 }
 
 let components = {
-  code: CodeBlock ,
+  code: CodeBlock,
   pre: (props: any) => <div className="code" {...props} />,
   a: (props: any) => <ButtonLink {...props} />,
   p: (props: any) => <p className="paragraph" {...props} />,
