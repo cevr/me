@@ -44,7 +44,7 @@ export let loader: LoaderFunction = async ({ params }) => {
     newerPost,
     post: {
       ...post,
-      content: postsApi.serialize(post.matter.content),
+      content: await postsApi.serialize(post.matter.content),
     },
   };
 };
