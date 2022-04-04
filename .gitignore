@@ -23,4 +23,5 @@ app/styles/tailwind.css
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/api/index.js
 .vercel
