@@ -6,7 +6,6 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
-    "prebuild": "npm run cleanup",
     "postinstall": "remix setup node"
   },
   "dependencies": {
