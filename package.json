@@ -5,8 +5,7 @@
   "license": "",
   "scripts": {
     "build": "remix build",
-    "dev": "remix dev",
-    "postinstall": "remix setup node"
+    "dev": "remix dev"
   },
   "dependencies": {
     "@remix-run/react": "^1.3.4",
