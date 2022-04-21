@@ -1,12 +1,14 @@
-import { MetaFunction, LoaderFunction, useLoaderData, Link, json } from "remix";
+import type { MetaFunction, LoaderFunction } from "remix";
+import { useLoaderData, Link, json } from "remix";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import type { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { MDXRemote } from "next-mdx-remote";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
-import { Post } from "~/lib/posts.server";
+import type { Post } from "~/lib/posts.server";
 
 import blogPostStyles from "../../styles/blog-post.css";
 
@@ -39,14 +41,23 @@ export let loader: LoaderFunction = async ({ params }) => {
   let olderPost = posts[postIndex + 1] ?? null;
   let newerPost = posts[postIndex - 1] ?? null;
 
-  return {
-    olderPost,
-    newerPost,
-    post: {
-      ...post,
-      content: await postsApi.serialize(post.matter.content),
+  const oneWeek = 1000 * 60 * 60 * 24 * 7;
+
+  return json(
+    {
+      olderPost,
+      newerPost,
+      post: {
+        ...post,
+        content: await postsApi.serialize(post.matter.content),
+      },
     },
-  };
+    {
+      headers: {
+        "Cache-Control": `s-maxage=${oneWeek}, stale-while-revalidate`,
+      },
+    }
+  );
 };
 
 export default function Screen() {
