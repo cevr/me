@@ -3,18 +3,17 @@ import type { SceneProps } from "@react-three/fiber";
 import { useFrame } from "@react-three/fiber";
 import "framer-motion";
 import * as React from "react";
-import type { Group, Mesh } from "three";
+import { MeshNormalMaterial } from "three";
+
 import * as THREE from "three";
-import { MeshPhongMaterial } from "three";
+import type { MeshPhongMaterial, Group, Mesh } from "three";
 
 import { useComposedRefs } from "~/lib/useComposedRef";
 
-const material = new MeshPhongMaterial({
-  color: "#fff",
-  emissive: "salmon",
-  specular: "#fff",
-  shininess: 100,
-  transparent: true,
+const material = new MeshNormalMaterial({
+  // emissive: "salmon",
+  // specular: "#salmon",
+  // shininess: 0,
 });
 
 function generateRandomFactor() {
@@ -60,7 +59,7 @@ export const Star = React.forwardRef<Group, StarProps>(function Star(
   return (
     <group dispose={null} ref={composedRef as any} rotation-y={initialRotationY}>
       <scene {...props}>
-        <mesh scale={0.25} ref={mesh} geometry={model.nodes.Star.geometry} material={material} />
+        <mesh scale={0.25} ref={mesh} geometry={model.nodes.Star.geometry} material={material}></mesh>
       </scene>
     </group>
   );

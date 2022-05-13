@@ -53,7 +53,7 @@ export function Text({
     <group {...props} scale={[0.1 * size, 0.1 * size, 0.1]}>
       <mesh ref={mesh}>
         <textGeometry args={[children, config]} />
-        <meshPhongMaterial />
+        <meshStandardMaterial color="salmon" />
       </mesh>
     </group>
   );

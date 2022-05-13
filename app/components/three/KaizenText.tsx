@@ -48,7 +48,7 @@ export const KaizenText = React.forwardRef(function KaizenText(_, forwardedRef) 
 
   return (
     <group ref={composedRef} rotation={[0, 0.5, 0]}>
-      <Text name="kaizen" castShadow receiveShadow color="salmon">
+      <Text name="kaizen" castShadow receiveShadow>
         改善
       </Text>
       <Text name="kaizen-roman" castShadow receiveShadow size={0.5} position={[0, -3, 0]}>
