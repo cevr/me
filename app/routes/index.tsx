@@ -115,14 +115,13 @@ function KaizenCanvas({ stars, hoveredProjectId }: KaizenCanvasProps) {
         zIndex: -1,
       }}
     >
+      <Stars />
+
+      <ambientLight intensity={1} color="salmon" />
       <React.Suspense fallback={null}>
-        <Stars />
-
-        <ambientLight intensity={1} color="salmon" />
-
         <group position={[-6, 1, 0]}>
           {textRef && <directionalLight intensity={2} target={textRef} />}
-          <pointLight intensity={0.2} position={[0, 3, 3]} />
+          <pointLight intensity={0.2} position={[0, 4, 3]} />
           <KaizenText ref={setTextRef} />
           {stars.map((star) => (
             <StarInitializer star={star} key={star.id} hoveredProjectId={hoveredProjectId} />
