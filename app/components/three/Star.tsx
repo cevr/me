@@ -10,8 +10,8 @@ import { MeshPhongMaterial } from "three";
 import { useComposedRefs } from "~/lib/useComposedRef";
 
 const material = new MeshPhongMaterial({
-  color: "#ffdd00",
-  emissive: "#ff9500",
+  color: "#fff",
+  emissive: "salmon",
   specular: "#fff",
   shininess: 100,
   transparent: true,
