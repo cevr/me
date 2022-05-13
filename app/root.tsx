@@ -1,16 +1,8 @@
 import type { LinksFunction, MetaFunction, LoaderFunction } from "remix";
 import { json } from "remix";
-import {
-  Meta,
-  Links,
-  Scripts,
-  LiveReload,
-  useCatch,
-  Outlet,
-  Link,
-  useLoaderData,
-} from "remix";
+import { Meta, Links, Scripts, LiveReload, useCatch, Outlet, Link, useLoaderData } from "remix";
 
+import tailwindStylesheetUrl from "./styles/tailwind.css";
 import rootStyles from "./styles/root.css";
 import navStyles from "./styles/nav.css";
 import footerStyles from "./styles/footer.css";
@@ -44,7 +36,7 @@ export let links: LinksFunction = () => {
     },
     {
       rel: "stylesheet",
-      href: "/tailwind",
+      href: tailwindStylesheetUrl,
     },
     {
       rel: "stylesheet",
@@ -72,7 +64,7 @@ export let loader: LoaderFunction = async ({ request }) => {
       headers: {
         "Cache-Control": `max-age=${oneYear}`,
       },
-    }
+    },
   );
 };
 
@@ -152,13 +144,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   );
 }
 
-function Document({
-  children,
-  title,
-}: {
-  children: React.ReactNode;
-  title?: string;
-}) {
+function Document({ children, title }: { children: React.ReactNode; title?: string }) {
   return (
     <html lang="en">
       <head>
