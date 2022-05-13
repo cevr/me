@@ -1,10 +1,6 @@
 .nav {
   --item-size: 2.5rem;
-
   grid-area: nav;
-  position: sticky;
-  top: 0;
-  background-color: var(--bg);
   transition: background-color var(--transition);
   display: grid;
   grid-gap: var(--grid-gap);

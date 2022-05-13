@@ -1,18 +1,20 @@
-import { MetaFunction, LoaderFunction, useLoaderData, Link } from 'remix';
-import { VerticalSpacer } from '~/components';
-import { postsApi } from '~/lib';
-import { Post } from '~/lib/posts';
+import type { MetaFunction, LoaderFunction} from "remix";
+import { json } from "remix";
+import { useLoaderData, Link } from "remix";
+import { VerticalSpacer } from "~/components";
+import { postsApi } from "~/lib";
+import type { Post } from "~/lib/posts.server";
 
-import blogIndexStyles from '../../styles/blog-index.css';
+import blogIndexStyles from "../../styles/blog-index.css";
 
 export let meta: MetaFunction = () => ({
-  title: 'Blog | Cristian',
+  title: "Blog | Cristian",
 });
 
 export function links() {
   return [
     {
-      rel: 'stylesheet',
+      rel: "stylesheet",
       href: blogIndexStyles,
     },
   ];
@@ -20,9 +22,17 @@ export function links() {
 
 export let loader: LoaderFunction = async () => {
   let posts = await postsApi.query();
-  return {
-    posts,
-  };
+  const oneHour = 1000 * 60 * 60;
+  return json(
+    {
+      posts,
+    },
+    {
+      headers: {
+        "Cache-Control": `s-maxage=${oneHour}, stale-while-revalidate`,
+      },
+    }
+  );
 };
 
 export default function Screen() {

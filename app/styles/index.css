@@ -143,7 +143,7 @@
   border: 2px solid;
   border-color: transparent;
   background-color: var(--link-bg);
-  padding: 1.875rem;
+  padding: 1rem;
   transition: border-color, transform, var(--transition);
 }
 

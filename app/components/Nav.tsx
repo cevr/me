@@ -1,9 +1,10 @@
-import { Link } from "remix";
-import { useLocation } from "react-router-dom";
 import clsx from "clsx";
+import { useLocation } from "react-router-dom";
+import { Link } from "remix";
 
-import { LightSwitch } from "./icons";
-import { Theme } from "~/lib";
+import type { Theme } from "~/lib";
+
+// import { LightSwitch } from "./icons";
 
 type NavProps = {
   theme: Theme;
@@ -36,15 +37,11 @@ export function Nav({ theme }: NavProps) {
           Blog
         </Link>
       </div>
-      <form action="/theme" method="POST">
-        <button
-          className="switch"
-          name="theme"
-          value={theme === "dark" ? "light" : "dark"}
-        >
+      {/* <form action="/theme" method="POST">
+        <button className="switch" name="theme" value={theme === "dark" ? "light" : "dark"}>
           <LightSwitch aria-label="Toggle Theme" on={theme === "light"} />
         </button>
-      </form>
+      </form> */}
     </nav>
   );
 }

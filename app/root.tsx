@@ -1,7 +1,6 @@
+import type { LinksFunction, MetaFunction, LoaderFunction } from "remix";
+import { json } from "remix";
 import {
-  LinksFunction,
-  MetaFunction,
-  LoaderFunction,
   Meta,
   Links,
   Scripts,
@@ -17,7 +16,8 @@ import navStyles from "./styles/nav.css";
 import footerStyles from "./styles/footer.css";
 import boundaryStyles from "./styles/boundary.css";
 import { Footer, Nav } from "./components";
-import { getTheme, Theme } from "./lib";
+import type { Theme } from "./lib";
+import { getTheme } from "./lib";
 
 export let links: LinksFunction = () => {
   return [
@@ -65,7 +65,15 @@ export let meta: MetaFunction = () => {
 
 export let loader: LoaderFunction = async ({ request }) => {
   let theme = await getTheme(request);
-  return { date: new Date(), theme };
+  let oneYear = 1000 * 60 * 60 * 24 * 365;
+  return json(
+    { date: new Date(), theme },
+    {
+      headers: {
+        "Cache-Control": `max-age=${oneYear}`,
+      },
+    }
+  );
 };
 
 export default function App() {

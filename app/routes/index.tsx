@@ -1,11 +1,18 @@
+import { Stars } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import * as React from "react";
-import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
+import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
+import { json } from "remix";
 import { useLoaderData } from "remix";
+import type { Group } from "three";
 
-import { ExternalLink, ButtonLink } from "~/components";
+import { ExternalLink } from "~/components";
 import { Star } from "~/components/icons";
+import { Star as ThreeStar } from "~/components/three";
+import { KaizenText } from "~/components/three/KaizenText";
 import { projectsApi } from "~/lib";
-import { Project } from "~/lib/projects";
+import type { Project } from "~/lib/projects.server";
+
 import indexStyles from "../styles/index.css";
 
 export let meta: MetaFunction = () => {
@@ -26,53 +33,50 @@ export let links: LinksFunction = () => {
 
 export let loader: LoaderFunction = async ({ request }) => {
   const projects = await projectsApi.query();
-  return {
-    projects,
-  };
+  let oneDay = 1000 * 60 * 60 * 24;
+  return json(
+    {
+      projects,
+    },
+    {
+      headers: {
+        "Cache-Control": `s-maxage=${oneDay}, stale-while-revalidate`,
+      },
+    },
+  );
 };
 
 export default function Index() {
   let data = useLoaderData<{ projects: Project[] }>();
+  let stars = React.useMemo(() => {
+    return data.projects.flatMap((project) => {
+      return Array.from({ length: project.stargazerCount }, (_, i) => ({
+        projectId: project.id,
+        id: `${project.id}-${i}`,
+      }));
+    });
+  }, [data.projects]);
+  let hoveredProjectId = React.useRef<string | null>(null);
 
   return (
     <main className="home">
-      <section className={"about"}>
-        <NameTitle />
-        <p className={"desc"}>
-          A growing developer with a heart of code. I have a passion for
-          improvement, believing fully in <KaizenLink />. I'm looking to do what
-          I can with a keyboard at hand. Cheesy, right?
-        </p>
-        <p className={"interests"}>
-          I specialize in{" "}
-          <ButtonLink href="https://reactjs.org/">React</ButtonLink>, I'm a fan
-          of <ButtonLink href="https://graphql.org/">GraphQL</ButtonLink>, I use{" "}
-          <ButtonLink href="https://www.typescriptlang.org/">
-            Typescript
-          </ButtonLink>{" "}
-          daily, and I love{" "}
-          <ButtonLink href="https://remix.run/">Remix</ButtonLink>
-          .
-          <br />
-          In fact,{" "}
-          <ButtonLink href="https://github.com/cevr/me">
-            this website
-          </ButtonLink>{" "}
-          is built with all of them!
-        </p>
-      </section>
-      <section className={"projects"}>
+      <KaizenCanvas stars={stars} hoveredProjectId={hoveredProjectId} />
+      <section className="projects z-20">
         <h2> Projects </h2>
         {data.projects.map((project) => (
           <ExternalLink
             href={project.url}
             aria-label={project.name}
             key={project.id}
+            onMouseEnter={() => {
+              hoveredProjectId.current = project.id;
+            }}
+            onMouseLeave={() => {
+              hoveredProjectId.current = null;
+            }}
           >
-            <article className={"project"}>
-              <div className="project-language">
-                {project.primaryLanguage?.name}
-              </div>
+            <article className="project">
+              <div className="project-language">{project.primaryLanguage?.name}</div>
               <h1 className="project-name">{project.name}</h1>
               <p className="project-description">{project.description}</p>
               <div className="project-stargazers">
@@ -89,46 +93,70 @@ export default function Index() {
   );
 }
 
-function NameTitle() {
-  let [showFull, setShowFull] = React.useState(false);
+type KaizenCanvasProps = {
+  stars: {
+    projectId: string;
+    id: string;
+  }[];
+  hoveredProjectId: React.MutableRefObject<string | null>;
+};
 
-  React.useEffect(() => {
-    setTimeout(() => setShowFull(true), 1500);
-  }, []);
-
+function KaizenCanvas({ stars, hoveredProjectId }: KaizenCanvasProps) {
+  let [textRef, setTextRef] = React.useState<Group | null>(null);
   return (
-    <h1>
-      <span className={"name"}>
-        <span>C</span>
-        {showFull ? (
-          <span className="animating-name first-name">ristian </span>
-        ) : null}
-      </span>
-      <span className={"name"}>
-        <span>V</span>
-        {showFull ? (
-          <span className="animating-name first-family-name">elasquez </span>
-        ) : null}
-      </span>
-      <span className={"name"}>
-        <span>R</span>
-        {showFull ? (
-          <span className={"animating-name second-family-name"}>amos</span>
-        ) : null}
-      </span>
-    </h1>
+    <Canvas
+      camera={{ position: [0, 0, 15] }}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: -1,
+      }}
+    >
+      <React.Suspense fallback={null}>
+        <Stars />
+
+        <ambientLight intensity={1} color="salmon" />
+
+        <group position={[-6, 1, 0]}>
+          {textRef && <directionalLight intensity={2} target={textRef} />}
+          <pointLight intensity={0.2} position={[0, 3, 3]} />
+          <KaizenText ref={setTextRef} />
+          {stars.map((star) => (
+            <StarInitializer star={star} key={star.id} hoveredProjectId={hoveredProjectId} />
+          ))}
+        </group>
+      </React.Suspense>
+    </Canvas>
   );
 }
 
-function KaizenLink() {
-  let [hovered, setHovered] = React.useState(false);
+type StarInitializerProps = {
+  star: {
+    projectId: string;
+    id: string;
+  };
+  hoveredProjectId: React.MutableRefObject<string | null>;
+};
+
+function StarInitializer({ star, hoveredProjectId }: StarInitializerProps) {
+  const props = React.useRef({
+    x: (4 + Math.random() * 8) * (Math.round(Math.random()) ? -1 : 1),
+    y: -2 + Math.random() * 4,
+    z: -0.25 + Math.random() * 1,
+    rotationY: Math.random() * Math.PI * 2,
+  });
+  const { x, y, z, rotationY } = props.current;
+
   return (
-    <ButtonLink
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      href="https://en.wikipedia.org/wiki/Kaizen"
-    >
-      {hovered ? "kaizen" : `改善`}
-    </ButtonLink>
+    <ThreeStar
+      position={[x, y, z]}
+      rotation={[0, x > 0 ? Math.PI : 0, 0]}
+      hoveredProjectId={hoveredProjectId}
+      projectId={star.projectId}
+      initialRotationY={rotationY}
+    />
   );
 }

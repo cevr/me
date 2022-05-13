@@ -26,3 +26,4 @@ yarn-debug.log*
 yarn-error.log*
 /api/index.js
 .vercel
+/api/index.js.map

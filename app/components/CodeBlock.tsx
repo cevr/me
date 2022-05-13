@@ -1,4 +1,5 @@
-import Highlight, { defaultProps, Language } from "prism-react-renderer";
+import type { Language } from "prism-react-renderer";
+import Highlight, { defaultProps } from "prism-react-renderer";
 
 const theme = {
   plain: {
@@ -9,15 +10,7 @@ const theme = {
   },
   styles: [
     {
-      types: [
-        "prolog",
-        "constant",
-        "builtin",
-        "function",
-        "boolean",
-        "number",
-        "maybe-class-name",
-      ],
+      types: ["prolog", "constant", "builtin", "function", "boolean", "number", "maybe-class-name"],
       style: {
         color: "var(--code-func)",
       },
@@ -67,7 +60,7 @@ const calculateLinesToHighlight = (meta: string) => {
   return (index: number) => {
     const lineNumber = index + 1;
     const inRange = lineNumbers?.some(([start, end]) =>
-      end ? lineNumber >= start && lineNumber <= end : lineNumber === start
+      end ? lineNumber >= start && lineNumber <= end : lineNumber === start,
     );
     return inRange;
   };
@@ -80,19 +73,12 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock(props: CodeBlockProps) {
-  const language = (
-    props.className ? props.className.replace(/language-/, "") : "markup"
-  ) as Language;
+  const language = (props.className ? props.className.replace(/language-/, "") : "markup") as Language;
 
   const shouldHighlightLine = calculateLinesToHighlight(props.metastring);
 
   return (
-    <Highlight
-      {...defaultProps}
-      theme={theme}
-      code={props.children.trim()}
-      language={language}
-    >
+    <Highlight {...defaultProps} theme={theme} code={props.children.trim()} language={language}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
           className={className}
