@@ -4,6 +4,7 @@ import * as React from "react";
 import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
 import { json } from "remix";
 import { useLoaderData } from "remix";
+import { ClientOnly } from "remix-utils";
 import type { Group } from "three";
 
 import { ExternalLink } from "~/components";
@@ -60,7 +61,7 @@ export default function Index() {
 
   return (
     <main className="home">
-      <KaizenCanvas stars={stars} hoveredProjectId={hoveredProjectId} />
+      <ClientOnly>{() => <KaizenCanvas stars={stars} hoveredProjectId={hoveredProjectId} />}</ClientOnly>
       <section className="projects z-20">
         <h2> Projects </h2>
         {data.projects.map((project) => (
