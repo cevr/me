@@ -7,7 +7,7 @@ import { MeshStandardMaterial } from "three";
 import * as THREE from "three";
 import type { MeshPhongMaterial, Group, Mesh } from "three";
 
-import { useComposedRefs } from "~/lib/useComposedRef";
+import { useComposedRefs } from "~/lib/utils";
 
 const material = new MeshStandardMaterial({
   color: "#fabfaf",
