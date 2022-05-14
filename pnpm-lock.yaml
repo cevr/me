@@ -1,8 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@react-three/drei': ^9.7.1
-  '@react-three/fiber': ^8.0.14
+  '@react-three/drei': ^9.8.1
+  '@react-three/fiber': ^8.0.16
   '@remix-run/dev': ^1.4.3
   '@remix-run/eslint-config': ^1.4.3
   '@remix-run/node': ^1.4.3
@@ -42,8 +42,8 @@ specifiers:
   typescript: ^4.6.4
 
 dependencies:
-  '@react-three/drei': 9.8.1_omdg3tuexlpdruv4u534mbzf6e
-  '@react-three/fiber': 8.0.15_5vzz734aui5gu3jm6wlduec5ym
+  '@react-three/drei': 9.8.1_xoowdbzemkftjcbbn4yr5k4xpi
+  '@react-three/fiber': 8.0.16_5vzz734aui5gu3jm6wlduec5ym
   '@remix-run/node': 1.4.3_ef5jwxihqo6n7gxfmzogljlgcm
   '@remix-run/react': 1.4.3_ef5jwxihqo6n7gxfmzogljlgcm
   '@remix-run/server-runtime': 1.4.3_ef5jwxihqo6n7gxfmzogljlgcm
@@ -54,7 +54,7 @@ dependencies:
   dotenv: 16.0.1
   esbuild: 0.14.39
   framer-motion: 6.3.3_ef5jwxihqo6n7gxfmzogljlgcm
-  framer-motion-3d: 6.3.3_omdg3tuexlpdruv4u534mbzf6e
+  framer-motion-3d: 6.3.3_xoowdbzemkftjcbbn4yr5k4xpi
   graphql: 16.5.0
   graphql-request: 4.2.0_graphql@16.5.0
   gray-matter: 4.0.3
@@ -1017,7 +1017,7 @@ packages:
       react: 18.1.0
     dev: false
 
-  /@react-spring/three/9.4.5_qzqxkbmf47p2iox5i3w3oz4jiq:
+  /@react-spring/three/9.4.5_ccau7tgitds6p5bkkj6mrhqn3m:
     resolution: {integrity: sha512-mArxfIhg9kyFL/8Y09TarS/ZKLd/qAWS4T3Ro/B46ILPfPnoPywDdw9/rknZihy/tslnviCgMrB4pZ29X1Dfxw==}
     peerDependencies:
       '@react-three/fiber': '>=6.0'
@@ -1028,7 +1028,7 @@ packages:
       '@react-spring/core': 9.4.5_react@18.1.0
       '@react-spring/shared': 9.4.5_react@18.1.0
       '@react-spring/types': 9.4.5
-      '@react-three/fiber': 8.0.15_5vzz734aui5gu3jm6wlduec5ym
+      '@react-three/fiber': 8.0.16_5vzz734aui5gu3jm6wlduec5ym
       react: 18.1.0
       three: 0.140.2
     dev: false
@@ -1037,7 +1037,7 @@ packages:
     resolution: {integrity: sha512-mpRIamoHwql0ogxEUh9yr4TP0xU5CWyZxVQeccGkHHF8kPMErtDXJlxyo0lj+telRF35XNihtPTWoflqtyARmg==}
     dev: false
 
-  /@react-three/drei/9.8.1_omdg3tuexlpdruv4u534mbzf6e:
+  /@react-three/drei/9.8.1_xoowdbzemkftjcbbn4yr5k4xpi:
     resolution: {integrity: sha512-WSEphM0gLHWVYT7Hy8WfyyXdItytihjwA3dx1DdfOust+SyGRylb8dEVFaWKHUwCN2zVUy2Xo4duAmXvkuZMxg==}
     peerDependencies:
       '@react-three/fiber': '>=8.0'
@@ -1049,8 +1049,8 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.17.9
-      '@react-spring/three': 9.4.5_qzqxkbmf47p2iox5i3w3oz4jiq
-      '@react-three/fiber': 8.0.15_5vzz734aui5gu3jm6wlduec5ym
+      '@react-spring/three': 9.4.5_ccau7tgitds6p5bkkj6mrhqn3m
+      '@react-three/fiber': 8.0.16_5vzz734aui5gu3jm6wlduec5ym
       '@use-gesture/react': 10.2.12_react@18.1.0
       detect-gpu: 4.0.21
       glsl-noise: 0.0.0
@@ -1071,8 +1071,8 @@ packages:
       zustand: 3.7.2_react@18.1.0
     dev: false
 
-  /@react-three/fiber/8.0.15_5vzz734aui5gu3jm6wlduec5ym:
-    resolution: {integrity: sha512-4skpTBbCRCK+I6GkFUlutawIQJCv+ny5zUvUHZsGsLoOEYYvtE3LwcNAe9AjfQP7KgdCo8xNV8BzTo7Y6GnG/A==}
+  /@react-three/fiber/8.0.16_5vzz734aui5gu3jm6wlduec5ym:
+    resolution: {integrity: sha512-c0BqDVNTKHJ0yvnxdaJgficoz173gBTd72ks6rI/Gn4NJew2PA8UpgOYnZMMrcK6oLkOwdxvu3KDSEFx9FmQMw==}
     peerDependencies:
       expo: '>=43.0'
       expo-asset: '>=8.4'
@@ -1094,7 +1094,7 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.17.9
-      '@types/react-reconciler': 0.26.6
+      '@types/react-reconciler': 0.26.7
       react: 18.1.0
       react-dom: 18.1.0_react@18.1.0
       react-merge-refs: 1.1.0
@@ -1471,8 +1471,8 @@ packages:
       '@types/react': 18.0.9
     dev: true
 
-  /@types/react-reconciler/0.26.6:
-    resolution: {integrity: sha512-N8MpyC6PJksD+CbMaZ1GW1t940+L4K+f7soiNKcKfgOgof3xWLvs5nPRQ/Q0P6QwDX0GH1PT1MsiQh2FtUY6aw==}
+  /@types/react-reconciler/0.26.7:
+    resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
     dependencies:
       '@types/react': 18.0.9
     dev: false
@@ -3974,7 +3974,7 @@ packages:
       map-cache: 0.2.2
     dev: true
 
-  /framer-motion-3d/6.3.3_omdg3tuexlpdruv4u534mbzf6e:
+  /framer-motion-3d/6.3.3_xoowdbzemkftjcbbn4yr5k4xpi:
     resolution: {integrity: sha512-rJ3IgjxYWhiCwuOpz3KCTtT4lXX9k/1y3pMwXmmy2ODwRIqoHg74E1hq3v/caQdLp2AMOZ41+K9LoLw0e+UWuQ==}
     peerDependencies:
       '@react-three/fiber': ^7.0.27
@@ -3982,7 +3982,7 @@ packages:
       react-dom: '>=16.8 || ^17.0.0'
       three: '>=0.133'
     dependencies:
-      '@react-three/fiber': 8.0.15_5vzz734aui5gu3jm6wlduec5ym
+      '@react-three/fiber': 8.0.16_5vzz734aui5gu3jm6wlduec5ym
       framer-motion: 6.3.3_ef5jwxihqo6n7gxfmzogljlgcm
       react: 18.1.0
       react-dom: 18.1.0_react@18.1.0

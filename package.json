@@ -16,8 +16,8 @@
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint ."
   },
   "dependencies": {
-    "@react-three/drei": "^9.7.1",
-    "@react-three/fiber": "^8.0.14",
+    "@react-three/drei": "^9.8.1",
+    "@react-three/fiber": "^8.0.16",
     "@remix-run/node": "^1.4.3",
     "@remix-run/react": "^1.4.3",
     "@remix-run/server-runtime": "^1.4.3",
