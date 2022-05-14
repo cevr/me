@@ -3,17 +3,18 @@ import type { SceneProps } from "@react-three/fiber";
 import { useFrame } from "@react-three/fiber";
 import "framer-motion";
 import * as React from "react";
-import { MeshNormalMaterial } from "three";
-
+import { MeshStandardMaterial } from "three";
 import * as THREE from "three";
 import type { MeshPhongMaterial, Group, Mesh } from "three";
 
 import { useComposedRefs } from "~/lib/useComposedRef";
 
-const material = new MeshNormalMaterial({
+const material = new MeshStandardMaterial({
+  color: "#fabfaf",
   // emissive: "salmon",
   // specular: "#salmon",
   // shininess: 0,
+  wireframe: true,
 });
 
 function generateRandomFactor() {

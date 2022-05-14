@@ -122,7 +122,7 @@ function KaizenCanvas({ stars, hoveredProjectId }: KaizenCanvasProps) {
       <React.Suspense fallback={null}>
         <group position={[-6, 1, 0]}>
           {textRef && <directionalLight intensity={2} target={textRef} />}
-          <pointLight intensity={1} position={[0, 1,2]} />
+          <pointLight intensity={1} position={[0, 1, 2]} />
           <KaizenText ref={setTextRef} />
           {stars.map((star) => (
             <StarInitializer star={star} key={star.id} hoveredProjectId={hoveredProjectId} />
