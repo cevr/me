@@ -1,4 +1,5 @@
 import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
+import { useMatches } from "remix";
 import { json } from "remix";
 import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useLoaderData } from "remix";
 
@@ -67,9 +68,12 @@ export let loader: LoaderFunction = async ({ request }) => {
 
 export default function App() {
   let data = useLoaderData<{ date: string }>();
+  const matches = useMatches();
+
+  const noscript = matches.some((match) => match.handle?.noscript);
 
   return (
-    <Document>
+    <Document noscript={noscript}>
       <Nav />
       <Outlet />
       <Footer date={data.date} />
@@ -141,7 +145,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   );
 }
 
-function Document({ children, title }: { children: React.ReactNode; title?: string }) {
+function Document({ children, title, noscript }: { children: React.ReactNode; title?: string; noscript?: boolean }) {
   return (
     <html lang="en">
       <head>
@@ -152,7 +156,7 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
       </head>
       <body>
         {children}
-        <Scripts />
+        {!noscript ? <Scripts /> : null}
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>

@@ -11,6 +11,10 @@ export function links() {
   ];
 }
 
+export let handle = {
+  noscript: true,
+}
+
 export default function Screen() {
   return (
     <main className="blog-layout">

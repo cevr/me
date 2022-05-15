@@ -20,14 +20,22 @@ export let meta: MetaFunction = () => ({
   title: "About | Cristian",
 });
 
+export let handle = {
+  noscript: true,
+};
+
 export default function AboutPage() {
   return (
-    <main className="about flex flex-col md:grid md:grid-cols-2 gap-10">
+    <main className="about flex flex-col md:grid md:grid-cols-3 gap-10">
       <section>
-        <img className="aspect-square rounded-[50%] max-w-full h-auto mx-auto" src="/images/me.jpg" alt="Portrait of me" />
+        <img
+          className="aspect-square rounded-[50%] max-w-full h-auto mx-auto"
+          src="/images/me.jpg"
+          alt="Portrait of me"
+        />
       </section>
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3 col-span-2 md:pt-10">
         <h1 className="text-6xl">Hi, I'm Cristian.</h1>
         <p>Professionally, I'm a product engineer that purses excellence in design, development, and testing.</p>
 
