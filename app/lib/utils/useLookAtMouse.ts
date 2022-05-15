@@ -2,6 +2,7 @@ import { useThree } from "@react-three/fiber";
 import * as React from "react";
 import type { Group } from "three";
 import { Plane, Raycaster, Vector2, Vector3 } from "three";
+
 const raycaster = new Raycaster();
 const intersectPoint = new Vector3();
 const plane = new Plane(new Vector3(0, 0, 1), -10);

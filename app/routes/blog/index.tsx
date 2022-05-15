@@ -1,6 +1,7 @@
-import type { MetaFunction, LoaderFunction} from "remix";
+import type { LoaderFunction, MetaFunction } from "remix";
 import { json } from "remix";
-import { useLoaderData, Link } from "remix";
+import { Link, useLoaderData } from "remix";
+
 import { VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
 import type { Post } from "~/lib/posts.server";
@@ -31,7 +32,7 @@ export let loader: LoaderFunction = async () => {
       headers: {
         "Cache-Control": `s-maxage=${oneHour}, stale-while-revalidate`,
       },
-    }
+    },
   );
 };
 

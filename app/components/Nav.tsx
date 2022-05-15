@@ -1,41 +1,31 @@
 import clsx from "clsx";
-import { useLocation } from "react-router-dom";
-import { Link } from "remix";
-
-import type { Theme } from "~/lib";
+import { NavLink } from "remix";
 
 // import { LightSwitch } from "./icons";
 
-type NavProps = {
-  theme: Theme;
-};
-
-export function Nav({ theme }: NavProps) {
-  let location = useLocation();
-
+export function Nav() {
   return (
     <nav className="nav">
       <div>
-        <Link
-          to="/"
-          className={clsx("logo", {
-            active: location.pathname === "/",
-          })}
-          aria-label="logo"
-          title="Logo"
-        >
+        <NavLink to="/" className={({ isActive }) => clsx("logo", { active: isActive })} aria-label="logo" title="Logo">
           CVR
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to="/blog"
-          className={clsx("item", {
-            active: location.pathname.includes("blog"),
-          })}
+          className={({ isActive }) => clsx("item", { active: isActive })}
           aria-label="blog"
           title="blog"
         >
           Blog
-        </Link>
+        </NavLink>
+        <NavLink
+          to="/about"
+          className={({ isActive }) => clsx("item", { active: isActive })}
+          aria-label="about"
+          title="about"
+        >
+          About
+        </NavLink>
       </div>
       {/* <form action="/theme" method="POST">
         <button className="switch" name="theme" value={theme === "dark" ? "light" : "dark"}>

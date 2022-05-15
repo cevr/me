@@ -6,7 +6,7 @@
 
 @media (min-width: 50rem) {
   .blog-layout {
-    width: 600px;
+    width: 100ch;
     margin: 0 auto;
   }
 }

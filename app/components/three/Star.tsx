@@ -5,7 +5,7 @@ import "framer-motion";
 import * as React from "react";
 import { MeshStandardMaterial } from "three";
 import * as THREE from "three";
-import type { MeshPhongMaterial, Group, Mesh } from "three";
+import type { Group, Mesh, MeshPhongMaterial } from "three";
 
 import { useComposedRefs } from "~/lib/utils";
 

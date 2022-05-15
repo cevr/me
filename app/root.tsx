@@ -1,15 +1,13 @@
-import type { LinksFunction, MetaFunction, LoaderFunction } from "remix";
+import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
 import { json } from "remix";
-import { Meta, Links, Scripts, LiveReload, useCatch, Outlet, Link, useLoaderData } from "remix";
+import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useLoaderData } from "remix";
 
-import tailwindStylesheetUrl from "./styles/tailwind.css";
-import rootStyles from "./styles/root.css";
-import navStyles from "./styles/nav.css";
-import footerStyles from "./styles/footer.css";
-import boundaryStyles from "./styles/boundary.css";
 import { Footer, Nav } from "./components";
-import type { Theme } from "./lib";
-import { getTheme } from "./lib";
+import boundaryStyles from "./styles/boundary.css";
+import footerStyles from "./styles/footer.css";
+import navStyles from "./styles/nav.css";
+import rootStyles from "./styles/root.css";
+import tailwindStylesheetUrl from "./styles/tailwind.css";
 
 export let links: LinksFunction = () => {
   return [
@@ -56,10 +54,9 @@ export let meta: MetaFunction = () => {
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
-  let theme = await getTheme(request);
   let oneYear = 1000 * 60 * 60 * 24 * 365;
   return json(
-    { date: new Date(), theme },
+    { date: new Date() },
     {
       headers: {
         "Cache-Control": `max-age=${oneYear}`,
@@ -69,11 +66,11 @@ export let loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function App() {
-  let data = useLoaderData<{ date: string; theme: Theme }>();
+  let data = useLoaderData<{ date: string }>();
 
   return (
     <Document>
-      <Nav theme={data.theme} />
+      <Nav />
       <Outlet />
       <Footer date={data.date} />
     </Document>

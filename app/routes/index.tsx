@@ -1,12 +1,13 @@
+import { motion } from "framer-motion";
 import * as React from "react";
 import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
-import { useLoaderData, json } from "remix";
+import { json, useLoaderData } from "remix";
 
-import { ExternalLink } from "~/components";
 import { Star } from "~/components/icons";
 import { KaizenCanvas } from "~/components/three";
 import { projectsApi } from "~/lib";
 import type { Project } from "~/lib/projects.server";
+
 import indexStyles from "../styles/index.css";
 
 export let meta: MetaFunction = () => {
@@ -40,6 +41,21 @@ export let loader: LoaderFunction = async ({ request }) => {
   );
 };
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.075,
+    },
+  },
+};
+
+const listItem = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1 },
+};
+
 export default function Index() {
   let data = useLoaderData<{ projects: Project[] }>();
   let stars = React.useMemo(() => {
@@ -53,35 +69,40 @@ export default function Index() {
   let hoveredProjectId = React.useRef<string | null>(null);
 
   return (
-    <main className="home">
+    <main className="home flex flex-col">
       <KaizenCanvas stars={stars} hoveredProjectId={hoveredProjectId} />
       <section className="projects z-20">
         <h2> Projects </h2>
-        {data.projects.map((project) => (
-          <ExternalLink
-            href={project.url}
-            aria-label={project.name}
-            key={project.id}
-            onMouseEnter={() => {
-              hoveredProjectId.current = project.id;
-            }}
-            onMouseLeave={() => {
-              hoveredProjectId.current = null;
-            }}
-          >
-            <article className="project">
-              <div className="project-language">{project.primaryLanguage?.name}</div>
-              <h1 className="project-name">{project.name}</h1>
-              <p className="project-description">{project.description}</p>
-              <div className="project-stargazers">
-                <span className="stargazers-star">
-                  <Star />
-                </span>
-                {project.stargazerCount}
-              </div>
-            </article>
-          </ExternalLink>
-        ))}
+        <motion.div className="flex flex-col gap-3" variants={container} initial="hidden" animate="show">
+          {data.projects.map((project) => (
+            <motion.a
+              variants={listItem}
+              target="_blank"
+              rel="noopener noreferrer"
+              href={project.url}
+              aria-label={project.name}
+              key={project.id}
+              onMouseEnter={() => {
+                hoveredProjectId.current = project.id;
+              }}
+              onMouseLeave={() => {
+                hoveredProjectId.current = null;
+              }}
+            >
+              <article className="project">
+                <div className="project-language">{project.primaryLanguage?.name}</div>
+                <h1 className="project-name">{project.name}</h1>
+                <p className="project-description">{project.description}</p>
+                <div className="project-stargazers">
+                  <span className="stargazers-star">
+                    <Star />
+                  </span>
+                  {project.stargazerCount}
+                </div>
+              </article>
+            </motion.a>
+          ))}
+        </motion.div>
       </section>
     </main>
   );

@@ -83,14 +83,10 @@ let fetchArticle = async (page: number): Promise<Post[]> =>
       throw new Error(`error fetching page ${page}, ${err}`);
     });
 
-let fetchAllArticles = async (
-  page = 1,
-  results: Post[] = []
-): Promise<Post[]> => {
+let fetchAllArticles = async (page = 1, results: Post[] = []): Promise<Post[]> => {
   let latestResults = await fetchArticle(page);
 
-  if (latestResults.length === 100)
-    return fetchAllArticles(page + 1, results.concat(latestResults));
+  if (latestResults.length === 100) return fetchAllArticles(page + 1, results.concat(latestResults));
 
   return results.concat(latestResults);
 };

@@ -3,7 +3,7 @@ import * as React from "react";
 import type { Group } from "three";
 import { Vector3 } from "three";
 
-import { useLookAtMouse, useComposedRefs } from "~/lib/utils";
+import { useComposedRefs, useLookAtMouse } from "~/lib/utils";
 
 import { Text } from "./Text";
 

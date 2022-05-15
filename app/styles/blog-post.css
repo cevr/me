@@ -21,7 +21,7 @@
 }
 
 .post li::before {
-  content: '\2022';
+  content: "\2022";
   color: var(--highlight);
   font-weight: bold;
   display: inline-block;

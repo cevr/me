@@ -1,14 +1,9 @@
-import { GraphQLClient, gql } from 'graphql-request';
+import { GraphQLClient, gql } from "graphql-request";
 
 let repositoriesQuery = gql`
   query {
     user(login: "cevr") {
-      repositories(
-        first: 25
-        orderBy: { field: STARGAZERS, direction: DESC }
-        isFork: false
-        affiliations: [OWNER]
-      ) {
+      repositories(first: 25, orderBy: { field: STARGAZERS, direction: DESC }, isFork: false, affiliations: [OWNER]) {
         edges {
           node {
             description
@@ -47,7 +42,7 @@ interface RepositoriesQueryData {
   }>;
 }
 
-let client = new GraphQLClient('https://api.github.com/graphql', {
+let client = new GraphQLClient("https://api.github.com/graphql", {
   headers: {
     Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
   },
@@ -60,8 +55,6 @@ export let query = (): Promise<Project[]> =>
       (data) =>
         data.user?.repositories?.edges
           .map((edge) => edge.node)
-          .filter(
-            (project) => project.stargazerCount > 1 && !project.isArchived
-          ) ?? []
+          .filter((project) => project.stargazerCount > 1 && !project.isArchived) ?? [],
     )
     .catch(() => []);

@@ -1,19 +1,18 @@
 .home {
   grid-area: content;
   display: grid;
-  grid-template-areas: 'about projects';
+  grid-template-areas: "about projects";
   grid-template-columns: 1fr 1fr;
   grid-gap: var(--grid-gap);
   height: 100%;
   overflow-y: auto;
   padding-top: var(--main-padding);
 }
-
 @media (max-width: 50rem) {
   .home {
     grid-template-areas:
-      'about'
-      'projects';
+      "about"
+      "projects";
     grid-template-columns: 1fr;
     margin-bottom: 1.5rem;
     padding: 0;
@@ -24,80 +23,11 @@
   grid-area: about;
   display: grid;
   grid-template-areas:
-    'name'
-    'desc'
-    'interests';
+    "name"
+    "desc"
+    "interests";
   grid-auto-rows: min-content;
   grid-gap: var(--grid-gap);
-}
-
-.about h1 {
-  font-size: 2.5rem;
-  grid-area: name;
-  font-family: 'megrim';
-  max-width: 100%;
-}
-
-.animating-name {
-  display: inline-flex;
-  overflow: hidden;
-  width: 0;
-  animation-iteration-count: 1;
-}
-
-.first-name {
-  animation: first-name 1.5s ease-in-out forwards;
-}
-
-.first-family-name {
-  animation: first-family-name 1.5s ease-in-out forwards;
-}
-
-.second-family-name {
-  animation: second-family-name 1.5s ease-in-out forwards;
-}
-
-.about p {
-  font-size: 1.125rem;
-  font-weight: 300;
-  color: var(--accent);
-  line-height: 2.75rem;
-}
-
-.about .desc {
-  grid-area: desc;
-}
-
-.about .interests {
-  grid-area: interests;
-}
-
-@keyframes first-name {
-  100% {
-    width: 130px;
-  }
-}
-
-@keyframes first-family-name {
-  100% {
-    width: 175px;
-  }
-}
-
-@keyframes second-family-name {
-  100% {
-    width: 95px;
-  }
-}
-
-@media (max-width: 50rem) {
-  .about h1 {
-    font-size: 2.5rem;
-  }
-
-  .name {
-    display: block;
-  }
 }
 
 .projects {
@@ -113,7 +43,7 @@
 }
 
 .projects:after {
-  content: '';
+  content: "";
   display: block;
   height: 0.625rem;
   width: 100%;

@@ -1,10 +1,10 @@
-import type { MetaFunction, LoaderFunction } from "remix";
-import { useLoaderData, Link, json } from "remix";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import type { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { MDXRemote } from "next-mdx-remote";
+import type { LoaderFunction, MetaFunction } from "remix";
+import { Link, json, useLoaderData } from "remix";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
@@ -56,7 +56,7 @@ export let loader: LoaderFunction = async ({ params }) => {
       headers: {
         "Cache-Control": `s-maxage=${oneWeek}, stale-while-revalidate`,
       },
-    }
+    },
   );
 };
 
@@ -74,9 +74,7 @@ export default function Screen() {
       <div className="date">
         {dayjs(post.published_at).format("MMMM DD, YYYY")}
 
-        {post.edited_at ? (
-          <span className="edited">{dayjs().to(post.edited_at)}</span>
-        ) : null}
+        {post.edited_at ? <span className="edited">{dayjs().to(post.edited_at)}</span> : null}
 
         <span> | {post.read_estimate} read</span>
       </div>
@@ -90,7 +88,7 @@ export default function Screen() {
         ))}
       </div>
       <VerticalSpacer size="lg" />
-      <MDXRemote {...post.content} components={components} />
+      <MDXRemote {...post.content} components={components as any} />
       <VerticalSpacer size="lg" />
       <nav className="post-nav">
         {olderPost ? <PostNavItem post={olderPost} /> : <div />}
@@ -121,13 +119,14 @@ function PostNavItem({ post, newer }: PostNavItemProps) {
 }
 
 let components = {
-  code: CodeBlock,
+  code: (props: any) => <CodeBlock {...props} />,
   pre: (props: any) => <div className="code" {...props} />,
   a: (props: any) => <ButtonLink {...props} />,
   p: (props: any) => <p className="paragraph" {...props} />,
   strong: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   b: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   h2: (props: any) => <h2 className="subtitle" {...props} />,
+  // eslint-disable-next-line jsx-a11y/alt-text
   img: (props: any) => <img className="image" {...props} />,
   blockquote: (props: any) => <blockquote className="blockquote" {...props} />,
 };

@@ -1,11 +1,11 @@
 import { Html, Stars } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import * as React from "react";
 import { motion } from "framer-motion";
+import * as React from "react";
 import type { Group } from "three";
 
-import { Star } from "./Star";
 import { KaizenText } from "./KaizenText";
+import { Star } from "./Star";
 
 type KaizenCanvasProps = {
   stars: {
