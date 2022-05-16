@@ -27,7 +27,7 @@ export function Text({
     () => ({
       font,
       size: 16,
-      height: 2,
+      height: 6,
       curveSegments: 32,
       bevelEnabled: true,
       bevelThickness: 0.1,
