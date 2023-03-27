@@ -1,5 +1,5 @@
+import { NavLink } from "@remix-run/react";
 import clsx from "clsx";
-import { NavLink } from "remix";
 
 // import { LightSwitch } from "./icons";
 

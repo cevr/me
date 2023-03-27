@@ -1,10 +1,11 @@
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import type { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { MDXRemote } from "next-mdx-remote";
-import type { LoaderFunction, MetaFunction } from "remix";
-import { Link, json, useLoaderData } from "remix";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
@@ -88,7 +89,7 @@ export default function Screen() {
         ))}
       </div>
       <VerticalSpacer size="lg" />
-      <MDXRemote {...post.content} components={components as any} />
+      <MDXRemote {...post.content as any} components={components as any} />
       <VerticalSpacer size="lg" />
       <nav className="post-nav">
         {olderPost ? <PostNavItem post={olderPost} /> : <div />}

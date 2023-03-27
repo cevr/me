@@ -1,7 +1,6 @@
-import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
-import { useMatches } from "remix";
-import { json } from "remix";
-import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useLoaderData } from "remix";
+import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useLoaderData, useMatches } from "@remix-run/react";
 
 import { Footer, Nav } from "./components";
 import boundaryStyles from "./styles/boundary.css";

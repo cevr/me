@@ -1,5 +1,5 @@
-import type { ActionFunction, LoaderFunction } from "remix";
-import { redirect } from "remix";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 
 import { setTheme, themeCookie } from "~/lib";
 
@@ -43,7 +43,7 @@ export let loader: LoaderFunction = async ({ request }) => {
         --code-string: #fac29a;
         --code-punc: #999999;
         --code-func: #dd4a68;
-      
+
         --bg: #212529;
         --fg: #f8f9fa;
         --link-bg: #343a40;

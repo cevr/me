@@ -22,7 +22,7 @@ export function Text({
   ...props
 }: TextProps) {
   extend({ TextGeometry });
-  const font = useLoader(FontLoader, "/fonts/yahei.json");
+  const font = useLoader(FontLoader as any, "/fonts/yahei.json");
   const config = React.useMemo(
     () => ({
       font,

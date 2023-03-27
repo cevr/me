@@ -1,6 +1,6 @@
-import type { LoaderFunction, MetaFunction } from "remix";
-import { json } from "remix";
-import { Link, useLoaderData } from "remix";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 
 import { VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
