@@ -44,16 +44,16 @@ export default function Hymns() {
   const fetcher = useFetcher<Hymn[]>();
 
   return (
-    <div className="font-mono flex flex-col gap-8">
+    <div className="flex flex-col gap-8 font-mono">
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
-          <Link to="/hymn" className="hover:text-[var(--highlight)] duration-200">
+          <Link to="/hymn" className="duration-200 hover:text-[var(--highlight)]">
             Hymns
           </Link>
 
           <div className="flex gap-2">
             <Link
-              className={clsx("hover:text-[var(--highlight)] duration-200", {
+              className={clsx("duration-200 hover:text-[var(--highlight)]", {
                 "text-[var(--highlight)] underline": sort === "number",
               })}
               to={{
@@ -66,7 +66,7 @@ export default function Hymns() {
             </Link>
 
             <Link
-              className={clsx("hover:text-[var(--highlight)] duration-200", {
+              className={clsx("duration-200 hover:text-[var(--highlight)]", {
                 "text-[var(--highlight)] underline": sort === "title",
               })}
               to={{
@@ -91,7 +91,7 @@ export default function Hymns() {
             <Popover.Content
               sideOffset={8}
               align="start"
-              className="p-0 w-[calc(100vw-80px)]"
+              className="w-[calc(100vw-80px)] p-0"
               onOpenAutoFocus={(event) => {
                 event.preventDefault();
               }}
@@ -99,7 +99,7 @@ export default function Hymns() {
                 fetcher.load(`/hymn/search?q=`);
               }}
             >
-              <div className="flex flex-col w-full gap-2  bg-[var(--link-bg)] py-2 px-4 rounded-md">
+              <div className="flex w-full flex-col gap-2  rounded-md bg-[var(--link-bg)] py-2 px-4">
                 {fetcher.data?.map((hymn) => (
                   <Link key={hymn.number} to={`/hymn/${hymn.number}`} className="flex items-center gap-2">
                     <span className="text-sm tabular-nums">{hymn.number.padStart(3, "0")}.</span>
@@ -110,7 +110,7 @@ export default function Hymns() {
             </Popover.Content>
           </Popover>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <Link
             to={{
               search: addToSearchParams(searchParams, {

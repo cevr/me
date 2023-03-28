@@ -69,7 +69,7 @@ export function CatchBoundary() {
             style={{
               gridArea: "content",
             }}
-            className="grid place-items-center text-center text-[var(--accent)] leading-8 duration-200 text-lg h-full"
+            className="grid h-full place-items-center text-center text-lg leading-8 text-[var(--accent)] duration-200"
           >
             <div>
               <p>Nope! This page definitely doesn't exist. Just checked.</p>
@@ -77,7 +77,7 @@ export function CatchBoundary() {
                 Take this{" "}
                 <Link
                   to="/"
-                  className="duration-200 border-b-[3px] border-[var(--highlight)] text-[var(--highlight)]"
+                  className="border-b-[3px] border-[var(--highlight)] text-[var(--highlight)] duration-200"
                   aria-label="home link"
                 >
                   link
@@ -101,7 +101,7 @@ export function CatchBoundary() {
               <p>What??! Something went wrong you say?</p>
               <p>
                 Click this{" "}
-                <Link to="/" className="duration-200 border-b-3" aria-label="home link">
+                <Link to="/" className="border-b-3 duration-200" aria-label="home link">
                   link
                 </Link>{" "}
                 back home and pretend you never saw anything.
@@ -127,7 +127,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
           <p>What??! Something went wrong you say?</p>
           <p>
             Click this{" "}
-            <Link to="/" className="duration-200 border-b-3" aria-label="home link">
+            <Link to="/" className="border-b-3 duration-200" aria-label="home link">
               link
             </Link>{" "}
             back home and pretend you never saw anything.
@@ -147,7 +147,7 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
         <Meta />
         <Links />
       </head>
-      <body className="text-[var(--fg)] bg-[var(--bg)] h-full min-h-0 grid p-4 max-w-[1200px] m-auto">
+      <body className="m-auto grid h-full min-h-0 max-w-[1200px] bg-[var(--bg)] p-4 text-[var(--fg)]">
         {children}
         {!noscript ? <Scripts /> : null}
         {process.env.NODE_ENV === "development" && <LiveReload />}

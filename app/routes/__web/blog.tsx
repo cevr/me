@@ -6,7 +6,7 @@ export default function Screen() {
       style={{
         gridArea: "content",
       }}
-      className="w-full pt-12 md:w-[100ch] m-auto"
+      className="m-auto w-full pt-12 md:w-[100ch]"
     >
       <Outlet />
     </main>

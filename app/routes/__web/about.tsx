@@ -24,23 +24,23 @@ export default function AboutPage() {
       style={{
         gridArea: "content",
       }}
-      className="flex flex-col md:grid md:grid-cols-3 gap-10 pt-12"
+      className="flex flex-col gap-10 pt-12 md:grid md:grid-cols-3"
     >
       <section>
         <img
-          className="aspect-square rounded-[50%] max-w-full h-auto mx-auto"
+          className="mx-auto aspect-square h-auto max-w-full rounded-[50%]"
           src="/images/me.jpg"
           alt="Portrait of me"
         />
       </section>
 
-      <section className="flex flex-col gap-3 col-span-2 md:pt-10">
+      <section className="col-span-2 flex flex-col gap-3 md:pt-10">
         <h1 className="text-6xl">Hi, I'm Cristian.</h1>
-        <p className="text-lg font-light text-[var(--accent)] leading-10">
+        <p className="text-lg font-light leading-10 text-[var(--accent)]">
           Professionally, I'm a product engineer that purses excellence in design, development, and testing.
         </p>
 
-        <p className="text-lg font-light text-[var(--accent)] leading-10">
+        <p className="text-lg font-light leading-10 text-[var(--accent)]">
           Honestly, I'm just a guy who likes to code.
         </p>
 

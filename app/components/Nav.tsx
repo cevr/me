@@ -6,13 +6,13 @@ import { cn } from "~/lib/utils/cn";
 
 export function Nav() {
   return (
-    <nav className="grid grid-cols-[10rem,1fr] gap-5 md:gap-2 items-center z-10 transition-colors">
+    <nav className="z-10 grid grid-cols-[10rem,1fr] items-center gap-5 transition-colors md:gap-2">
       <div className="flex items-end gap-4">
         <NavLink
           to="/"
           className={({ isActive }) =>
             cn(
-              "text-[2.5rem] font-[Megrim] text-[var(--fg)] border-b-2 border-transparent hover:text-[var(--highlight)] transition-colors",
+              "border-b-2 border-transparent font-[Megrim] text-[2.5rem] text-[var(--fg)] transition-colors hover:text-[var(--highlight)]",
               { "border-[var(--highlight)]": isActive },
             )
           }
@@ -25,7 +25,7 @@ export function Nav() {
           to="/blog"
           className={({ isActive }) =>
             cn(
-              "block text-[var(--fg)] duration-200 border-b-2 border-transparent leading-[3] hover:text-[var(--highlight)]",
+              "block border-b-2 border-transparent leading-[3] text-[var(--fg)] duration-200 hover:text-[var(--highlight)]",
               {
                 "border-[var(--highlight)]": isActive,
               },
@@ -40,7 +40,7 @@ export function Nav() {
           to="/about"
           className={({ isActive }) =>
             cn(
-              "block text-[var(--fg)] duration-200 border-b-2 border-transparent leading-[3] hover:text-[var(--highlight)]",
+              "block border-b-2 border-transparent leading-[3] text-[var(--fg)] duration-200 hover:text-[var(--highlight)]",
               {
                 "border-[var(--highlight)]": isActive,
               },

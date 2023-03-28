@@ -53,9 +53,9 @@ export default function HymnPage() {
       </div>
       <div className="flex flex-col gap-4">
         {hymn.lines.map((line, lineIndex) => (
-          <div key={`line-${lineIndex}`} className="flex gap-x-2 gap-y-4 flex-wrap">
+          <div key={`line-${lineIndex}`} className="flex flex-wrap gap-x-2 gap-y-4">
             {line.map(({ lyric, chord }, lyricIndex) => (
-              <div className="flex flex-col justify-between w-max break-before-all" key={lyric + chord + lyricIndex}>
+              <div className="flex w-max break-before-all flex-col justify-between" key={lyric + chord + lyricIndex}>
                 <motion.span
                   key={`${chord}-${lyricIndex}`}
                   className="leading-tight"
@@ -65,7 +65,7 @@ export default function HymnPage() {
                 >
                   {chord}
                 </motion.span>
-                <span className="flex-shrink-0 flex" key={`lyric-${lyricIndex}`}>
+                <span className="flex flex-shrink-0" key={`lyric-${lyricIndex}`}>
                   {lyric}
                 </span>
               </div>
@@ -75,7 +75,7 @@ export default function HymnPage() {
       </div>
       <span className="text-[10px]">{hymn.reference}</span>
 
-      <div className="flex flex-col md:flex-row w-full justify-between">
+      <div className="flex w-full flex-col justify-between md:flex-row">
         <div className="flex flex-col gap-2">
           {prevHymn ? (
             <a className="p-2 underline" href={`/hymn/${prevHymn?.number}`}>
@@ -83,7 +83,7 @@ export default function HymnPage() {
             </a>
           ) : null}
         </div>
-        <div className="flex flex-col gap-2 justify-end text-end">
+        <div className="flex flex-col justify-end gap-2 text-end">
           {nextHymn ? (
             <a className="p-2 underline" href={`/hymn/${nextHymn.number}`}>
               {nextHymn.number.padStart(3, "0")}. {nextHymn.title} →

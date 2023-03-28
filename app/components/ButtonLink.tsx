@@ -3,7 +3,7 @@ import { ExternalLink } from "./ExternalLink";
 export function ButtonLink({ className, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
     <ExternalLink
-      className="text-[var(--highlight)] py-1 px-2 rounded-md duration-200 bg-[var(--link-bg)] whitespace-nowrap hover:bg-[var(--highlight)] hover:text-[var(--link-hover-fg)]"
+      className="whitespace-nowrap rounded-md bg-[var(--link-bg)] py-1 px-2 text-[var(--highlight)] duration-200 hover:bg-[var(--highlight)] hover:text-[var(--link-hover-fg)]"
       {...props}
     />
   );

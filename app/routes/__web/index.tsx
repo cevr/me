@@ -70,9 +70,9 @@ export default function Index() {
         style={{
           gridArea: "content",
         }}
-        className="content grid grid-cols-1 gap-5 md:gap-2 h-full overflow-y-auto pt-12 md:grid-cols-2 md:mb-6 md:p-0"
+        className="content grid h-full grid-cols-1 gap-5 overflow-y-auto pt-12 md:mb-6 md:grid-cols-2 md:gap-2 md:p-0"
       >
-        <section className="projects z-20 h-full flex flex-col gap-5 md:gap-2 overflow-y-auto scrollbar-hide p-2 md:p-0 md:col-start-2">
+        <section className="projects scrollbar-hide z-20 flex h-full flex-col gap-5 overflow-y-auto p-2 md:col-start-2 md:gap-2 md:p-0">
           <h2 className="hidden md:block md:h-auto md:text-xl">Projects</h2>
           <motion.div className="flex flex-col gap-3 p-1" variants={container} initial="hidden" animate="show">
             {data.projects.map((project) => (
@@ -89,17 +89,17 @@ export default function Index() {
                 onMouseLeave={() => {
                   hoveredProjectId.current = null;
                 }}
-                className="block border-2 border-transparent bg-[var(--link-bg)] p-4 transition-all transform hover:border-[var(--highlight)] md:hover:scale-[1.01] md:p-5"
+                className="block transform border-2 border-transparent bg-[var(--link-bg)] p-4 transition-all hover:border-[var(--highlight)] md:p-5 md:hover:scale-[1.01]"
               >
                 <article className="">
-                  <div className="project-language text-sm uppercase tracking-wider font-light text-[var(--fg)]">
+                  <div className="project-language text-sm font-light uppercase tracking-wider text-[var(--fg)]">
                     {project.primaryLanguage?.name}
                   </div>
-                  <h1 className="capitalize text-2xl font-medium text-[var(--fg)]">{project.name}</h1>
+                  <h1 className="text-2xl font-medium capitalize text-[var(--fg)]">{project.name}</h1>
                   <p className="project-description text-[0.875rem] font-light text-[var(--accent)]">
                     {project.description}
                   </p>
-                  <div className="project-stargazers flex gap-1 text-xs font-medium text-[var(--accent)] mt-2">
+                  <div className="project-stargazers mt-2 flex gap-1 text-xs font-medium text-[var(--accent)]">
                     <span className="stargazers-star h-3 w-3">
                       <Star />
                     </span>
