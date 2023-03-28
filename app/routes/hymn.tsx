@@ -101,7 +101,14 @@ export default function Hymns() {
             >
               <div className="flex w-full flex-col gap-2  rounded-md bg-[var(--link-bg)] py-2 px-4">
                 {fetcher.data?.map((hymn) => (
-                  <Link key={hymn.number} to={`/hymn/${hymn.number}`} className="flex items-center gap-2">
+                  <Link
+                    key={hymn.number}
+                    to={{
+                      pathname: `/hymn/${hymn.number}`,
+                      search: searchParams.toString(),
+                    }}
+                    className="flex items-center gap-2"
+                  >
                     <span className="text-sm tabular-nums">{hymn.number.padStart(3, "0")}.</span>
                     <span className="text-sm">{hymn.title}</span>
                   </Link>
