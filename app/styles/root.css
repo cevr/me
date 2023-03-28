@@ -13,37 +13,11 @@ body {
 }
 
 body {
-  --transition: 0.15s;
-  --grid-gap: 0.625rem;
-  --main-padding: 3.125rem;
-
-  transition: all var(--transition);
   font-family: -apple-system, BlinkMacSystemFont, Avenir Next, Avenir, Helvetica, sans-serif;
-  background: var(--bg);
-  color: var(--fg);
-
-  --nav-height: 3.75rem;
-  --footer-height: 3.75rem;
-  --vertical-padding: 1rem;
-  height: 100%;
-  min-height: 0;
-  display: grid;
   grid-template-areas:
     "nav"
     "content"
     "footer";
-  grid-template-rows: auto 1fr auto;
-  grid-template-columns: 100%;
-  grid-gap: var(--grid-gap);
-  padding: var(--vertical-padding) 2.5rem;
-  max-width: 1200px;
-  margin: auto;
-}
-
-@media (max-width: 50rem) {
-  body {
-    --grid-gap: 1.25rem;
-  }
 }
 
 *::selection {
@@ -51,15 +25,13 @@ body {
   color: var(--bg);
 }
 
-.paragraph-link {
-  color: var(--highlight);
-  padding: 0.25rem 0.5rem;
-  background-color: var(--link-bg);
-  border-radius: 6px;
-  transition: background-color var(--transition);
-  white-space: nowrap;
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
-.paragraph-link:hover {
-  background-color: var(--highlight);
-  color: var(--link-hover-fg);
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

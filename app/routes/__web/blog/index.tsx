@@ -6,20 +6,9 @@ import { VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
 import type { Post } from "~/lib/posts.server";
 
-import blogIndexStyles from "../../../styles/blog-index.css";
-
 export let meta: MetaFunction = () => ({
   title: "Blog | Cristian",
 });
-
-export function links() {
-  return [
-    {
-      rel: "stylesheet",
-      href: blogIndexStyles,
-    },
-  ];
-}
 
 export let loader: LoaderFunction = async () => {
   let posts = await postsApi.query();
@@ -39,12 +28,12 @@ export let loader: LoaderFunction = async () => {
 export default function Screen() {
   const data = useLoaderData<{ posts: Post[] }>();
   return (
-    <div className="blog">
-      <h1>Blog</h1>
+    <div>
+      <h1 className="text-5xl">Blog</h1>
       <VerticalSpacer />
-      <ul>
+      <ul className="flex flex-col gap-4">
         {data.posts.map((post) => (
-          <li key={post.slug}>
+          <li className="text-xl text-[var(--fg)] duration-200 hover:text-[var(--highlight)]" key={post.slug}>
             <Link to={post.slug}>{post.title}</Link>
           </li>
         ))}

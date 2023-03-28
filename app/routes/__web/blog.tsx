@@ -1,19 +1,13 @@
 import { Outlet } from "@remix-run/react";
 
-import blogLayoutStyles from "../../styles/blog-layout.css";
-
-export function links() {
-  return [
-    {
-      rel: "stylesheet",
-      href: blogLayoutStyles,
-    },
-  ];
-}
-
 export default function Screen() {
   return (
-    <main className="blog-layout">
+    <main
+      style={{
+        gridArea: "content",
+      }}
+      className="w-full pt-12 md:w-[100ch] m-auto"
+    >
       <Outlet />
     </main>
   );

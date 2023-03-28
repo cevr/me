@@ -7,6 +7,25 @@ import type { Group } from "three";
 import { KaizenText } from "./KaizenText";
 import { Star } from "./Star";
 
+function useBreakpoint() {
+  const [breakpoint, setBreakpoint] = React.useState<"sm" | "md" | "lg">("lg");
+  React.useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth < 640) {
+        setBreakpoint("sm");
+      } else if (window.innerWidth < 768) {
+        setBreakpoint("md");
+      } else {
+        setBreakpoint("lg");
+      }
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return breakpoint;
+}
+
 type KaizenCanvasProps = {
   stars: {
     projectId: string;
@@ -17,6 +36,8 @@ type KaizenCanvasProps = {
 
 export function KaizenCanvas({ stars, hoveredProjectId }: KaizenCanvasProps) {
   let [textRef, setTextRef] = React.useState<Group | null>(null);
+  const breakpoint = useBreakpoint();
+
   return (
     <Canvas
       camera={{ position: [0, 0, 15] }}
@@ -32,16 +53,18 @@ export function KaizenCanvas({ stars, hoveredProjectId }: KaizenCanvasProps) {
       <Stars />
 
       <ambientLight intensity={1} color="#fababa" />
-      <React.Suspense fallback={<Progress />}>
-        <group position={[-6, 1, 0]}>
-          {textRef && <directionalLight intensity={2} target={textRef} />}
-          <pointLight intensity={1} position={[0, 1, 2]} />
-          <KaizenText ref={setTextRef} />
-          {stars.map((star) => (
-            <StarInitializer star={star} key={star.id} hoveredProjectId={hoveredProjectId} />
-          ))}
-        </group>
-      </React.Suspense>
+      {breakpoint !== "sm" ? (
+        <React.Suspense fallback={<Progress />}>
+          <group position={[-6, 1, 0]}>
+            {textRef && <directionalLight intensity={2} target={textRef} />}
+            <pointLight intensity={1} position={[0, 1, 2]} />
+            <KaizenText ref={setTextRef} />
+            {stars.map((star) => (
+              <StarInitializer star={star} key={star.id} hoveredProjectId={hoveredProjectId} />
+            ))}
+          </group>
+        </React.Suspense>
+      ) : null}
     </Canvas>
   );
 }

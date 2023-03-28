@@ -78,7 +78,7 @@
 
 .post-nav-item {
   color: var(--accent);
-  transition: color var(--transition);
+  transition: color 0.2s;
 }
 
 .post-nav-item:hover {
@@ -127,7 +127,7 @@
   color: var(--bg);
   padding: 0.25rem 0.5rem;
   margin-right: 0.5rem;
-  transition: all var(--transition);
+  transition: all 0.2s;
 }
 
 @media (max-width: 50rem) {

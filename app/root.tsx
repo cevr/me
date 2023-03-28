@@ -1,9 +1,6 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useMatches } from "@remix-run/react";
 
-import boundaryStyles from "./styles/boundary.css";
-import footerStyles from "./styles/footer.css";
-import navStyles from "./styles/nav.css";
 import rootStyles from "./styles/root.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 
@@ -39,9 +36,6 @@ export let links: LinksFunction = () => {
       href: "/theme",
     },
     { rel: "stylesheet", href: rootStyles },
-    { rel: "stylesheet", href: navStyles },
-    { rel: "stylesheet", href: footerStyles },
-    { rel: "stylesheet", href: boundaryStyles },
   ];
 };
 
@@ -71,12 +65,21 @@ export function CatchBoundary() {
     case 404:
       return (
         <Document title="Not found | Cristian">
-          <main className="boundary">
+          <main
+            style={{
+              gridArea: "content",
+            }}
+            className="grid place-items-center text-center text-[var(--accent)] leading-8 duration-200 text-lg h-full"
+          >
             <div>
               <p>Nope! This page definitely doesn't exist. Just checked.</p>
               <p>
                 Take this{" "}
-                <Link to="/" className="link-home" aria-label="home link">
+                <Link
+                  to="/"
+                  className="duration-200 border-b-[3px] border-[var(--highlight)] text-[var(--highlight)]"
+                  aria-label="home link"
+                >
                   link
                 </Link>{" "}
                 back home
@@ -89,12 +92,16 @@ export function CatchBoundary() {
     default:
       return (
         <Document title="Oops! | Cristian">
-          <main className="boundary">
+          <main
+            style={{
+              gridArea: "content",
+            }}
+          >
             <div>
               <p>What??! Something went wrong you say?</p>
               <p>
                 Click this{" "}
-                <Link to="/" className="link-home" aria-label="home link">
+                <Link to="/" className="duration-200 border-b-3" aria-label="home link">
                   link
                 </Link>{" "}
                 back home and pretend you never saw anything.
@@ -111,12 +118,16 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
   return (
     <Document title="Oops! | Cristian">
-      <main className="boundary">
+      <main
+        style={{
+          gridArea: "content",
+        }}
+      >
         <div>
           <p>What??! Something went wrong you say?</p>
           <p>
             Click this{" "}
-            <Link to="/" className="link-home" aria-label="home link">
+            <Link to="/" className="duration-200 border-b-3" aria-label="home link">
               link
             </Link>{" "}
             back home and pretend you never saw anything.
@@ -136,7 +147,7 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="text-[var(--fg)] bg-[var(--bg)] h-full min-h-0 grid p-4 max-w-[1200px] m-auto">
         {children}
         {!noscript ? <Scripts /> : null}
         {process.env.NODE_ENV === "development" && <LiveReload />}

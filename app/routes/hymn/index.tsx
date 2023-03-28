@@ -20,9 +20,9 @@ export default function Hymns() {
           prefetch="intent"
           key={hymn.number}
           to={`/hymn/${hymn.number}?${searchParams.toString()}`}
-          className="p-2 underline"
+          className="p-2 hover:underline"
         >
-          {hymn.number}. {hymn.title}
+          <span className="tabular-nums">{hymn.number.padStart(3, "0")}</span>. {hymn.title}
         </Link>
       ))}
     </nav>

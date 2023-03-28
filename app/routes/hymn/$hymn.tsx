@@ -75,7 +75,7 @@ export default function HymnPage() {
       </div>
       <span className="text-[10px]">{hymn.reference}</span>
 
-      <div className="flex w-full justify-between flex-wrap">
+      <div className="flex flex-col md:flex-row w-full justify-between">
         <div className="flex flex-col gap-2">
           {prevHymn ? (
             <a className="p-2 underline" href={`/hymn/${prevHymn?.number}`}>
@@ -83,7 +83,7 @@ export default function HymnPage() {
             </a>
           ) : null}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 justify-end text-end">
           {nextHymn ? (
             <a className="p-2 underline" href={`/hymn/${nextHymn.number}`}>
               {nextHymn.number.padStart(3, "0")}. {nextHymn.title} →

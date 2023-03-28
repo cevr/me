@@ -2,13 +2,7 @@ import type { LinksFunction, MetaFunction } from "@remix-run/node";
 
 import { ExternalLink } from "~/components";
 
-import aboutStylesheet from "../../styles/about.css";
-
 export let links: LinksFunction = () => [
-  {
-    rel: "stylesheet",
-    href: aboutStylesheet,
-  },
   {
     rel: "preload",
     href: "/images/me.jpg",
@@ -26,7 +20,12 @@ export let handle = {
 
 export default function AboutPage() {
   return (
-    <main className="about flex flex-col md:grid md:grid-cols-3 gap-10">
+    <main
+      style={{
+        gridArea: "content",
+      }}
+      className="flex flex-col md:grid md:grid-cols-3 gap-10 pt-12"
+    >
       <section>
         <img
           className="aspect-square rounded-[50%] max-w-full h-auto mx-auto"
@@ -37,9 +36,13 @@ export default function AboutPage() {
 
       <section className="flex flex-col gap-3 col-span-2 md:pt-10">
         <h1 className="text-6xl">Hi, I'm Cristian.</h1>
-        <p>Professionally, I'm a product engineer that purses excellence in design, development, and testing.</p>
+        <p className="text-lg font-light text-[var(--accent)] leading-10">
+          Professionally, I'm a product engineer that purses excellence in design, development, and testing.
+        </p>
 
-        <p>Honestly, I'm just a guy who likes to code.</p>
+        <p className="text-lg font-light text-[var(--accent)] leading-10">
+          Honestly, I'm just a guy who likes to code.
+        </p>
 
         <ExternalLink
           className="text-[salmon] underline"
