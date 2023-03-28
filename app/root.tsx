@@ -1,8 +1,6 @@
-import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useLoaderData, useMatches } from "@remix-run/react";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useMatches } from "@remix-run/react";
 
-import { Footer, Nav } from "./components";
 import boundaryStyles from "./styles/boundary.css";
 import footerStyles from "./styles/footer.css";
 import navStyles from "./styles/nav.css";
@@ -53,29 +51,14 @@ export let meta: MetaFunction = () => {
   };
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
-  let oneYear = 1000 * 60 * 60 * 24 * 365;
-  return json(
-    { date: new Date() },
-    {
-      headers: {
-        "Cache-Control": `max-age=${oneYear}`,
-      },
-    },
-  );
-};
-
 export default function App() {
-  let data = useLoaderData<{ date: string }>();
   const matches = useMatches();
 
   const noscript = matches.some((match) => match.handle?.noscript);
 
   return (
     <Document noscript={noscript}>
-      <Nav />
       <Outlet />
-      <Footer date={data.date} />
     </Document>
   );
 }
@@ -146,7 +129,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 function Document({ children, title, noscript }: { children: React.ReactNode; title?: string; noscript?: boolean }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <meta charSet="utf-8" />
         {title ? <title>{title}</title> : null}

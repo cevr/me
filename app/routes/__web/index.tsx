@@ -9,7 +9,7 @@ import { KaizenCanvas } from "~/components/three";
 import { projectsApi } from "~/lib";
 import type { Project } from "~/lib/projects.server";
 
-import indexStyles from "../styles/index.css";
+import indexStyles from "../../styles/index.css";
 
 export let meta: MetaFunction = () => {
   return {

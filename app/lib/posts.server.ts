@@ -96,4 +96,4 @@ export let query = async () => {
   return posts;
 };
 
-export { serialize } from "next-mdx-remote/serialize";
+export { bundleMDX as serialize } from "mdx-bundler";

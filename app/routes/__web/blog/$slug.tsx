@@ -4,14 +4,14 @@ import { Link, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import type { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { MDXRemote } from "next-mdx-remote";
+import { getMDXComponent } from "mdx-bundler/client";
+import * as React from "react";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
 import type { Post } from "~/lib/posts.server";
 
-import blogPostStyles from "../../styles/blog-post.css";
+import blogPostStyles from "../../../styles/blog-post.css";
 
 dayjs.extend(relativeTime);
 
@@ -50,7 +50,7 @@ export let loader: LoaderFunction = async ({ params }) => {
       newerPost,
       post: {
         ...post,
-        content: await postsApi.serialize(post.matter.content),
+        content: (await postsApi.serialize({ source: post.matter.content })).code,
       },
     },
     {
@@ -64,11 +64,12 @@ export let loader: LoaderFunction = async ({ params }) => {
 export default function Screen() {
   const { post, newerPost, olderPost } = useLoaderData<{
     post: Post & {
-      content: MDXRemoteSerializeResult;
+      content: string;
     };
     newerPost: Post;
     olderPost: Post;
   }>();
+  const MDXComponent = React.useMemo(() => getMDXComponent(post.content), [post.content]);
 
   return (
     <div className="post">
@@ -89,11 +90,11 @@ export default function Screen() {
         ))}
       </div>
       <VerticalSpacer size="lg" />
-      <MDXRemote {...post.content as any} components={components as any} />
+      <MDXComponent components={components as any} />
       <VerticalSpacer size="lg" />
       <nav className="post-nav">
-        {olderPost ? <PostNavItem post={olderPost} /> : <div />}
-        {newerPost ? <PostNavItem post={newerPost} newer /> : <div />}
+        {olderPost ? <PostNavItem post={olderPost as any} /> : <div />}
+        {newerPost ? <PostNavItem post={newerPost as any} newer /> : <div />}
       </nav>
     </div>
   );

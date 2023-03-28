@@ -6,7 +6,7 @@ import { VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
 import type { Post } from "~/lib/posts.server";
 
-import blogIndexStyles from "../../styles/blog-index.css";
+import blogIndexStyles from "../../../styles/blog-index.css";
 
 export let meta: MetaFunction = () => ({
   title: "Blog | Cristian",

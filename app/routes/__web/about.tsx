@@ -2,7 +2,7 @@ import type { LinksFunction, MetaFunction } from "@remix-run/node";
 
 import { ExternalLink } from "~/components";
 
-import aboutStylesheet from "../styles/about.css";
+import aboutStylesheet from "../../styles/about.css";
 
 export let links: LinksFunction = () => [
   {

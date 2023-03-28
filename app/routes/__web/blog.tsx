@@ -1,6 +1,6 @@
 import { Outlet } from "@remix-run/react";
 
-import blogLayoutStyles from "../styles/blog-layout.css";
+import blogLayoutStyles from "../../styles/blog-layout.css";
 
 export function links() {
   return [
