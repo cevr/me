@@ -2,10 +2,10 @@ import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { Link, Outlet, useFetcher, useLoaderData, useSearchParams } from "@remix-run/react";
 import clsx from "clsx";
 
-import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { Popover } from "~/components/popover";
 import { getHymnSearchParams } from "~/lib/hymns.server";
+import { addToSearchParams } from "~/lib/utils";
 import type { Hymn } from "~/types/hymn";
 
 export let meta: MetaFunction = () => ({
@@ -16,38 +16,22 @@ export let loader = async ({ request }: LoaderArgs) => {
   return getHymnSearchParams(request);
 };
 
-function calculateCapoFret(semitones: number) {
-  const absSemitones = Math.abs(semitones);
-  if (semitones === 0) {
-    return 0;
-  }
-
-  return 12 - absSemitones;
-}
-
-function addToSearchParams(searchParams: URLSearchParams, params: Record<string, string> | [string, string][]) {
-  const newSearchParams = new URLSearchParams(searchParams);
-  if (Array.isArray(params)) {
-    params.forEach(([key, value]) => {
-      newSearchParams.set(key, value);
-    });
-  }
-  Object.entries(params).forEach(([key, value]) => {
-    newSearchParams.set(key, value);
-  });
-  return newSearchParams;
-}
-
 export default function Hymns() {
   const [searchParams] = useSearchParams();
-  const { semitone, sort } = useLoaderData<typeof loader>();
+  const { sort } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<Hymn[]>();
 
   return (
-    <div className="flex flex-col gap-8 font-mono">
+    <div className="flex flex-col gap-8 font-mono max-w-[calc(100vw_-_32px)]">
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
-          <Link to="/hymn" className="duration-200 hover:text-[var(--highlight)]">
+          <Link
+            to={{
+              pathname: "/hymn",
+              search: searchParams.toString(),
+            }}
+            className="duration-200 hover:text-[var(--highlight)]"
+          >
             Hymns
           </Link>
 
@@ -91,7 +75,7 @@ export default function Hymns() {
             <Popover.Content
               sideOffset={8}
               align="start"
-              className="w-[calc(100vw-80px)] p-0"
+              className="w-[calc(100vw-32px)] p-0"
               onOpenAutoFocus={(event) => {
                 event.preventDefault();
               }}
@@ -107,36 +91,15 @@ export default function Hymns() {
                       pathname: `/hymn/${hymn.number}`,
                       search: searchParams.toString(),
                     }}
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 py-2 text-lg"
                   >
-                    <span className="text-sm tabular-nums">{hymn.number.padStart(3, "0")}.</span>
-                    <span className="text-sm">{hymn.title}</span>
+                    <span className="tabular-nums">{hymn.number.padStart(3, "0")}.</span>
+                    <span className="">{hymn.title}</span>
                   </Link>
                 ))}
               </div>
             </Popover.Content>
           </Popover>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link
-            to={{
-              search: addToSearchParams(searchParams, {
-                semitone: ((semitone + 1) % 12).toString(),
-              }).toString(),
-            }}
-          >
-            <Button variant="outline">Up</Button>
-          </Link>
-          <div>Capo: {calculateCapoFret(semitone)}</div>
-          <Link
-            to={{
-              search: addToSearchParams(searchParams, {
-                semitone: ((semitone - 1 + 12) % 12).toString(),
-              }).toString(),
-            }}
-          >
-            <Button variant="outline">Down</Button>
-          </Link>
         </div>
       </div>
       <Outlet />

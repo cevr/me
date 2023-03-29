@@ -1,9 +1,11 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { Chord, Scale } from "tonal";
+import { Button } from "~/components/button";
 
 import { getHymn, getHymnSearchParams } from "~/lib/hymns.server";
+import { addToSearchParams } from "~/lib/utils";
 import type { Hymn } from "~/types/hymn";
 
 export let loader = async ({ params, request }: LoaderArgs) => {
@@ -37,14 +39,15 @@ export let loader = async ({ params, request }: LoaderArgs) => {
     hymn: transposedHymn,
     nextHymn,
     scale: scale[0],
+    semitone,
   };
 };
 
 export default function HymnPage() {
-  const { hymn, nextHymn, prevHymn, scale } = useLoaderData<typeof loader>();
+  const { hymn, nextHymn, prevHymn, scale, semitone } = useLoaderData<typeof loader>();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-[116px]">
       <div>
         <span className="text-sm">{scale}</span>
         <h3 className="text-2xl">
@@ -53,7 +56,7 @@ export default function HymnPage() {
       </div>
       <div className="flex flex-col gap-4">
         {hymn.lines.map((line, lineIndex) => (
-          <div key={`line-${lineIndex}`} className="flex flex-wrap gap-x-2 gap-y-4">
+          <div key={`line-${lineIndex}`} className="flex flex-wrap gap-2">
             {line.map(({ lyric, chord }, lyricIndex) => (
               <div className="flex w-max break-before-all flex-col justify-between" key={lyric + chord + lyricIndex}>
                 <motion.span
@@ -65,7 +68,7 @@ export default function HymnPage() {
                 >
                   {chord}
                 </motion.span>
-                <span className="flex flex-shrink-0" key={`lyric-${lyricIndex}`}>
+                <span className="flex" key={`lyric-${lyricIndex}`}>
                   {lyric}
                 </span>
               </div>
@@ -74,7 +77,6 @@ export default function HymnPage() {
         ))}
       </div>
       <span className="text-[10px]">{hymn.reference}</span>
-
       <div className="flex w-full flex-col justify-between md:flex-row">
         <div className="flex flex-col gap-2">
           {prevHymn ? (
@@ -91,6 +93,43 @@ export default function HymnPage() {
           ) : null}
         </div>
       </div>
+      <HymnCommandBar semitone={semitone} />
+    </div>
+  );
+}
+
+function calculateCapoFret(semitones: number) {
+  const absSemitones = Math.abs(semitones);
+  if (semitones === 0) {
+    return 0;
+  }
+
+  return 12 - absSemitones;
+}
+
+function HymnCommandBar({ semitone }: { semitone: number }) {
+  const [searchParams] = useSearchParams();
+  return (
+    <div className="fixed bottom-4 flex w-[calc(100%-32px)] items-center justify-between gap-2 rounded-lg border border-primary-300 bg-neutral-800 py-2 px-4">
+      <Link
+        to={{
+          search: addToSearchParams(searchParams, {
+            semitone: ((semitone + 1) % 12).toString(),
+          }).toString(),
+        }}
+      >
+        <Button variant="outline">Up</Button>
+      </Link>
+      <div>Capo: {calculateCapoFret(semitone)}</div>
+      <Link
+        to={{
+          search: addToSearchParams(searchParams, {
+            semitone: ((semitone - 1 + 12) % 12).toString(),
+          }).toString(),
+        }}
+      >
+        <Button variant="outline">Down</Button>
+      </Link>
     </div>
   );
 }
