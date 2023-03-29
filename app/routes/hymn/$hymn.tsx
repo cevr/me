@@ -48,8 +48,8 @@ export default function HymnPage() {
   const transposedHymn: Hymn = {
     ...hymn,
     lines: hymn.lines.map((line) =>
-      line.map(({ chord, lyric }, i) => ({
-        chord: chord ? transposed[i] : chord,
+      line.map(({ lyric }) => ({
+        chord: transposed.shift(),
         lyric,
       })),
     ),
@@ -118,7 +118,7 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
       if (!ref.current) return;
 
       const container = ref.current;
-      const screenHeight = window.innerHeight;
+      const screenHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
       const containerWidth = container.offsetWidth;
 
       // Calculate the total text length
@@ -136,8 +136,8 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
 
       // Clamp the font size to a desired minimum and maximum range
       const minFontSize = 6;
-      const maxFontSize = 30;
-      const clampedFontSize = Math.min(Math.max(optimalFontSize, minFontSize), maxFontSize);
+      const maxFontSize = 40;
+      const clampedFontSize = Math.floor(Math.min(Math.max(optimalFontSize, minFontSize), maxFontSize));
 
       fontSize.current = clampedFontSize;
       container.style.fontSize = clampedFontSize + "px";
@@ -165,11 +165,11 @@ function calculateCapoFret(semitones: number) {
 function HymnCommandBar({ semitone }: { semitone: number }) {
   const [searchParams] = useSearchParams();
   return (
-    <div className="flex w-full items-center justify-between gap-4 sm:justify-center">
+    <div className="flex w-full items-center justify-between gap-4 sm:justify-center text-lg">
       <Link
         to={{
           search: addToSearchParams(searchParams, {
-            semitone: ((semitone + 1) % 12).toString(),
+            semitone: ((semitone + 1) % 13).toString(),
           }).toString(),
         }}
       >
@@ -181,7 +181,7 @@ function HymnCommandBar({ semitone }: { semitone: number }) {
       <Link
         to={{
           search: addToSearchParams(searchParams, {
-            semitone: ((semitone - 1 + 12) % 12).toString(),
+            semitone: ((semitone - 1 + 13) % 13).toString(),
           }).toString(),
         }}
       >
