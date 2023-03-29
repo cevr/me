@@ -56,7 +56,7 @@ export default function HymnPage() {
   };
 
   return (
-    <div className="flex flex-col gap-8 pb-[116px]">
+    <div className="flex flex-col gap-8">
       <HymnCommandBar semitone={semitone} />
 
       <div>
