@@ -12,7 +12,7 @@ export let meta: MetaFunction = () => ({
   title: "Hymns",
 });
 
-export let loader = async ({ request }: LoaderArgs) => {
+export let loader = ({ request }: LoaderArgs) => {
   return getHymnSearchParams(request);
 };
 
@@ -22,7 +22,7 @@ export default function Hymns() {
   const fetcher = useFetcher<Hymn[]>();
 
   return (
-    <div className="flex flex-col gap-8 font-mono max-w-[calc(100vw_-_32px)]">
+    <div className="flex max-w-[calc(100vw_-_32px)] flex-col gap-8 font-mono">
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
           <Link
