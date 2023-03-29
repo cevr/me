@@ -113,26 +113,28 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
 
       const container = ref.current;
       const screenHeight = window.innerHeight;
-      const parentWidth = container.parentElement?.offsetWidth ?? 0;
+      const containerWidth = container.offsetWidth;
 
-      let currentFontSize = fontSize.current;
-      let isTextFitting = false;
+      // Calculate the total text length
+      const totalTextLength = container.textContent ? container.textContent.length : 1;
 
-      while (!isTextFitting) {
-        container.style.fontSize = currentFontSize + "px";
+      // Calculate the available area on the screen
+      const availableArea = screenHeight * containerWidth;
 
-        const isHeightExceeded = container.offsetHeight > screenHeight;
-        const isWidthExceeded = container.offsetWidth > parentWidth;
+      // Estimate the font size by dividing the available area by the total text length
+      const estimatedFontSize = availableArea / totalTextLength;
 
-        if (isHeightExceeded || (!isTextFitting && isWidthExceeded)) {
-          currentFontSize -= 0.5;
-        } else {
-          currentFontSize += 0.5;
-          isTextFitting = container.offsetHeight + 0.5 >= screenHeight || container.offsetWidth + 0.5 >= parentWidth;
-        }
-      }
+      // Apply a scaling factor to fine-tune the font size
+      const scalingFactor = 0.02;
+      const optimalFontSize = estimatedFontSize * scalingFactor;
 
-      fontSize.current = currentFontSize;
+      // Clamp the font size to a desired minimum and maximum range
+      const minFontSize = 6;
+      const maxFontSize = 28;
+      const clampedFontSize = Math.min(Math.max(optimalFontSize, minFontSize), maxFontSize);
+
+      fontSize.current = clampedFontSize;
+      container.style.fontSize = clampedFontSize + "px";
     };
 
     window.addEventListener("resize", fitTextToScreenHeight);
