@@ -19,29 +19,11 @@ export let loader = async ({ params, request }: LoaderArgs) => {
 
   const [prevHymn, hymn, nextHymn] = await getHymn(sort, number);
 
-  const chords = hymn.lines.flatMap((line) =>
-    line.map((l) => l.chord).filter(Boolean as unknown as (chord: string | undefined) => chord is string),
-  );
-  const transposed = semitone === 0 ? chords : chords.map((chord) => Chord.transpose(chord, `${semitone}M`));
-
-  const scale = Scale.detect(transposed);
-
-  const transposedHymn: Hymn = {
-    ...hymn,
-    lines: hymn.lines.map((line) =>
-      line.map(({ chord, lyric }) => ({
-        chord: chord ? transposed.shift() : chord,
-        lyric,
-      })),
-    ),
-  };
-
   return json(
     {
       prevHymn,
-      hymn: transposedHymn,
+      hymn,
       nextHymn,
-      scale: scale[0],
       semitone,
     },
     {
@@ -53,9 +35,25 @@ export let loader = async ({ params, request }: LoaderArgs) => {
 };
 
 export default function HymnPage() {
-  const { hymn, nextHymn, prevHymn, scale, semitone } = useLoaderData<typeof loader>();
+  const { hymn, nextHymn, prevHymn, semitone } = useLoaderData<typeof loader>();
   const ref = React.useRef<HTMLDivElement>(null);
   useFitTextToScreen(ref);
+
+  const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
+  const transposed =
+    semitone === 0 ? chords : chords.map((chord) => (chord ? Chord.transpose(chord, `${semitone}M`) || chord : chord));
+
+  const scale = Scale.detect(transposed.filter(Boolean) as string[])[0];
+
+  const transposedHymn: Hymn = {
+    ...hymn,
+    lines: hymn.lines.map((line) =>
+      line.map(({ chord, lyric }, i) => ({
+        chord: chord ? transposed[i] : chord,
+        lyric,
+      })),
+    ),
+  };
 
   return (
     <div className="flex flex-col gap-8 pb-[116px]">
@@ -68,7 +66,7 @@ export default function HymnPage() {
         </h3>
       </div>
       <div className="flex flex-col gap-4" ref={ref}>
-        {hymn.lines.map((line, lineIndex) => (
+        {transposedHymn.lines.map((line, lineIndex) => (
           <div key={`line-${lineIndex}`} className="flex flex-wrap gap-2">
             {line.map(({ lyric, chord }, lyricIndex) => (
               <div className="flex w-max break-before-all flex-col justify-between" key={lyric + chord + lyricIndex}>
