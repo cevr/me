@@ -2,8 +2,9 @@ import type { LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { Chord, Scale } from "tonal";
-import { Button } from "~/components/button";
+import * as React from "react";
 
+import { Button } from "~/components/button";
 import { getHymn, getHymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 import type { Hymn } from "~/types/hymn";
@@ -45,16 +46,20 @@ export let loader = async ({ params, request }: LoaderArgs) => {
 
 export default function HymnPage() {
   const { hymn, nextHymn, prevHymn, scale, semitone } = useLoaderData<typeof loader>();
+  const ref = React.useRef<HTMLDivElement>(null);
+  useFitTextToScreen(ref);
 
   return (
     <div className="flex flex-col gap-4 pb-[116px]">
+      <HymnCommandBar semitone={semitone} />
+
       <div>
         <span className="text-sm">{scale}</span>
         <h3 className="text-2xl">
           {hymn.number.padStart(3, "0")}. {hymn.title}
         </h3>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4" ref={ref}>
         {hymn.lines.map((line, lineIndex) => (
           <div key={`line-${lineIndex}`} className="flex flex-wrap gap-2">
             {line.map(({ lyric, chord }, lyricIndex) => (
@@ -93,9 +98,51 @@ export default function HymnPage() {
           ) : null}
         </div>
       </div>
-      <HymnCommandBar semitone={semitone} />
     </div>
   );
+}
+
+function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize = 16) {
+  const fontSize = React.useRef(initialFontSize);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const fitTextToScreenHeight = () => {
+      if (!ref.current) return;
+
+      const container = ref.current;
+      const screenHeight = window.innerHeight;
+      const parentWidth = container.parentElement?.offsetWidth ?? 0;
+
+      let currentFontSize = fontSize.current;
+      let isTextFitting = false;
+
+      while (!isTextFitting) {
+        container.style.fontSize = currentFontSize + "px";
+
+        const isHeightExceeded = container.offsetHeight > screenHeight;
+        const isWidthExceeded = container.offsetWidth > parentWidth;
+
+        if (isHeightExceeded || (!isTextFitting && isWidthExceeded)) {
+          currentFontSize -= 0.5;
+        } else {
+          currentFontSize += 0.5;
+          isTextFitting = container.offsetHeight + 0.5 >= screenHeight || container.offsetWidth + 0.5 >= parentWidth;
+        }
+      }
+
+      fontSize.current = currentFontSize;
+    };
+
+    window.addEventListener("resize", fitTextToScreenHeight);
+    fitTextToScreenHeight();
+
+    return () => {
+      window.removeEventListener("resize", fitTextToScreenHeight);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }
 
 function calculateCapoFret(semitones: number) {
@@ -110,7 +157,7 @@ function calculateCapoFret(semitones: number) {
 function HymnCommandBar({ semitone }: { semitone: number }) {
   const [searchParams] = useSearchParams();
   return (
-    <div className="fixed bottom-4 flex w-[calc(100%-32px)] items-center justify-between gap-2 rounded-lg border border-primary-300 bg-neutral-800 py-2 px-4">
+    <div className="flex w-full items-center justify-between gap-4 sm:justify-center">
       <Link
         to={{
           search: addToSearchParams(searchParams, {
@@ -118,7 +165,9 @@ function HymnCommandBar({ semitone }: { semitone: number }) {
           }).toString(),
         }}
       >
-        <Button variant="outline">Up</Button>
+        <Button variant="outline" size="lg">
+          Up
+        </Button>
       </Link>
       <div>Capo: {calculateCapoFret(semitone)}</div>
       <Link
@@ -128,7 +177,9 @@ function HymnCommandBar({ semitone }: { semitone: number }) {
           }).toString(),
         }}
       >
-        <Button variant="outline">Down</Button>
+        <Button variant="outline" size="lg">
+          Down
+        </Button>
       </Link>
     </div>
   );
