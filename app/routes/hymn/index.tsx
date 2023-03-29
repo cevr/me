@@ -1,4 +1,5 @@
 import type { LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 
 import { getHymnSearchParams, getHymns } from "~/lib/hymns.server";
@@ -6,7 +7,11 @@ import { getHymnSearchParams, getHymns } from "~/lib/hymns.server";
 export const loader = async ({ request }: LoaderArgs) => {
   const { sort } = getHymnSearchParams(request);
 
-  return Object.values(await getHymns(sort));
+  return json(Object.values(await getHymns(sort)), {
+    headers: {
+      "Cache-Control": "public, max-age=86400",
+    },
+  });
 };
 
 export default function Hymns() {

@@ -1,4 +1,5 @@
 import type { LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { Chord, Scale } from "tonal";
@@ -35,13 +36,20 @@ export let loader = async ({ params, request }: LoaderArgs) => {
     ),
   };
 
-  return {
-    prevHymn,
-    hymn: transposedHymn,
-    nextHymn,
-    scale: scale[0],
-    semitone,
-  };
+  return json(
+    {
+      prevHymn,
+      hymn: transposedHymn,
+      nextHymn,
+      scale: scale[0],
+      semitone,
+    },
+    {
+      headers: {
+        "Cache-Control": "public, max-age=86400",
+      },
+    },
+  );
 };
 
 export default function HymnPage() {
