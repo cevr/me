@@ -24,7 +24,10 @@ export default function Hymns() {
         <Link
           prefetch="intent"
           key={hymn.number}
-          to={`/hymn/${hymn.number}?${searchParams.toString()}`}
+          to={{
+            pathname: `/hymn/${hymn.number}`,
+            search: searchParams.toString(),
+          }}
           className="p-2 hover:underline"
         >
           <span className="tabular-nums">{hymn.number.padStart(3, "0")}</span>. {hymn.title}

@@ -94,7 +94,7 @@ export default function Hymns() {
                     className="flex items-center gap-2 py-2 text-lg"
                   >
                     <span className="tabular-nums">{hymn.number.padStart(3, "0")}.</span>
-                    <span className="">{hymn.title}</span>
+                    <span>{hymn.title}</span>
                   </Link>
                 ))}
               </div>
