@@ -50,12 +50,12 @@ export default function HymnPage() {
   useFitTextToScreen(ref);
 
   return (
-    <div className="flex flex-col gap-4 pb-[116px]">
+    <div className="flex flex-col gap-8 pb-[116px]">
       <HymnCommandBar semitone={semitone} />
 
       <div>
         <span className="text-sm">{scale}</span>
-        <h3 className="text-2xl">
+        <h3 className="text-3xl">
           {hymn.number.padStart(3, "0")}. {hymn.title}
         </h3>
       </div>
@@ -130,7 +130,7 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
 
       // Clamp the font size to a desired minimum and maximum range
       const minFontSize = 6;
-      const maxFontSize = 28;
+      const maxFontSize = 30;
       const clampedFontSize = Math.min(Math.max(optimalFontSize, minFontSize), maxFontSize);
 
       fontSize.current = clampedFontSize;
