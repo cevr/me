@@ -81,9 +81,9 @@ async function pushToPublic(fileName: string, data: any, commitMessage: string) 
       }),
     });
 
-    console.log("JSON object committed and pushed successfully.");
+    console.log(`${fileName} committed and pushed to CMS successfully.`);
   } catch (error) {
-    console.error("Error while committing and pushing JSON object:", error);
+    console.error(`Error while committing and pushing ${fileName}:`, error);
   }
 }
 
