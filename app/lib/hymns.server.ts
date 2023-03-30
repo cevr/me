@@ -4,26 +4,31 @@ import * as z from "zod";
 import type { Hymn } from "~/types/hymn";
 
 declare global {
-  var hymnState: {
-    hymns: Hymn[] | undefined;
-    content: string | undefined;
-    timestamp: number;
+  var hymnCache: {
+    data?: {
+      hymns: Hymn[];
+      content: string;
+      timestamp: number;
+    };
   };
 }
 
-global.hymnState ||= {
-  hymns: undefined as Hymn[] | undefined,
-  content: undefined as string | undefined,
-  timestamp: Date.now(),
-};
+let hymnCache: typeof global.hymnCache = {};
+
+if (process.env.NODE_ENV !== "production") {
+  if (!global.hymnCache) {
+    global.hymnCache = {};
+  }
+  hymnCache = global.hymnCache;
+}
 
 export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
-  if (global.hymnState.hymns) {
+  if (hymnCache.data) {
     maybeInvalidate();
     if (sortBy === "title") {
-      return global.hymnState.hymns.slice().sort((a, b) => a.title.localeCompare(b.title));
+      return hymnCache.data.hymns.slice().sort((a, b) => a.title.localeCompare(b.title));
     }
-    return global.hymnState.hymns;
+    return hymnCache.data.hymns;
   }
 
   const response = await fetch("https://bradwarden.com/music/hymnchords/cho/");
@@ -36,7 +41,7 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
   const content = $("pre").text();
   const hymns = parseCho(content);
 
-  global.hymnState = {
+  hymnCache.data = {
     hymns,
     content,
     timestamp: Date.now(),
@@ -95,7 +100,7 @@ export async function getHymn(
 }
 
 async function maybeInvalidate() {
-  if (global.hymnState.content && Date.now() - global.hymnState.timestamp > 1000 * 60 * 60 * 24) {
+  if (hymnCache.data && Date.now() - hymnCache.data.timestamp! > 1000 * 60 * 60 * 24) {
     const response = await fetch("https://bradwarden.com/music/hymnchords/cho/");
     if (!response.ok) {
       throw new Error("Could not fetch hymns");
@@ -103,10 +108,10 @@ async function maybeInvalidate() {
     const text = await response.text();
     const $ = load(text);
     const content = $("pre").text();
-    if (content !== global.hymnState.content) {
+    if (content !== hymnCache.data.content) {
       const hymns = parseCho(content);
 
-      global.hymnState = {
+      hymnCache.data = {
         hymns,
         content,
         timestamp: Date.now(),
