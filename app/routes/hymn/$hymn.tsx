@@ -138,7 +138,7 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
       const estimatedFontSize = availableArea / totalTextLength;
 
       // Apply a scaling factor to fine-tune the font size
-      const scalingFactor = 0.02;
+      const scalingFactor = 0.018;
       const optimalFontSize = estimatedFontSize * scalingFactor;
 
       // Clamp the font size to a desired minimum and maximum range
