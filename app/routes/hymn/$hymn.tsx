@@ -115,6 +115,15 @@ export default function HymnPage() {
   );
 }
 
+const getScreenHeight = () => {
+  if (typeof window === "undefined") return 0;
+  return window.visualViewport?.height || window.innerHeight;
+};
+
+const withinRange = (number: number, min: number, max: number) => {
+  return number >= min && number <= max;
+};
+
 function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize = 16) {
   const fontSize = React.useRef(initialFontSize);
 
@@ -124,34 +133,38 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
     const fitTextToScreenHeight = () => {
       if (!ref.current) return;
 
+      console.log("fitTextToScreenHeight");
+
       const container = ref.current;
-      const screenHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      const containerWidth = container.offsetWidth;
 
-      // Calculate the total text length
-      const totalTextLength = container.textContent ? container.textContent.length : 1;
+      let currentFontSize = fontSize.current;
 
-      // Calculate the available area on the screen
-      const availableArea = screenHeight * containerWidth;
+      const adjustFontSizeRecursively = () => {
+        const padding = 16;
+        const screenHeight = getScreenHeight();
+        const paddedHeight = screenHeight - padding;
+        // Increase or decrease font size depending on the current height
+        if (container.offsetHeight < paddedHeight) {
+          currentFontSize += 0.5
+        } else if (container.offsetHeight > paddedHeight) {
+          currentFontSize -= 0.5;
+        }
+        container.style.fontSize = currentFontSize + "px";
 
-      // Estimate the font size by dividing the available area by the total text length
-      const estimatedFontSize = availableArea / totalTextLength;
+        // if the height is not within the range, keep adjusting
+        requestAnimationFrame(() => {
+          if (!withinRange(container.offsetHeight, paddedHeight - padding, paddedHeight)) {
+            adjustFontSizeRecursively();
+          }
+        });
+      };
 
-      // Apply a scaling factor to fine-tune the font size
-      const scalingFactor = 0.018;
-      const optimalFontSize = estimatedFontSize * scalingFactor;
-
-      // Clamp the font size to a desired minimum and maximum range
-      const minFontSize = 6;
-      const maxFontSize = 40;
-      const clampedFontSize = Math.floor(Math.min(Math.max(optimalFontSize, minFontSize), maxFontSize));
-
-      fontSize.current = clampedFontSize;
-      container.style.fontSize = clampedFontSize + "px";
+      adjustFontSizeRecursively();
     };
 
-    window.addEventListener("resize", fitTextToScreenHeight);
     fitTextToScreenHeight();
+
+    window.addEventListener("resize", fitTextToScreenHeight);
 
     return () => {
       window.removeEventListener("resize", fitTextToScreenHeight);
