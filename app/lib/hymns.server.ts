@@ -22,6 +22,12 @@ if (process.env.NODE_ENV !== "production") {
   hymnCache = global.hymnCache;
 }
 
+if (!hymnCache.data) {
+  getHymns("number").catch(() => {
+    // ignore
+  });
+}
+
 export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
   if (hymnCache.data) {
     maybeInvalidate();
