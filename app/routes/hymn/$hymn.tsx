@@ -34,11 +34,7 @@ export let loader = async ({ params, request }: LoaderArgs) => {
   );
 };
 
-export default function HymnPage() {
-  const { hymn, nextHymn, prevHymn, semitone } = useLoaderData<typeof loader>();
-  const ref = React.useRef<HTMLDivElement>(null);
-  useFitTextToScreen(ref);
-
+function transposeHymn(hymn: Hymn, semitone: number) {
   const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
   const transposed =
     semitone === 0 ? chords : chords.map((chord) => (chord ? Chord.transpose(chord, `${semitone}M`) || chord : chord));
@@ -54,6 +50,15 @@ export default function HymnPage() {
       })),
     ),
   };
+  return [transposedHymn, scale] as const;
+}
+
+export default function HymnPage() {
+  const { hymn, nextHymn, prevHymn, semitone } = useLoaderData<typeof loader>();
+  const ref = React.useRef<HTMLDivElement>(null);
+  useFitTextToScreen(ref);
+
+  const [transposedHymn, scale] = transposeHymn(hymn, semitone);
 
   return (
     <div className="flex flex-col gap-8">
@@ -165,7 +170,7 @@ function calculateCapoFret(semitones: number) {
 function HymnCommandBar({ semitone }: { semitone: number }) {
   const [searchParams] = useSearchParams();
   return (
-    <div className="flex w-full items-center justify-between gap-4 sm:justify-center text-lg">
+    <div className="flex w-full items-center justify-between gap-4 text-lg sm:justify-center">
       <Link
         to={{
           search: addToSearchParams(searchParams, {
