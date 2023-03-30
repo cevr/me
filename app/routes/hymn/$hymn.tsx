@@ -34,14 +34,14 @@ export let loader = async ({ params, request }: LoaderArgs) => {
   );
 };
 
-function transposeHymn(hymn: Hymn, semitone: number) {
+function transposeHymn(hymn: Hymn, semitone: number): Hymn & { scale: string } {
   const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
   const transposed =
     semitone === 0 ? chords : chords.map((chord) => (chord ? Chord.transpose(chord, `${semitone}M`) || chord : chord));
 
   const scale = Scale.detect(transposed.filter(Boolean) as string[])[0];
 
-  const transposedHymn: Hymn = {
+  const transposedHymn = {
     ...hymn,
     lines: hymn.lines.map((line) =>
       line.map(({ lyric }) => ({
@@ -49,8 +49,10 @@ function transposeHymn(hymn: Hymn, semitone: number) {
         lyric,
       })),
     ),
+    scale,
   };
-  return [transposedHymn, scale] as const;
+
+  return transposedHymn;
 }
 
 export default function HymnPage() {
@@ -58,14 +60,14 @@ export default function HymnPage() {
   const ref = React.useRef<HTMLDivElement>(null);
   useFitTextToScreen(ref);
 
-  const [transposedHymn, scale] = transposeHymn(hymn, semitone);
+  const transposedHymn = transposeHymn(hymn, semitone);
 
   return (
     <div className="flex flex-col gap-8">
       <HymnCommandBar semitone={semitone} />
 
       <div>
-        <span className="text-sm">{scale}</span>
+        <span className="text-sm">{transposedHymn.scale}</span>
         <h3 className="text-3xl">
           {hymn.number.padStart(3, "0")}. {hymn.title}
         </h3>
