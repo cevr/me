@@ -1,5 +1,5 @@
 module.exports = {
-  plugins: [require("@ianvs/prettier-plugin-sort-imports"), require("prettier-plugin-tailwindcss")],
+  plugins: [require("prettier-plugin-tailwindcss"), require("./node_modules/@ianvs/prettier-plugin-sort-imports")],
   printWidth: 120,
   singleQuote: false,
   trailingComma: "all",
@@ -7,4 +7,8 @@ module.exports = {
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
   importOrderCombineTypeAndValueImports: false,
+  importOrderGroupNamespaceSpecifiers: true,
+  importOrderCaseInsensitive: true,
+  importOrderMergeDuplicateImports: true,
+  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
 };

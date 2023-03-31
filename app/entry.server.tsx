@@ -1,6 +1,6 @@
-import ReactDOMServer from "react-dom/server";
 import type { EntryContext } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
+import ReactDOMServer from "react-dom/server";
 
 require("dotenv").config();
 

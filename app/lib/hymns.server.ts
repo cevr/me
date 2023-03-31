@@ -1,8 +1,9 @@
-import { load } from "cheerio";
 import * as z from "zod";
-import { Chord, Scale, Interval, Note } from "tonal";
+import { load } from "cheerio";
+import { Chord, Interval, Note, Scale } from "tonal";
 
 import type { Hymn } from "~/types/hymn";
+
 import { GithubCMS } from "./github.server";
 import { keys } from "./hymns";
 import { TaskQueue } from "./utils";

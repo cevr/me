@@ -1,8 +1,8 @@
+import * as React from "react";
+import * as THREE from "three";
 import type { GroupProps } from "@react-three/fiber";
 import { extend, useLoader } from "@react-three/fiber";
-import * as React from "react";
 import type { Mesh } from "three";
-import * as THREE from "three";
 import { FontLoader, TextGeometry } from "three-stdlib";
 
 type TextProps = {

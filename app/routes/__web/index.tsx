@@ -1,8 +1,8 @@
+import * as React from "react";
 import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { motion } from "framer-motion";
-import * as React from "react";
 import { ClientOnly } from "remix-utils";
 
 import { Star } from "~/components/icons";

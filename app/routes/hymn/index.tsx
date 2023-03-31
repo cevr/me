@@ -1,7 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 
-import { getHymnSearchParams, getHymns } from "~/lib/hymns.server";
+import { getHymns, getHymnSearchParams } from "~/lib/hymns.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const { sort } = getHymnSearchParams(request);

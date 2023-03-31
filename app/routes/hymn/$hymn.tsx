@@ -1,14 +1,13 @@
+import * as React from "react";
 import type { LoaderArgs } from "@remix-run/node";
 import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
-import * as React from "react";
 import debounce from "lodash.debounce";
 
-import type { HymnSearchParams } from "~/lib/hymns.server";
-import { getHymn, getHymnSearchParams, transposeHymn } from "~/lib/hymns.server";
-import { keys } from "~/lib/hymns";
-
 import { Select } from "~/components/select";
+import { keys } from "~/lib/hymns";
+import { getHymn, getHymnSearchParams, transposeHymn } from "~/lib/hymns.server";
+import type { HymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 
 export let loader = async ({ params, request }: LoaderArgs) => {

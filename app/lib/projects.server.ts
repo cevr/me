@@ -1,4 +1,4 @@
-import { GraphQLClient, gql } from "graphql-request";
+import { gql, GraphQLClient } from "graphql-request";
 
 let repositoriesQuery = gql`
   query {

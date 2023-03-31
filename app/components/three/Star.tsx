@@ -1,10 +1,9 @@
+import * as React from "react";
+import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import type { SceneProps } from "@react-three/fiber";
 import { useFrame } from "@react-three/fiber";
-import "framer-motion";
-import * as React from "react";
 import { MeshStandardMaterial } from "three";
-import * as THREE from "three";
 import type { Group, Mesh, MeshPhongMaterial } from "three";
 
 import { useComposedRefs } from "~/lib/utils";

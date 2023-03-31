@@ -12,7 +12,7 @@
     "dev:remix": "remix dev",
     "postinstall": "remix setup",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css",
-    "format": "prettier --write .",
+    "format": "prettier --write app",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint ."
   },
   "dependencies": {
