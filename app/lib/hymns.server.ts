@@ -3,6 +3,8 @@ import * as z from "zod";
 
 import type { Hymn } from "~/types/hymn";
 import { GithubCMS } from "./github.server";
+import { TaskQueue } from "./utils";
+import { allLimited } from "./utils/promises";
 
 declare global {
   var hymnCache: {
@@ -12,59 +14,85 @@ declare global {
       timestamp: number;
     };
   };
+  var fetchQueue: TaskQueue<Hymn[]>;
 }
 
+const hymnsFilename = "hymns.json";
+
 let hymnCache: typeof global.hymnCache = {};
+let fetchQueue = new TaskQueue<Hymn[]>();
 
 if (process.env.NODE_ENV !== "production") {
   if (!global.hymnCache) {
     global.hymnCache = {};
   }
   hymnCache = global.hymnCache;
-}
-
-const hymnsFilename = "hymns.json";
-
-if (!hymnCache.data) {
-  getHymns("number").catch(() => {
-    console.log("failed");
-    // ignore
-  });
-}
-
-export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
-  if (hymnCache.data) {
-    maybeInvalidate();
-    if (sortBy === "title") {
-      return hymnCache.data.hymns.slice().sort((a, b) => a.title.localeCompare(b.title));
-    }
-    return hymnCache.data.hymns;
+  if (!global.fetchQueue) {
+    global.fetchQueue = new TaskQueue<Hymn[]>();
   }
-  try {
-    const response = await fetch("https://bradwarden.com/music/hymnchords/cho/");
+  fetchQueue = global.fetchQueue;
+}
+
+function fetchHymns() {
+  async function doFetch() {
+    const response = await fetch("https://bradwarden.com/music/hymnchords");
 
     if (!response.ok) {
       throw new Error("Could not fetch hymns");
     }
-
     const text = await response.text();
+
     const $ = load(text);
-    const content = $("pre").text();
+    const choFiles = $("a")
+      .map(function () {
+        const url = new URL($(this).attr("href")!, "https://bradwarden.com/music/hymnchords/");
+        return url;
+      })
+      .get()
+      .filter((url) => {
+        const searchParams = new URLSearchParams(url.search);
+        const hymnNumber = searchParams.get("num");
+        return !!hymnNumber;
+      })
+      .map((url) => {
+        const searchParams = new URLSearchParams(url.search);
+        const hymnNumber = searchParams.get("num");
+        return hymnNumber;
+      })
+      .map((hymnNumber) => `https://bradwarden.com/music/hymnchords/cho/?${hymnNumber!}`);
+
+    const content = await allLimited(
+      choFiles.map((url) => async () => {
+        console.log("fetching", url);
+        const text = await fetch(url).then((r) => r.text());
+        console.log("fetched", url);
+        const $ = load(text);
+        return $("pre").text();
+      }),
+      50,
+    ).then((responses) => responses.join("\n"));
+
     const hymns = parseCho(content);
+    pushHymnsToPublic(hymns);
 
     hymnCache.data = {
       hymns,
       content,
       timestamp: Date.now(),
     };
-
-    pushHymnsToPublic(hymns);
-
     return hymns;
-  } catch (error) {
-    console.error(error);
+  }
+  return fetchQueue.add("hymns", doFetch);
+}
+
+export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
+  let hymns: Hymn[];
+  if (hymnCache.data) {
+    maybeInvalidate();
+    hymns = hymnCache.data.hymns;
+  } else {
     const response = await GithubCMS.get(hymnsFilename);
-    const hymns = await response.json();
+    hymns = await response.json();
     hymnCache.data = {
       hymns,
       content: "",
@@ -72,6 +100,11 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
     };
     return hymns;
   }
+
+  if (sortBy === "title") {
+    return hymns.slice().sort((a, b) => a.title.localeCompare(b.title));
+  }
+  return hymns;
 }
 
 function pushHymnsToPublic(hymns: Hymn[]) {
@@ -128,26 +161,9 @@ export async function getHymn(
 }
 
 async function maybeInvalidate() {
-  if (hymnCache.data && Date.now() - hymnCache.data.timestamp! > 1000 * 60 * 60 * 24) {
+  if (hymnCache.data && Date.now() - hymnCache.data.timestamp > 1000 * 60 * 60 * 24) {
     try {
-      const response = await fetch("https://bradwarden.com/music/hymnchords/cho/");
-      if (!response.ok) {
-        throw new Error("Could not fetch hymns");
-      }
-      const text = await response.text();
-      const $ = load(text);
-      const content = $("pre").text();
-      if (content !== hymnCache.data.content) {
-        const hymns = parseCho(content);
-
-        pushHymnsToPublic(hymns);
-
-        hymnCache.data = {
-          hymns,
-          content,
-          timestamp: Date.now(),
-        };
-      }
+      await fetchHymns();
     } catch (e) {
       console.error("Could not invalidate hymns");
     }
