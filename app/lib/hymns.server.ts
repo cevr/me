@@ -57,8 +57,8 @@ function fetchHymns() {
         }
         const [, hymnNumber, title] = match;
         // also replace any non-alphanumeric characters with a dash
-        // ensure no double dashes
-        return `${hymnNumber.padStart(3, "0")}-${title.replace(/[^a-zA-Z0-9]/g, "-").replace(/--/g, "-")}.cho`;
+        // ensure no consecutive dashes
+        return `${hymnNumber.padStart(3, "0")}-${title.replace(/[^a-zA-Z0-9]/g, "-").replace(/-+/g, "-")}.cho`;
       })
       .map((url) => `https://bradwarden.com/music/hymnchords/cho/${url}`);
 
