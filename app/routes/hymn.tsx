@@ -83,7 +83,7 @@ export default function Hymns() {
                 fetcher.load(`/hymn/search?q=`);
               }}
             >
-              <div className="flex w-full flex-col gap-2  rounded-md bg-[var(--link-bg)] py-2 px-4">
+              <div className="flex w-full flex-col gap-2  rounded-md bg-[var(--link-bg)] px-4 py-2">
                 {fetcher.data?.map((hymn) => (
                   <Link
                     key={hymn.number}
