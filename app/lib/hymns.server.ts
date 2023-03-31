@@ -3,6 +3,7 @@ import * as z from "zod";
 
 import type { Hymn } from "~/types/hymn";
 import { GithubCMS } from "./github.server";
+import { keys } from "./hymns";
 import { TaskQueue } from "./utils";
 import { allLimited } from "./utils/promises";
 
@@ -116,27 +117,22 @@ const hymnSearchParamsSchema = z.object({
     .nullable()
     .default("number")
     .transform((x) => x ?? "number"),
-  semitone: z.preprocess(
-    (x) => {
-      if (typeof x === "string") return parseInt(x);
-    },
-    z
-      .number()
-      .min(0)
-      .max(12)
-      .nullable()
-      .default(0)
-      .transform((x) => x ?? 0),
-  ),
+  key: z
+    .enum(keys)
+    .nullable()
+    .default(null)
+    .transform((x) => x ?? undefined),
 });
 
-export function getHymnSearchParams(req: Request) {
+export type HymnSearchParams = z.infer<typeof hymnSearchParamsSchema>;
+
+export function getHymnSearchParams(req: Request): HymnSearchParams {
   const url = new URL(req.url);
   const sort = url.searchParams.get("sort");
-  const semitone = url.searchParams.get("semitone");
+  const key = url.searchParams.get("key");
   const params = hymnSearchParamsSchema.safeParse({
     sort,
-    semitone,
+    key,
   });
   if (!params.success) {
     throw new Error(params.error.message);

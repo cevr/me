@@ -1,21 +1,24 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
+import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
-import { Chord, Scale } from "tonal";
+import { Chord, Scale, Interval, Note } from "tonal";
 import * as React from "react";
 import debounce from "lodash.debounce";
 
-import { Button } from "~/components/button";
+import type { HymnSearchParams } from "~/lib/hymns.server";
+import { keys } from "~/lib/hymns";
 import { getHymn, getHymnSearchParams } from "~/lib/hymns.server";
-import { addToSearchParams } from "~/lib/utils";
+
 import type { Hymn } from "~/types/hymn";
+import { Select } from "~/components/select";
+import { addToSearchParams } from "~/lib/utils";
 
 export let loader = async ({ params, request }: LoaderArgs) => {
   const number = params.hymn;
   if (!number) {
     throw new Error("hymnNumber is required");
   }
-  const { sort, semitone } = getHymnSearchParams(request);
+  const { sort, key } = getHymnSearchParams(request);
 
   const [prevHymn, hymn, nextHymn] = await getHymn(sort, number);
 
@@ -23,16 +26,29 @@ export let loader = async ({ params, request }: LoaderArgs) => {
     prevHymn,
     hymn,
     nextHymn,
-    semitone,
+    key,
   };
 };
 
-function transposeHymn(hymn: Hymn, semitone: number): Hymn & { scale: string } {
+function transposeHymn(hymn: Hymn, key: HymnSearchParams["key"]): [Hymn & { scale: string }, number] {
   const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
-  const transposed =
-    semitone === 0 ? chords : chords.map((chord) => (chord ? Chord.transpose(chord, `${semitone}M`) || chord : chord));
 
-  const scale = Scale.detect(transposed.filter(Boolean) as string[])[0];
+  const originalScale = Scale.detect(chords.filter(Boolean) as string[])[0].split(" ")[0];
+  if (!key) {
+    return [
+      {
+        ...hymn,
+        scale: originalScale,
+      },
+      0,
+    ];
+  }
+  const { tonic } = Chord.get(key);
+  const interval = Interval.distance(Note.get(originalScale), Note.get(tonic as string));
+
+  const transposed = chords.map((chord) => (chord ? Chord.transpose(chord, interval) : chord));
+
+  const scale = Scale.detect(transposed.filter(Boolean) as string[])[0]?.split(" ")[0] ?? "";
 
   const transposedHymn = {
     ...hymn,
@@ -45,26 +61,25 @@ function transposeHymn(hymn: Hymn, semitone: number): Hymn & { scale: string } {
     scale,
   };
 
-  return transposedHymn;
+  // get number from the interval string
+  const semitone = Interval.semitones(interval) ?? 0;
+  return [transposedHymn, semitone];
 }
 
 export default function HymnPage() {
-  const { hymn, nextHymn, prevHymn, semitone } = useLoaderData<typeof loader>();
+  const { hymn, nextHymn, prevHymn, key } = useLoaderData<typeof loader>();
   const ref = React.useRef<HTMLDivElement>(null);
   useFitTextToScreen(ref);
 
-  const transposedHymn = transposeHymn(hymn, semitone);
+  const [transposedHymn, semitone] = transposeHymn(hymn, key);
 
   return (
     <div className="flex flex-col gap-8">
-      <HymnCommandBar semitone={semitone} />
+      <HymnCommandBar semitone={semitone} hymnKey={Chord.get(key ?? (transposedHymn.scale as any)).tonic as any} />
 
-      <div>
-        <span className="text-sm">{transposedHymn.scale}</span>
-        <h3 className="text-3xl">
-          {hymn.number}. {hymn.title}
-        </h3>
-      </div>
+      <h3 className="text-3xl">
+        {hymn.number}. {hymn.title}
+      </h3>
       <div className="flex flex-col gap-4" ref={ref}>
         {transposedHymn.lines.map((line, lineIndex) => (
           <div key={`line-${lineIndex}`} className="flex flex-wrap gap-2">
@@ -175,33 +190,35 @@ function calculateCapoFret(semitones: number) {
   return 12 - absSemitones;
 }
 
-function HymnCommandBar({ semitone }: { semitone: number }) {
+function HymnCommandBar({ semitone, hymnKey }: { semitone: number; hymnKey: HymnSearchParams["key"] }) {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
   return (
     <div className="flex w-full items-center justify-between gap-4 text-lg sm:justify-center">
-      <Link
-        to={{
-          search: addToSearchParams(searchParams, {
-            semitone: ((semitone + 1) % 13).toString(),
-          }).toString(),
+      <Select
+        name="key"
+        value={hymnKey}
+        onValueChange={(value) => {
+          navigate({
+            search: addToSearchParams(searchParams, {
+              key: value,
+            }).toString(),
+          });
         }}
       >
-        <Button variant="outline" size="lg">
-          Up
-        </Button>
-      </Link>
+        <Select.Trigger className="w-[180px]">
+          <Select.Value placeholder="Select a key" />
+        </Select.Trigger>
+        <Select.Content>
+          {keys.map((key) => (
+            <Select.Item key={key} value={key}>
+              {key}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select>
       <div>Capo: {calculateCapoFret(semitone)}</div>
-      <Link
-        to={{
-          search: addToSearchParams(searchParams, {
-            semitone: ((semitone - 1 + 13) % 13).toString(),
-          }).toString(),
-        }}
-      >
-        <Button variant="outline" size="lg">
-          Down
-        </Button>
-      </Link>
     </div>
   );
 }
