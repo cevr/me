@@ -4,6 +4,7 @@ import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { Chord, Scale } from "tonal";
 import * as React from "react";
+import debounce from "lodash.debounce";
 
 import { Button } from "~/components/button";
 import { getHymn, getHymnSearchParams } from "~/lib/hymns.server";
@@ -117,11 +118,7 @@ export default function HymnPage() {
 
 const getScreenHeight = () => {
   if (typeof window === "undefined") return 0;
-  return window.visualViewport?.height || window.innerHeight;
-};
-
-const withinRange = (number: number, min: number, max: number) => {
-  return number >= min && number <= max;
+  return window.innerHeight;
 };
 
 function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize = 16) {
@@ -130,37 +127,41 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
   React.useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const fitTextToScreenHeight = () => {
+    const fitTextToScreenHeight = debounce(() => {
       if (!ref.current) return;
-
-      console.log("fitTextToScreenHeight");
 
       const container = ref.current;
 
-      let currentFontSize = fontSize.current;
+      let lastFontSize: number | undefined;
 
       const adjustFontSizeRecursively = () => {
-        const padding = 16;
+        const padding = 64;
         const screenHeight = getScreenHeight();
         const paddedHeight = screenHeight - padding;
-        // Increase or decrease font size depending on the current height
-        if (container.offsetHeight < paddedHeight) {
-          currentFontSize += 0.5
-        } else if (container.offsetHeight > paddedHeight) {
-          currentFontSize -= 0.5;
-        }
-        container.style.fontSize = currentFontSize + "px";
 
-        // if the height is not within the range, keep adjusting
+        lastFontSize = fontSize.current;
+
+        if (container.offsetHeight < paddedHeight) {
+          fontSize.current += 0.5;
+        } else if (container.offsetHeight > paddedHeight) {
+          fontSize.current -= 0.5;
+        }
+
+        container.style.fontSize = fontSize.current + "px";
+
         requestAnimationFrame(() => {
-          if (!withinRange(container.offsetHeight, paddedHeight - padding, paddedHeight)) {
+          // Store the last good font size based on the direction of the changes
+          const increasing = fontSize.current > lastFontSize!;
+          if (increasing && container.offsetHeight > paddedHeight) {
+            container.style.fontSize = lastFontSize + "px";
+          } else {
             adjustFontSizeRecursively();
           }
         });
       };
 
       adjustFontSizeRecursively();
-    };
+    }, 250);
 
     fitTextToScreenHeight();
 
