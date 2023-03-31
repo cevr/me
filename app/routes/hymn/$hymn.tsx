@@ -1,5 +1,4 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import { Chord, Scale } from "tonal";
@@ -20,19 +19,12 @@ export let loader = async ({ params, request }: LoaderArgs) => {
 
   const [prevHymn, hymn, nextHymn] = await getHymn(sort, number);
 
-  return json(
-    {
-      prevHymn,
-      hymn,
-      nextHymn,
-      semitone,
-    },
-    {
-      headers: {
-        "Cache-Control": "public, max-age=86400",
-      },
-    },
-  );
+  return {
+    prevHymn,
+    hymn,
+    nextHymn,
+    semitone,
+  };
 };
 
 function transposeHymn(hymn: Hymn, semitone: number): Hymn & { scale: string } {
@@ -70,7 +62,7 @@ export default function HymnPage() {
       <div>
         <span className="text-sm">{transposedHymn.scale}</span>
         <h3 className="text-3xl">
-          {hymn.number.padStart(3, "0")}. {hymn.title}
+          {hymn.number}. {hymn.title}
         </h3>
       </div>
       <div className="flex flex-col gap-4" ref={ref}>
@@ -100,14 +92,14 @@ export default function HymnPage() {
         <div className="flex flex-col gap-2">
           {prevHymn ? (
             <a className="p-2 underline" href={`/hymn/${prevHymn?.number}`}>
-              ← {prevHymn.number.padStart(3, "0")}. {prevHymn?.title}
+              ← {prevHymn.number}. {prevHymn?.title}
             </a>
           ) : null}
         </div>
         <div className="flex flex-col justify-end gap-2 text-end">
           {nextHymn ? (
             <a className="p-2 underline" href={`/hymn/${nextHymn.number}`}>
-              {nextHymn.number.padStart(3, "0")}. {nextHymn.title} →
+              {nextHymn.number}. {nextHymn.title} →
             </a>
           ) : null}
         </div>

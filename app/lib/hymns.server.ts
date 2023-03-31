@@ -45,29 +45,31 @@ function fetchHymns() {
     const $ = load(text);
     const choFiles = $("a")
       .map(function () {
-        const url = new URL($(this).attr("href")!, "https://bradwarden.com/music/hymnchords/");
-        return url;
+        return $(this).text();
       })
       .get()
-      .filter((url) => {
-        const searchParams = new URLSearchParams(url.search);
-        const hymnNumber = searchParams.get("num");
-        return !!hymnNumber;
-      })
       .map((url) => {
-        const searchParams = new URLSearchParams(url.search);
-        const hymnNumber = searchParams.get("num");
-        return hymnNumber;
+        // 608. Faith Is the Victory
+        // we want to turn it into 608-Faith-Is-the-Victory
+        const match = url.match(/^(\d+)\. (.*)$/);
+        if (!match) {
+          return null;
+        }
+        const [, hymnNumber, title] = match;
+        // also replace any non-alphanumeric characters with a dash
+        // ensure no double dashes
+        return `${hymnNumber.padStart(3, "0")}-${title.replace(/[^a-zA-Z0-9]/g, "-").replace(/--/g, "-")}.cho`;
       })
-      .map((hymnNumber) => `https://bradwarden.com/music/hymnchords/cho/?${hymnNumber!}`);
+      .map((url) => `https://bradwarden.com/music/hymnchords/cho/${url}`);
 
     const content = await allLimited(
       choFiles.map((url) => async () => {
         console.log("fetching", url);
-        const text = await fetch(url).then((r) => r.text());
-        console.log("fetched", url);
-        const $ = load(text);
-        return $("pre").text();
+        const res = await fetch(url);
+        if (!res.ok) {
+          return "";
+        }
+        return res.text();
       }),
       50,
     ).then((responses) => responses.join("\n"));
@@ -82,7 +84,7 @@ function fetchHymns() {
     };
     return hymns;
   }
-  return fetchQueue.add("hymns", doFetch);
+  return fetchQueue.add("hymns", () => doFetch());
 }
 
 export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
@@ -190,8 +192,9 @@ function parseCho(cho: string): Hymn[] {
       // title ex: 36. O Thou in Whose Presence
       // we want to separate the number from the title and use that as the number
       // and the title as the title
-      const title = line.slice(7, -1).trim();
-      const number = title.match(/^\d+/)![0];
+      // parse the title between the {title: and }
+      const title = /{title:(.*)}/.exec(line)![1];
+      const number = title.match(/^\d+/)![0].padStart(3, "0");
       const titleWithoutNumber = title.slice(number.length + 1).trim();
       currentHymn = {
         title: titleWithoutNumber,
