@@ -210,7 +210,7 @@ function HymnCommandBar({ semitone, hymnKey }: { semitone: number; hymnKey: Hymn
         <Select.Trigger className="w-[180px]">
           <Select.Value placeholder="Select a key" />
         </Select.Trigger>
-        <Select.Content>
+        <Select.Content sideOffset={8} position="popper">
           {keys.map((key) => (
             <Select.Item key={key} value={key}>
               {key}
