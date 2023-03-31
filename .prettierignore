@@ -1,7 +1,9 @@
 node_modules
 
+pnpm-lock.yaml
+
 /build
-/public/build
+/public
 .env
 
 /cypress/screenshots
