@@ -10,7 +10,6 @@ declare global {
   var hymnCache: {
     data?: {
       hymns: Hymn[];
-      content: string;
       timestamp: number;
     };
   };
@@ -79,7 +78,6 @@ function fetchHymns() {
 
     hymnCache.data = {
       hymns,
-      content,
       timestamp: Date.now(),
     };
     return hymns;
@@ -97,7 +95,6 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
     hymns = await response.json();
     hymnCache.data = {
       hymns,
-      content: "",
       timestamp: Date.now(),
     };
     return hymns;
