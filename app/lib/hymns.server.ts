@@ -192,13 +192,15 @@ function parseCho(cho: string): Hymn[] {
       // title ex: 36. O Thou in Whose Presence
       // we want to separate the number from the title and use that as the number
       // and the title as the title
-      // parse the title between the {title: and }
-      const title = /{title:(.*)}/.exec(line)![1];
-      const number = title.match(/^\d+/)![0].padStart(3, "0");
-      const titleWithoutNumber = title.slice(number.length + 1).trim();
+      // parse the title between the {title:}
+      const match = line.match(/{title:(.*)}/);
+      const numberAndTitle = match![1].trim();
+      const number = numberAndTitle.split(".")[0];
+      const title = numberAndTitle.slice(number.length + 1).trim();
+
       currentHymn = {
-        title: titleWithoutNumber,
-        number,
+        title,
+        number: number.padStart(3, "0"),
         lines: [],
         reference: "",
       };
