@@ -1,15 +1,13 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
-import { Chord, Scale, Interval, Note } from "tonal";
 import * as React from "react";
 import debounce from "lodash.debounce";
 
 import type { HymnSearchParams } from "~/lib/hymns.server";
+import { getHymn, getHymnSearchParams, transposeHymn } from "~/lib/hymns.server";
 import { keys } from "~/lib/hymns";
-import { getHymn, getHymnSearchParams } from "~/lib/hymns.server";
 
-import type { Hymn } from "~/types/hymn";
 import { Select } from "~/components/select";
 import { addToSearchParams } from "~/lib/utils";
 
@@ -21,67 +19,31 @@ export let loader = async ({ params, request }: LoaderArgs) => {
   const { sort, key } = getHymnSearchParams(request);
 
   const [prevHymn, hymn, nextHymn] = await getHymn(sort, number);
+  const [transposedHymn, semitone] = transposeHymn(hymn, key);
 
   return {
     prevHymn,
-    hymn,
+    hymn: transposedHymn,
     nextHymn,
     key,
+    semitone,
   };
 };
 
-function transposeHymn(hymn: Hymn, key: HymnSearchParams["key"]): [Hymn & { scale: string }, number] {
-  const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
-
-  const originalScale = Scale.detect(chords.filter(Boolean) as string[])[0].split(" ")[0];
-  if (!key) {
-    return [
-      {
-        ...hymn,
-        scale: originalScale,
-      },
-      0,
-    ];
-  }
-  const { tonic } = Chord.get(key);
-  const interval = Interval.distance(Note.get(originalScale), Note.get(tonic as string));
-
-  const transposed = chords.map((chord) => (chord ? Chord.transpose(chord, interval) : chord));
-
-  const scale = Scale.detect(transposed.filter(Boolean) as string[])[0]?.split(" ")[0] ?? "";
-
-  const transposedHymn = {
-    ...hymn,
-    lines: hymn.lines.map((line) =>
-      line.map(({ lyric }) => ({
-        chord: transposed.shift(),
-        lyric,
-      })),
-    ),
-    scale,
-  };
-
-  // get number from the interval string
-  const semitone = Interval.semitones(interval) ?? 0;
-  return [transposedHymn, semitone];
-}
-
 export default function HymnPage() {
-  const { hymn, nextHymn, prevHymn, key } = useLoaderData<typeof loader>();
+  const { hymn, nextHymn, prevHymn, key, semitone } = useLoaderData<typeof loader>();
   const ref = React.useRef<HTMLDivElement>(null);
   useFitTextToScreen(ref);
 
-  const [transposedHymn, semitone] = transposeHymn(hymn, key);
-
   return (
     <div className="flex flex-col gap-8">
-      <HymnCommandBar semitone={semitone} hymnKey={Chord.get(key ?? (transposedHymn.scale as any)).tonic as any} />
+      <HymnCommandBar semitone={semitone} hymnKey={key ?? (hymn.scale as (typeof keys)[number])} />
 
       <h3 className="text-3xl">
         {hymn.number}. {hymn.title}
       </h3>
       <div className="flex flex-col gap-4" ref={ref}>
-        {transposedHymn.lines.map((line, lineIndex) => (
+        {hymn.lines.map((line, lineIndex) => (
           <div key={`line-${lineIndex}`} className="flex flex-wrap gap-2">
             {line.map(({ lyric, chord }, lyricIndex) => (
               <div className="flex w-max break-before-all flex-col justify-between" key={lyric + chord + lyricIndex}>

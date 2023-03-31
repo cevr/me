@@ -1,5 +1,6 @@
 import { load } from "cheerio";
 import * as z from "zod";
+import { Chord, Scale, Interval, Note } from "tonal";
 
 import type { Hymn } from "~/types/hymn";
 import { GithubCMS } from "./github.server";
@@ -229,4 +230,40 @@ function parseCho(cho: string): Hymn[] {
   });
 
   return hymns;
+}
+
+export function transposeHymn(hymn: Hymn, key: HymnSearchParams["key"]): [Hymn & { scale: string }, number] {
+  const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
+
+  const originalScale = Scale.detect(chords.filter(Boolean) as string[])[0].split(" ")[0];
+  if (!key) {
+    return [
+      {
+        ...hymn,
+        scale: originalScale,
+      },
+      0,
+    ];
+  }
+  const { tonic } = Chord.get(key);
+  const interval = Interval.distance(Note.get(originalScale), Note.get(tonic as string));
+
+  const transposed = chords.map((chord) => (chord ? Chord.transpose(chord, interval) : chord));
+
+  const scale = Scale.detect(transposed.filter(Boolean) as string[])[0]?.split(" ")[0] ?? "";
+
+  const transposedHymn = {
+    ...hymn,
+    lines: hymn.lines.map((line) =>
+      line.map(({ lyric }) => ({
+        chord: transposed.shift(),
+        lyric,
+      })),
+    ),
+    scale,
+  };
+
+  // get number from the interval string
+  const semitone = Interval.semitones(interval) ?? 0;
+  return [transposedHymn, semitone];
 }
