@@ -37,7 +37,8 @@ if (process.env.NODE_ENV !== "production") {
 
 function fetchHymns() {
   async function doFetch() {
-    const response = await fetch("https://bradwarden.com/music/hymnchords");
+    const baseUrl = "https://bradwarden.com/music/hymnchords";
+    const response = await fetch(baseUrl);
 
     if (!response.ok) {
       throw new Error("Could not fetch hymns");
@@ -45,28 +46,51 @@ function fetchHymns() {
     const text = await response.text();
 
     const $ = load(text);
-    const choFiles = $("a")
-      .map(function () {
-        return $(this).text();
-      })
-      .get()
-      .map((url) => {
-        // 608. Faith Is the Victory
-        // we want to turn it into 608-Faith-Is-the-Victory
-        const match = url.match(/^(\d+)\. (.*)$/);
-        if (!match) {
-          return null;
-        }
-        const [, hymnNumber, title] = match;
-        // also remove any non-alphanumeric characters
-        // replace spaces with dashes
-        // ensure no consecutive dashes
-        return `${hymnNumber.padStart(3, "0")}-${title.replace(/[^a-zA-Z\s]/g, "").replace(/\s/g, "-")}.cho`;
-      })
-      .map((url) => `https://bradwarden.com/music/hymnchords/cho/${url}`);
+    const choFiles = await allLimited(
+      $("a")
+        .map(function () {
+          return $(this).text();
+        })
+        .get()
+        .map((url) => {
+          // 608. Faith Is the Victory
+          // we want to turn it into 608-Faith-Is-the-Victory
+          const match = url.match(/^(\d+)\. (.*)$/);
+          if (!match) {
+            return null;
+          }
+          const [, hymnNumber] = match;
+          // also remove any non-alphanumeric characters
+          // replace spaces with dashes
+          // ensure no consecutive dashes
+          return hymnNumber;
+        })
+        .map((number) => `${baseUrl}/?num=${number}`)
+        .map(
+          (url) => () =>
+            fetch(url)
+              .then((res) => res.text())
+              .then((text) => {
+                const $ = load(text);
+                const choATag = $("a").filter((i, el) => !!$(el).attr("href")?.endsWith(".cho"));
+                const choUrl = choATag?.attr("href");
+                if (choUrl) {
+                  const url = new URL(choUrl, baseUrl + "/").toString();
+                  console.log(`Found cho file: ${url}`);
+                  return url;
+                }
+                return undefined;
+              }),
+        ),
+      50,
+    );
+
+    const hymnsWithCho = choFiles.filter(Boolean as unknown as (file: string | undefined) => file is string);
+
+    console.log(`Found ${hymnsWithCho.length} hymns with cho files.`);
 
     const content = await allLimited(
-      choFiles.map((url) => async () => {
+      hymnsWithCho.map((url) => async () => {
         console.log("fetching", url);
         const res = await fetch(url);
         if (!res.ok) {
