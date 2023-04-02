@@ -12,8 +12,8 @@ export function Nav() {
           to="/"
           className={({ isActive }) =>
             cn(
-              "border-b-2 border-transparent font-[Megrim] text-[2.5rem] text-[var(--fg)] transition-colors hover:text-[var(--highlight)]",
-              { "border-[var(--highlight)]": isActive },
+              "border-b-2 border-transparent font-[Megrim] text-[2.5rem] text-neutral-50 transition-colors hover:text-salmon-500",
+              { "border-salmon-500": isActive },
             )
           }
           aria-label="logo"
@@ -24,12 +24,9 @@ export function Nav() {
         <NavLink
           to="/blog"
           className={({ isActive }) =>
-            cn(
-              "block border-b-2 border-transparent leading-[3] text-[var(--fg)] duration-200 hover:text-[var(--highlight)]",
-              {
-                "border-[var(--highlight)]": isActive,
-              },
-            )
+            cn("block border-b-2 border-transparent leading-[3] text-neutral-50 duration-200 hover:text-salmon-500", {
+              "border-salmon-500": isActive,
+            })
           }
           aria-label="blog"
           title="blog"
@@ -37,34 +34,28 @@ export function Nav() {
           Blog
         </NavLink>
         <NavLink
-          to="/about"
-          className={({ isActive }) =>
-            cn(
-              "block border-b-2 border-transparent leading-[3] text-[var(--fg)] duration-200 hover:text-[var(--highlight)]",
-              {
-                "border-[var(--highlight)]": isActive,
-              },
-            )
-          }
-          aria-label="about"
-          title="about"
-        >
-          About
-        </NavLink>
-        <NavLink
           to="/apps"
           className={({ isActive }) =>
-            cn(
-              "block border-b-2 border-transparent leading-[3] text-[var(--fg)] duration-200 hover:text-[var(--highlight)]",
-              {
-                "border-[var(--highlight)]": isActive,
-              },
-            )
+            cn("block border-b-2 border-transparent leading-[3] text-neutral-50 duration-200 hover:text-salmon-500", {
+              "border-salmon-500": isActive,
+            })
           }
           aria-label="apps"
           title="apps"
         >
           Apps
+        </NavLink>
+        <NavLink
+          to="/about"
+          className={({ isActive }) =>
+            cn("block border-b-2 border-transparent leading-[3] text-neutral-50 duration-200 hover:text-salmon-500", {
+              "border-salmon-500": isActive,
+            })
+          }
+          aria-label="about"
+          title="about"
+        >
+          About
         </NavLink>
       </div>
       {/* <form action="/theme" method="POST">

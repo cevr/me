@@ -25,6 +25,10 @@ export function links() {
   return [
     {
       rel: "stylesheet",
+      href: "/code-theme",
+    },
+    {
+      rel: "stylesheet",
       href: blogPostStyles,
     },
   ];
@@ -121,8 +125,8 @@ function PostNavItem({ post, newer }: PostNavItemProps) {
 }
 
 let components = {
-  code: (props: any) => <CodeBlock {...props} />,
   pre: (props: any) => <div className="code" {...props} />,
+  code: (props: any) => <CodeBlock {...props} />,
   a: (props: any) => <ButtonLink {...props} />,
   p: (props: any) => <p className="paragraph" {...props} />,
   strong: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,

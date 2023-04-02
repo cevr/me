@@ -3,9 +3,9 @@ import Highlight, { defaultProps } from "prism-react-renderer";
 
 const theme = {
   plain: {
-    color: "var(--fg)",
+    color: "var(--neutral-50)",
     backgroundColor: "var(--code-bg)",
-    transition: "all var(--transition)",
+    transition: "all 0.2s ease-out",
     fontFamily: '"SFMono-Regular", monospace',
   },
   styles: [
@@ -84,7 +84,7 @@ export function CodeBlock(props: CodeBlockProps) {
           className={className}
           style={{
             ...style,
-            padding: "var(--grid-gap)",
+            padding: "1rem",
             borderRadius: "0.5rem",
             overflow: "auto",
           }}

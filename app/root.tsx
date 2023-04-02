@@ -31,10 +31,6 @@ export let links: LinksFunction = () => {
       rel: "stylesheet",
       href: tailwindStylesheetUrl,
     },
-    {
-      rel: "stylesheet",
-      href: "/theme",
-    },
     { rel: "stylesheet", href: rootStyles },
   ];
 };
@@ -69,7 +65,7 @@ export function CatchBoundary() {
             style={{
               gridArea: "content",
             }}
-            className="grid h-full place-items-center text-center text-lg leading-8 text-[var(--accent)] duration-200"
+            className="grid h-full place-items-center text-center text-lg leading-8 text-neutral-500 duration-200"
           >
             <div>
               <p>Nope! This page definitely doesn't exist. Just checked.</p>
@@ -77,7 +73,7 @@ export function CatchBoundary() {
                 Take this{" "}
                 <Link
                   to="/"
-                  className="border-b-[3px] border-[var(--highlight)] text-[var(--highlight)] duration-200"
+                  className="border-b-[3px] border-salmon-500 text-salmon-500 duration-200"
                   aria-label="home link"
                 >
                   link
@@ -147,7 +143,7 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
         <Meta />
         <Links />
       </head>
-      <body className="m-auto grid h-full min-h-0 max-w-[100vw] bg-neutral-900 p-4 text-[var(--fg)] md:max-w-[1200px]">
+      <body className="m-auto grid h-full min-h-0 max-w-[100vw] bg-neutral-900 p-4 text-neutral-50 md:max-w-[1200px]">
         {children}
         {!noscript ? <Scripts /> : null}
         {process.env.NODE_ENV === "development" && <LiveReload />}

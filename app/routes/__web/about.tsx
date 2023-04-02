@@ -36,11 +36,11 @@ export default function AboutPage() {
 
       <section className="col-span-2 flex flex-col gap-3 md:pt-10">
         <h1 className="text-6xl">Hi, I'm Cristian.</h1>
-        <p className="text-lg font-light leading-10 text-[var(--accent)]">
+        <p className="text-lg font-light leading-10 text-neutral-400">
           Professionally, I'm a product engineer that purses excellence in design, development, and testing.
         </p>
 
-        <p className="text-lg font-light leading-10 text-[var(--accent)]">
+        <p className="text-lg font-light leading-10 text-neutral-400">
           Honestly, I'm just a guy who likes to code.
         </p>
 

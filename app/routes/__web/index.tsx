@@ -89,17 +89,17 @@ export default function Index() {
                 onMouseLeave={() => {
                   hoveredProjectId.current = null;
                 }}
-                className="block transform border-2 border-transparent bg-[var(--link-bg)] p-4 transition-all hover:border-[var(--highlight)] md:p-5 md:hover:scale-[1.01]"
+                className="block transform border-2 border-transparent bg-neutral-800 p-4 transition-all hover:border-salmon-500 md:p-5 md:hover:scale-[1.01]"
               >
                 <article className="">
-                  <div className="project-language text-sm font-light uppercase tracking-wider text-[var(--fg)]">
+                  <div className="project-language text-sm font-light uppercase tracking-wider text-neutral-50">
                     {project.primaryLanguage?.name}
                   </div>
-                  <h1 className="text-2xl font-medium capitalize text-[var(--fg)]">{project.name}</h1>
-                  <p className="project-description text-[0.875rem] font-light text-[var(--accent)]">
+                  <h1 className="text-2xl font-medium capitalize text-neutral-50">{project.name}</h1>
+                  <p className="project-description text-[0.875rem] font-light text-neutral-400">
                     {project.description}
                   </p>
-                  <div className="project-stargazers mt-2 flex gap-1 text-xs font-medium text-[var(--accent)]">
+                  <div className="project-stargazers mt-2 flex gap-1 text-xs font-medium text-neutral-400">
                     <span className="stargazers-star h-3 w-3">
                       <Star />
                     </span>

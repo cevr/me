@@ -33,7 +33,7 @@ export default function Screen() {
       <VerticalSpacer />
       <ul className="flex flex-col gap-4 font-light">
         {data.posts.map((post) => (
-          <li className="text-xl text-[var(--fg)] duration-200 hover:text-[var(--highlight)]" key={post.slug}>
+          <li className="text-xl text-neutral-50 duration-200 hover:text-salmon-500" key={post.slug}>
             <Link to={post.slug}>{post.title}</Link>
           </li>
         ))}

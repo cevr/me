@@ -1,5 +1,5 @@
 .date {
-  color: var(--accent);
+  color: var(--neutral-400);
 }
 
 .title {
@@ -11,7 +11,7 @@
 .post ol {
   font-size: 1rem;
   font-weight: 300;
-  color: var(--fg);
+  color: var(--neutral-50);
   line-height: 1.9rem;
   margin: 1rem 0;
 }
@@ -22,7 +22,7 @@
 
 .post li::before {
   content: "\2022";
-  color: var(--highlight);
+  color: var(--salmon-500);
   font-weight: bold;
   display: inline-block;
   width: 1em;
@@ -31,12 +31,12 @@
 
 .paragraph code {
   background-color: var(--code-bg);
-  color: var(--highlight);
+  color: var(--salmon-500);
   font-family: SFMono-Regular, monospace;
   font-size: 0.9rem;
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
-  transition: all var(--transition);
+  transition: all 0.2s;
 }
 
 .subtitle {
@@ -48,7 +48,7 @@
   margin: 0.5rem 0;
 }
 
-.code .line-number {
+.line-number {
   display: inline-block;
   margin-left: 0.5rem;
   padding-right: 1.5rem;
@@ -61,7 +61,7 @@
 
 .code .highlight-line {
   background-color: var(--code-highlight-bg);
-  border-left: 4px solid var(--highlight);
+  border-left: 4px solid var(--salmon-500);
 }
 
 .code .highlight-line .line-number {
@@ -77,12 +77,12 @@
 }
 
 .post-nav-item {
-  color: var(--accent);
+  color: var(--neutral-400);
   transition: color 0.2s;
 }
 
 .post-nav-item:hover {
-  color: var(--highlight);
+  color: var(--salmon-500);
 }
 
 .post-nav-item-date {
@@ -104,7 +104,7 @@
 
 .blockquote {
   padding: 0.5rem 1rem;
-  border-left: 4px solid var(--highlight);
+  border-left: 4px solid var(--salmon-500);
   background-color: #00000030;
   border-radius: 4px;
   border-top-left-radius: 0;
@@ -123,8 +123,8 @@
 
 .blog-tag {
   border-radius: 0.5rem;
-  background-color: var(--highlight);
-  color: var(--bg);
+  background-color: var(--salmon-500);
+  color: var(--neutral-900);
   padding: 0.25rem 0.5rem;
   margin-right: 0.5rem;
   transition: all 0.2s;

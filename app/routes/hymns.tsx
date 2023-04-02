@@ -31,15 +31,15 @@ export default function Hymns() {
               pathname: "/hymns",
               search: searchParams.toString(),
             }}
-            className="duration-200 hover:text-[var(--highlight)]"
+            className="duration-200 hover:text-salmon-500"
           >
             Hymns
           </Link>
 
           <div className="flex gap-2">
             <Link
-              className={clsx("duration-200 hover:text-[var(--highlight)]", {
-                "text-[var(--highlight)] underline": sort === "number",
+              className={clsx("duration-200 hover:text-salmon-500", {
+                "text-salmon-500 underline": sort === "number",
               })}
               to={{
                 search: addToSearchParams(searchParams, {
@@ -51,8 +51,8 @@ export default function Hymns() {
             </Link>
 
             <Link
-              className={clsx("duration-200 hover:text-[var(--highlight)]", {
-                "text-[var(--highlight)] underline": sort === "title",
+              className={clsx("duration-200 hover:text-salmon-500", {
+                "text-salmon-500 underline": sort === "title",
               })}
               to={{
                 search: addToSearchParams(searchParams, {

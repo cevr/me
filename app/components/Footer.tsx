@@ -9,7 +9,7 @@ type FooterProps = {
   date: string;
 };
 
-const footerLinkClassName = "text-[var(--accent)] hover:text-[var(--highlight)] duration-200 font-light h-6 w-6";
+const footerLinkClassName = "text-neutral-400 hover:text-salmon-500 duration-200 font-light h-6 w-6";
 
 export function Footer({ date }: FooterProps) {
   return (

@@ -22,8 +22,8 @@ body {
 }
 
 *::selection {
-  background: var(--fg);
-  color: var(--bg);
+  background: var(--neutral-50);
+  color: var(--neutral-900);
 }
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
