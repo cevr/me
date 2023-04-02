@@ -37,7 +37,7 @@ if (process.env.NODE_ENV !== "production") {
 
 function fetchHymns() {
   async function doFetch() {
-    const baseUrl = "https://bradwarden.com/music/hymnchords";
+    const baseUrl = "https://bradwarden.com/music/hymnchords/";
     const response = await fetch(baseUrl);
 
     if (!response.ok) {
@@ -46,62 +46,37 @@ function fetchHymns() {
     const text = await response.text();
 
     const $ = load(text);
-    const choFiles = await allLimited(
-      $("a")
-        .map(function () {
-          return $(this).text();
-        })
-        .get()
-        .map((url) => {
-          // 608. Faith Is the Victory
-          // we want to turn it into 608-Faith-Is-the-Victory
-          const match = url.match(/^(\d+)\. (.*)$/);
-          if (!match) {
-            return null;
-          }
-          const [, hymnNumber] = match;
-          // also remove any non-alphanumeric characters
-          // replace spaces with dashes
-          // ensure no consecutive dashes
-          return hymnNumber;
-        })
-        .map((number) => `${baseUrl}/?num=${number}`)
-        .map(
-          (url) => () =>
-            fetch(url)
-              .then((res) => res.text())
-              .then((text) => {
-                const $ = load(text);
-                const choATag = $("a").filter((i, el) => !!$(el).attr("href")?.endsWith(".cho"));
-                const choUrl = choATag?.attr("href");
-                if (choUrl) {
-                  const url = new URL(choUrl, baseUrl + "/").toString();
-                  console.log(`Found cho file: ${url}`);
-                  return url;
-                }
-                return undefined;
-              }),
-        ),
-      50,
-    );
 
-    const hymnsWithCho = choFiles.filter(Boolean as unknown as (file: string | undefined) => file is string);
+    // get final <p> tag and all the <a> tags within it
+    const urls = $("p")
+      .last()
+      .map(function () {
+        return $(this)
+          .find("a")
+          .map(function () {
+            return $(this).attr("href");
+          })
+          .get();
+      })
+      .get()
+      .map((url) => new URL(url, baseUrl).toString());
 
-    console.log(`Found ${hymnsWithCho.length} hymns with cho files.`);
-
-    const content = await allLimited(
-      hymnsWithCho.map((url) => async () => {
+    const hymns = await allLimited(
+      urls.map((url) => async () => {
         console.log("fetching", url);
         const res = await fetch(url);
         if (!res.ok) {
-          return "";
+          console.log("failed to fetch", url);
+          return null;
         }
-        return res.text();
+        const content = await res.text();
+        return parseWebPage(content);
       }),
       50,
-    ).then((responses) => responses.join("\n"));
+    ).then((responses) => responses.filter((response): response is Hymn => response !== null));
 
-    const hymns = parseCho(content);
+    console.log("fetched", hymns.length, "hymns");
+
     pushHymnsToPublic(hymns);
 
     hymnCache.data = {
@@ -192,71 +167,134 @@ async function maybeInvalidate() {
   }
 }
 
-function parseCho(cho: string): Hymn[] {
-  type Hymn = {
-    title: string;
-    number: string;
-    reference: string;
-    lines: {
-      lyric: string;
-      chord?: string;
-    }[][];
-  };
-  const lines = cho.split("\n");
-  const hymns: Hymn[] = [];
-  let currentHymn: Hymn | undefined;
+function parseWebPage(content: string) {
+  const $ = load(content);
+  // if theres an anchor tag within a pre tag, then the hymn is unavailable
+  const unavailable = $("pre a").text();
 
-  lines.forEach((line) => {
-    if (!line.trim()) return;
-    if (line.startsWith("{title:")) {
-      // title ex: 36. O Thou in Whose Presence
-      // we want to separate the number from the title and use that as the number
-      // and the title as the title
-      // parse the title between the {title:}
-      const match = line.match(/{title:(.*)}/);
-      const numberAndTitle = match![1].trim();
-      const number = numberAndTitle.split(".")[0];
-      const title = numberAndTitle.slice(number.length + 1).trim();
+  if (unavailable) {
+    return null;
+  }
+  // we want to parse the content of the pre tag
+  const h2 = $("h2").text();
+  const match = h2.match(/^(\d+)\. (.*)$/);
+  if (!match) {
+    return null;
+  }
+  const [, hymnNumber, hymnTitle] = match;
 
-      currentHymn = {
-        title,
-        number: number.padStart(3, "0"),
-        lines: [],
-        reference: "",
-      };
-      hymns.push(currentHymn);
-    } else if (line.startsWith("# Reference:")) {
-      currentHymn!.reference = line.slice(13).trim();
-    } else {
-      const segment = [];
+  const preContent = $("pre").html() || "";
+  const rawLines = preContent.split("<br>");
 
-      let lyricAndChord = {
-        lyric: "",
-        chord: "",
-      };
-      let inChord = false;
+  const parsedLines: Hymn["lines"] = [];
 
-      for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        if (char === "[") {
-          inChord = true;
-          (lyricAndChord.chord || lyricAndChord.lyric) &&
-            segment.push(lyricAndChord) &&
-            (lyricAndChord = { lyric: "", chord: "" });
-        } else if (char === "]") {
-          inChord = false;
-        } else {
-          inChord ? (lyricAndChord.chord += char) : (lyricAndChord.lyric += char);
+  for (let i = 0; i < rawLines.length; i++) {
+    const line = rawLines[i].trim();
+
+    if (line.includes("[") || line === "") {
+      continue;
+    }
+
+    const nextLine = rawLines[i + 1] ? rawLines[i + 1].trim() : "";
+
+    if (nextLine) {
+      const chordRegex = /([A-G](?:#|b)?(?:m|M|dim|aug|sus)?(?:\d)?)|(\s+)/g;
+      const chordMatches = line.matchAll(chordRegex);
+
+      const chordPositions: { chord: string; position: number }[] = [];
+      let currentPosition = 0;
+
+      for (const match of chordMatches) {
+        if (match[1]) {
+          chordPositions.push({ chord: match[1], position: currentPosition });
         }
+        currentPosition += match[0].length;
       }
 
-      lyricAndChord && segment.push(lyricAndChord);
-      currentHymn && currentHymn.lines.push(segment);
-    }
-  });
+      const combinedLine = chordPositions.map((chordPosition, index) => {
+        const nextChordPosition = chordPositions[index + 1]?.position || nextLine.length;
+        const lyric = nextLine.slice(chordPosition.position, nextChordPosition).trim();
+        return { lyric, chord: chordPosition.chord };
+      });
 
-  return hymns;
+      parsedLines.push(combinedLine);
+      i++; // Skip the next line since it's already processed
+    }
+  }
+
+  return {
+    title: hymnTitle,
+    number: hymnNumber.padStart(3, "0"),
+    reference: "The Seventh-day Adventist Hymnal. Chords by https://bradwarden.com/music/hymnchords",
+    lines: parsedLines,
+  };
 }
+
+// function parseCho(cho: string): Hymn[] {
+//   type Hymn = {
+//     title: string;
+//     number: string;
+//     reference: string;
+//     lines: {
+//       lyric: string;
+//       chord?: string;
+//     }[][];
+//   };
+//   const lines = cho.split("\n");
+//   const hymns: Hymn[] = [];
+//   let currentHymn: Hymn | undefined;
+
+//   lines.forEach((line) => {
+//     if (!line.trim()) return;
+//     if (line.startsWith("{title:")) {
+//       // title ex: 36. O Thou in Whose Presence
+//       // we want to separate the number from the title and use that as the number
+//       // and the title as the title
+//       // parse the title between the {title:}
+//       const match = line.match(/{title:(.*)}/);
+//       const numberAndTitle = match![1].trim();
+//       const number = numberAndTitle.split(".")[0];
+//       const title = numberAndTitle.slice(number.length + 1).trim();
+
+//       currentHymn = {
+//         title,
+//         number: number.padStart(3, "0"),
+//         lines: [],
+//         reference: "",
+//       };
+//       hymns.push(currentHymn);
+//     } else if (line.startsWith("# Reference:")) {
+//       currentHymn!.reference = line.slice(13).trim();
+//     } else {
+//       const segment = [];
+
+//       let lyricAndChord = {
+//         lyric: "",
+//         chord: "",
+//       };
+//       let inChord = false;
+
+//       for (let i = 0; i < line.length; i++) {
+//         const char = line[i];
+//         if (char === "[") {
+//           inChord = true;
+//           (lyricAndChord.chord || lyricAndChord.lyric) &&
+//             segment.push(lyricAndChord) &&
+//             (lyricAndChord = { lyric: "", chord: "" });
+//         } else if (char === "]") {
+//           inChord = false;
+//         } else {
+//           inChord ? (lyricAndChord.chord += char) : (lyricAndChord.lyric += char);
+//         }
+//       }
+
+//       lyricAndChord && segment.push(lyricAndChord);
+//       currentHymn && currentHymn.lines.push(segment);
+//     }
+//   });
+
+//   return hymns;
+// }
 
 export function transposeHymn(hymn: Hymn, key: HymnSearchParams["key"]): [Hymn & { scale: string }, number] {
   const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
