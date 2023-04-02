@@ -63,7 +63,6 @@ export default function HymnPage() {
           </div>
         ))}
       </div>
-      <span className="text-[10px]">{hymn.reference}</span>
       <div className="flex w-full flex-col justify-between md:flex-row">
         <div className="flex flex-col gap-2">
           {prevHymn ? (

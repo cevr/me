@@ -2,6 +2,7 @@ import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { Link, Outlet, useFetcher, useLoaderData, useSearchParams } from "@remix-run/react";
 import clsx from "clsx";
 
+import { ExternalLink } from "~/components";
 import { Input } from "~/components/input";
 import { Popover } from "~/components/popover";
 import { getHymnSearchParams } from "~/lib/hymns.server";
@@ -27,7 +28,7 @@ export default function Hymns() {
         <div className="flex flex-col gap-2">
           <Link
             to={{
-              pathname: "/hymn",
+              pathname: "/hymns",
               search: searchParams.toString(),
             }}
             className="duration-200 hover:text-[var(--highlight)]"
@@ -67,6 +68,7 @@ export default function Hymns() {
           <Popover open={!!fetcher.data?.length}>
             <Popover.Anchor asChild>
               <Input
+                placeholder="Search hymns"
                 onChange={(event) => {
                   fetcher.load(`/hymns/search?q=${event.target.value}`);
                 }}
@@ -83,7 +85,7 @@ export default function Hymns() {
                 fetcher.load(`/hymns/search?q=`);
               }}
             >
-              <div className="flex w-full flex-col gap-2  rounded-md bg-[var(--link-bg)] px-4 py-2">
+              <div className="flex w-full flex-col gap-2  rounded-md bg-neutral-800 px-4 py-2">
                 {fetcher.data?.map((hymn) => (
                   <Link
                     key={hymn.number}
@@ -103,6 +105,10 @@ export default function Hymns() {
         </div>
       </div>
       <Outlet />
+      <span className="text-[10px]">
+        The Seventh-day Adventist Hymnal. Chords by{" "}
+        <ExternalLink href="https://bradwarden.com/music/hymnchords">Brad Warden</ExternalLink>
+      </span>
     </div>
   );
 }

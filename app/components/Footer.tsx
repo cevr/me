@@ -17,7 +17,7 @@ export function Footer({ date }: FooterProps) {
       style={{
         gridArea: "footer",
       }}
-      className="flex items-center justify-center gap-6 py-6 sm:justify-between"
+      className="flex items-center justify-center gap-6 py-6 sm:justify-between h-16"
     >
       <div className="flex items-center gap-5">
         <ExternalLink

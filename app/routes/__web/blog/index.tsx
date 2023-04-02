@@ -28,16 +28,16 @@ export let loader: LoaderFunction = async () => {
 export default function Screen() {
   const data = useLoaderData<{ posts: Post[] }>();
   return (
-    <div>
+    <>
       <h1 className="text-5xl">Blog</h1>
       <VerticalSpacer />
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-4 font-light">
         {data.posts.map((post) => (
           <li className="text-xl text-[var(--fg)] duration-200 hover:text-[var(--highlight)]" key={post.slug}>
             <Link to={post.slug}>{post.title}</Link>
           </li>
         ))}
       </ul>
-    </div>
+    </>
   );
 }

@@ -191,7 +191,7 @@ function parseWebPage(content: string) {
   for (let i = 0; i < rawLines.length; i++) {
     const line = rawLines[i].trim();
 
-    if (line.includes("[") || line === "") {
+    if (line.includes("[") || line.includes("(") || line === "") {
       continue;
     }
 

@@ -147,7 +147,7 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
         <Meta />
         <Links />
       </head>
-      <body className="m-auto grid h-full min-h-0 max-w-[100vw] bg-[var(--bg)] p-4 text-[var(--fg)] md:max-w-[1200px]">
+      <body className="m-auto grid h-full min-h-0 max-w-[100vw] bg-neutral-900 p-4 text-[var(--fg)] md:max-w-[1200px]">
         {children}
         {!noscript ? <Scripts /> : null}
         {process.env.NODE_ENV === "development" && <LiveReload />}

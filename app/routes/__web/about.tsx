@@ -24,7 +24,7 @@ export default function AboutPage() {
       style={{
         gridArea: "content",
       }}
-      className="flex flex-col gap-10 pt-12 md:grid md:grid-cols-3"
+      className="flex flex-col gap-10 pt-12 sm:grid sm:grid-cols-3 overflow-y-auto max-h-full"
     >
       <section>
         <img
@@ -44,10 +44,7 @@ export default function AboutPage() {
           Honestly, I'm just a guy who likes to code.
         </p>
 
-        <ExternalLink
-          className="text-[salmon] underline"
-          href="https://www.investopedia.com/terms/k/kaizen.asp#:~:text=What%20Is%20Kaizen%3F,a%20gradual%20and%20methodical%20process."
-        >
+        <ExternalLink href="https://www.investopedia.com/terms/k/kaizen.asp#:~:text=What%20Is%20Kaizen%3F,a%20gradual%20and%20methodical%20process.">
           What's kaizen?
         </ExternalLink>
       </section>

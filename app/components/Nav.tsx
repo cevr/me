@@ -6,7 +6,7 @@ import { cn } from "~/lib/utils/cn";
 
 export function Nav() {
   return (
-    <nav className="z-10 grid grid-cols-[10rem,1fr] items-center gap-5 transition-colors md:gap-2">
+    <nav className="z-10 grid grid-cols-[10rem,1fr] items-center gap-5 transition-colors md:gap-2 h-16">
       <div className="flex items-end gap-4">
         <NavLink
           to="/"
@@ -50,6 +50,21 @@ export function Nav() {
           title="about"
         >
           About
+        </NavLink>
+        <NavLink
+          to="/apps"
+          className={({ isActive }) =>
+            cn(
+              "block border-b-2 border-transparent leading-[3] text-[var(--fg)] duration-200 hover:text-[var(--highlight)]",
+              {
+                "border-[var(--highlight)]": isActive,
+              },
+            )
+          }
+          aria-label="apps"
+          title="apps"
+        >
+          Apps
         </NavLink>
       </div>
       {/* <form action="/theme" method="POST">
