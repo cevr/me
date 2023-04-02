@@ -67,14 +67,14 @@ export default function HymnPage() {
       <div className="flex w-full flex-col justify-between md:flex-row">
         <div className="flex flex-col gap-2">
           {prevHymn ? (
-            <a className="p-2 underline" href={`/hymn/${prevHymn?.number}`}>
+            <a className="p-2 underline" href={`/hymns/${prevHymn?.number}`}>
               ← {prevHymn.number}. {prevHymn?.title}
             </a>
           ) : null}
         </div>
         <div className="flex flex-col justify-end gap-2 text-end">
           {nextHymn ? (
-            <a className="p-2 underline" href={`/hymn/${nextHymn.number}`}>
+            <a className="p-2 underline" href={`/hymns/${nextHymn.number}`}>
               {nextHymn.number}. {nextHymn.title} →
             </a>
           ) : null}

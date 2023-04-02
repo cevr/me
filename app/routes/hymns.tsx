@@ -68,7 +68,7 @@ export default function Hymns() {
             <Popover.Anchor asChild>
               <Input
                 onChange={(event) => {
-                  fetcher.load(`/hymn/search?q=${event.target.value}`);
+                  fetcher.load(`/hymns/search?q=${event.target.value}`);
                 }}
               />
             </Popover.Anchor>
@@ -80,7 +80,7 @@ export default function Hymns() {
                 event.preventDefault();
               }}
               onClick={() => {
-                fetcher.load(`/hymn/search?q=`);
+                fetcher.load(`/hymns/search?q=`);
               }}
             >
               <div className="flex w-full flex-col gap-2  rounded-md bg-[var(--link-bg)] px-4 py-2">
@@ -88,7 +88,7 @@ export default function Hymns() {
                   <Link
                     key={hymn.number}
                     to={{
-                      pathname: `/hymn/${hymn.number}`,
+                      pathname: `/hymns/${hymn.number}`,
                       search: searchParams.toString(),
                     }}
                     className="flex items-center gap-2 py-2 text-lg"

@@ -20,7 +20,7 @@ export default function Hymns() {
           prefetch="intent"
           key={hymn.number}
           to={{
-            pathname: `/hymn/${hymn.number}`,
+            pathname: `/hymns/${hymn.number}`,
             search: searchParams.toString(),
           }}
           className="p-2 hover:underline"
