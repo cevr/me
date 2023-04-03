@@ -14,7 +14,7 @@ export default function AppsPage() {
       <VerticalSpacer />
       <ul className="flex flex-col gap-4 font-light">
         <li className="text-xl text-neutral-50 duration-200 hover:text-salmon-500">
-          <Link to="/hymns">SDA Hymnal with transcribed chords and key transpositoner</Link>
+          <Link to="/hymns">SDA Hymnal with transcribed chords and key transposition</Link>
         </li>
       </ul>
     </main>
