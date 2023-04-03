@@ -2,6 +2,10 @@ import { Link } from "@remix-run/react";
 
 import { VerticalSpacer } from "~/components";
 
+export let meta = () => ({
+  title: "Apps | Cristian",
+});
+
 export default function AppsPage() {
   return (
     <main
