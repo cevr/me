@@ -47,7 +47,7 @@ module.exports = {
           const cssVariable = colorKey === "DEFAULT" ? `--${colorGroup}` : `--${colorGroup}-${colorKey}`;
 
           const newVars =
-            typeof value === "string" ? { [cssVariable]: value } : extractColorVars(value, `-${colorKey}`);
+            typeof value === "string" ? { [cssVariable]: value } : extractColorVars(value, `${colorKey}`);
 
           return { ...vars, ...newVars };
         }, {});

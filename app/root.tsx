@@ -1,8 +1,8 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useMatches } from "@remix-run/react";
 
-import rootStyles from "./styles/root.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
+import rootStyles from "./styles/root.css";
 
 export let links: LinksFunction = () => {
   return [
@@ -136,15 +136,20 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 function Document({ children, title, noscript }: { children: React.ReactNode; title?: string; noscript?: boolean }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark h-full ml-[calc(100vw_-_100%)]">
       <head>
         <meta charSet="utf-8" />
         {title ? <title>{title}</title> : null}
         <Meta />
         <Links />
       </head>
-      <body className="m-auto grid h-full min-h-0 max-w-[100vw] bg-neutral-900 p-4 text-neutral-50 md:max-w-[1200px]">
-        {children}
+      <body
+        className="h-full w-full bg-neutral-900 text-neutral-50"
+        style={{
+          scrollbarGutter: "stable both-edges",
+        }}
+      >
+        <div className="m-auto grid h-full min-h-0 max-w-[100vw] p-4 md:max-w-[1200px]">{children}</div>
         {!noscript ? <Scripts /> : null}
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>

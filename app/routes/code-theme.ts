@@ -39,18 +39,10 @@ export let loader: LoaderFunction = async ({ request }) => {
         --code-bg: #1c1e26;
         --code-highlight-bg: #fa807220;
         --code-comment: #868e96;
-        --code-keyword: salmon;
+        --code-keyword: var(--salmon-500);
         --code-string: #fac29a;
         --code-punc: #999999;
         --code-func: #dd4a68;
-
-        --bg: #212529;
-        --fg: #f8f9fa;
-        --link-bg: #343a40;
-        --link-hover-fg: #212529;
-        --accent: #adb5bd;
-        --highlight: salmon;
-        --contrast: #0b7285;
       }`,
     { headers: { "content-type": "text/css" } },
   );
