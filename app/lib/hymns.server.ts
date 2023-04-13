@@ -19,7 +19,7 @@ declare global {
   var fetchQueue: TaskQueue<Hymn[]>;
 }
 
-const hymnsFilename = "hymns.json";
+const hymnsFilename = "me/hymns.json";
 
 let hymnCache: typeof global.hymnCache = {};
 let fetchQueue = new TaskQueue<Hymn[]>();
@@ -94,8 +94,8 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
     maybeInvalidate();
     hymns = hymnCache.data.hymns;
   } else {
-    const response = await GithubCMS.get(hymnsFilename);
-    hymns = await response.json();
+    const hymns = (await GithubCMS.get(hymnsFilename)) as Hymn[];
+
     hymnCache.data = {
       hymns,
       timestamp: Date.now(),

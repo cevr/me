@@ -1,9 +1,27 @@
 import { env } from "./env.server";
 import { TaskQueue } from "./utils";
+import { allLimited } from "./utils/promises";
+
+interface GitHubFile {
+  name: string;
+  path: string;
+  sha: string;
+  size: number;
+  url: string;
+  html_url: string;
+  git_url: string;
+  download_url: string;
+  type: string;
+  _links: {
+    self: string;
+    git: string;
+    html: string;
+  };
+}
 
 const githubToken = env.GITHUB_TOKEN;
-async function getSha(fileName: string): Promise<string | null> {
-  const res = await fetch(`https://api.github.com/repos/cevr/cms/contents/me/${fileName}`, {
+async function getSha(path: string): Promise<string | null> {
+  const res = await fetch(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
     headers: {
       Authorization: `token ${githubToken}`,
     },
@@ -15,9 +33,9 @@ async function getSha(fileName: string): Promise<string | null> {
   return null;
 }
 
-async function push(fileName: string, data: any, commitMessage: string) {
-  const sha = await getSha(fileName);
-  return fetch(`https://api.github.com/repos/cevr/cms/contents/me/${fileName}`, {
+async function push(path: string, data: any, commitMessage: string) {
+  const sha = await getSha(path);
+  return fetch(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
     method: "PUT",
     headers: {
       Authorization: `token ${githubToken}`,
@@ -25,7 +43,7 @@ async function push(fileName: string, data: any, commitMessage: string) {
     },
     body: JSON.stringify({
       message: commitMessage,
-      committer: { name: "Cristian V. Ramos", email: "seeve.c@gmail.com" },
+      committer: { name: "cvr.im", email: "seeve.c@gmail.com" },
       content: Buffer.from(JSON.stringify(data)).toString("base64"),
       ...(sha ? { sha } : {}),
     }),
@@ -34,7 +52,7 @@ async function push(fileName: string, data: any, commitMessage: string) {
       if (!response.ok) {
         throw new Error(`Request failed with status ${response.status} ${await response.text()}`);
       }
-      console.log(`Sucessfully pushed ${fileName} to github cms`);
+      console.log(`Sucessfully pushed ${path} to github cms`);
     })
     .catch((error) => {
       console.error("Error:", error);
@@ -43,14 +61,38 @@ async function push(fileName: string, data: any, commitMessage: string) {
 
 const githubQueue = new TaskQueue();
 
+async function get(path: string): Promise<unknown> {
+  const res = await fetch(`https://raw.githubusercontent.com/cevr/cms/main/${path}`);
+  if (!res.ok) {
+    throw new Error(`Could not fetch file: ${path}`);
+  }
+  return res.json();
+}
+
+async function getDir(path: string) {
+  const res = await fetch(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
+    headers: {
+      Authorization: `token ${githubToken}`,
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`Could not fetch dir: ${path}`);
+  }
+  const files = (await res.json().then((res) => [res].flat())) as GitHubFile[];
+  let count = 0;
+  return allLimited(
+    files.map((file: GitHubFile) => () => {
+      const res = get(`${path}/${file.name}`);
+      console.log(`Fetching ${path}/${file.name} (${++count}/${files.length})`);
+      return res
+    }),
+    50,
+  );
+}
+
 export const GithubCMS = {
-  get: async (fileName: string) => {
-    const res = await fetch(`https://raw.githubusercontent.com/cevr/cms/main/me/${fileName}`);
-    if (!res.ok) {
-      throw new Error(`Could not fetch file: ${fileName}`);
-    }
-    return res;
-  },
+  get,
+  getDir,
   push: (fileName: string, data: any, commitMessage: string) => {
     githubQueue.add(fileName, () => push(fileName, data, commitMessage));
   },

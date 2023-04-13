@@ -17,10 +17,23 @@ export default function AppsPage() {
       <h1 className="text-5xl">Apps</h1>
       <VerticalSpacer />
       <ul className="flex flex-col gap-4 font-light">
-        <li className="text-xl text-neutral-50 duration-200 hover:text-salmon-500">
-          <Link to="/hymns">SDA Hymnal with transcribed chords and key transposition</Link>
-        </li>
+        {apps.map((app) => (
+          <li key={app.href} className="text-xl text-neutral-50 duration-200 hover:text-salmon-500">
+            <Link to={app.href}>{app.description}</Link>
+          </li>
+        ))}
       </ul>
     </main>
   );
 }
+
+const apps = [
+  {
+    href: "/hymns",
+    description: "SDA Hymnal with transcribed chords and key transposition",
+  },
+  {
+    href: "/bible-tools",
+    description: "An AI powered bible study tool",
+  },
+];
