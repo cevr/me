@@ -114,8 +114,8 @@ export async function searchEmbeddings(query: string, k = 5) {
   const egw = await getEgwEmbeddings();
   const bible = await getBibleEmbeddings();
 
-  const egwResults = compareEmbeddingToMultipleSets(queryEmbedding, egw, 0.8, 3);
-  const bibleResults = compareEmbeddingToMultipleSets(queryEmbedding, bible, 0.8, 3);
+  const egwResults = compareEmbeddingToMultipleSets(queryEmbedding, egw, 0.8, k);
+  const bibleResults = compareEmbeddingToMultipleSets(queryEmbedding, bible, 0.8, k);
   console.log({ egwResults, bibleResults });
   const completion = await openai
     .createChatCompletion({

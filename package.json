@@ -36,6 +36,7 @@
     "esbuild": "^0.17.16",
     "framer-motion": "^10.11.6",
     "framer-motion-3d": "^10.11.6",
+    "ftld": "*",
     "graphql": "^16.6.0",
     "graphql-request": "^5.2.0",
     "gray-matter": "^4.0.3",
