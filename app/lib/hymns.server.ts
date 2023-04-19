@@ -189,7 +189,14 @@ function parseWebPage(content: string) {
   const parsedLines: Hymn["lines"] = [];
 
   for (let i = 0; i < rawLines.length; i++) {
-    const line = rawLines[i].trim();
+    let line = rawLines[i].trim();
+
+    if (line === "" && hymnNumber === "251" && i === 0) {
+      // special case for 251
+      // the first line is blank, but this breaks the parser
+      // so we just set it to Ab (the first chord)
+      line = "Ab";
+    }
 
     if (line.includes("[") || line.includes("(") || line === "") {
       continue;
@@ -229,72 +236,6 @@ function parseWebPage(content: string) {
     lines: parsedLines,
   };
 }
-
-// function parseCho(cho: string): Hymn[] {
-//   type Hymn = {
-//     title: string;
-//     number: string;
-//     reference: string;
-//     lines: {
-//       lyric: string;
-//       chord?: string;
-//     }[][];
-//   };
-//   const lines = cho.split("\n");
-//   const hymns: Hymn[] = [];
-//   let currentHymn: Hymn | undefined;
-
-//   lines.forEach((line) => {
-//     if (!line.trim()) return;
-//     if (line.startsWith("{title:")) {
-//       // title ex: 36. O Thou in Whose Presence
-//       // we want to separate the number from the title and use that as the number
-//       // and the title as the title
-//       // parse the title between the {title:}
-//       const match = line.match(/{title:(.*)}/);
-//       const numberAndTitle = match![1].trim();
-//       const number = numberAndTitle.split(".")[0];
-//       const title = numberAndTitle.slice(number.length + 1).trim();
-
-//       currentHymn = {
-//         title,
-//         number: number.padStart(3, "0"),
-//         lines: [],
-//         reference: "",
-//       };
-//       hymns.push(currentHymn);
-//     } else if (line.startsWith("# Reference:")) {
-//       currentHymn!.reference = line.slice(13).trim();
-//     } else {
-//       const segment = [];
-
-//       let lyricAndChord = {
-//         lyric: "",
-//         chord: "",
-//       };
-//       let inChord = false;
-
-//       for (let i = 0; i < line.length; i++) {
-//         const char = line[i];
-//         if (char === "[") {
-//           inChord = true;
-//           (lyricAndChord.chord || lyricAndChord.lyric) &&
-//             segment.push(lyricAndChord) &&
-//             (lyricAndChord = { lyric: "", chord: "" });
-//         } else if (char === "]") {
-//           inChord = false;
-//         } else {
-//           inChord ? (lyricAndChord.chord += char) : (lyricAndChord.lyric += char);
-//         }
-//       }
-
-//       lyricAndChord && segment.push(lyricAndChord);
-//       currentHymn && currentHymn.lines.push(segment);
-//     }
-//   });
-
-//   return hymns;
-// }
 
 export function transposeHymn(hymn: Hymn, key: HymnSearchParams["key"]): [Hymn & { scale: string }, number] {
   const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));

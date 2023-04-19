@@ -149,7 +149,7 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
           scrollbarGutter: "stable both-edges",
         }}
       >
-        <div className="m-auto grid h-full min-h-0 max-w-[100vw] p-4 md:max-w-[1200px]">{children}</div>
+        <div className="m-auto h-full min-h-0 max-w-[100vw] p-4 md:max-w-[1200px]">{children}</div>
         {!noscript ? <Scripts /> : null}
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>

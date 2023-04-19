@@ -104,7 +104,7 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
       const adjustFontSizeRecursively = () => {
         const padding = 64;
         const screenHeight = getScreenHeight();
-        const paddedHeight = screenHeight - padding;
+        const paddedHeight = screenHeight - padding * 2;
 
         lastFontSize = fontSize.current;
 
