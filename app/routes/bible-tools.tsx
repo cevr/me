@@ -17,8 +17,8 @@ export let meta: MetaFunction = () => ({
 export default function EgwSearchPage() {
   let fetcher = useFetcher<{
     answer: string;
-    egwResults: Omit<LabeledEmbedding, "embedding">[];
-    bibleResults: Omit<LabeledEmbedding, "embedding">[];
+    egw: Omit<LabeledEmbedding, "embedding">[];
+    bible: Omit<LabeledEmbedding, "embedding">[];
   }>();
   return (
     <main className="flex flex-col h-full gap-4 justify-center h-min-0">
@@ -36,7 +36,7 @@ export default function EgwSearchPage() {
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl">Bible results</h2>
             <ul className="flex flex-col gap-2">
-              {fetcher.data.bibleResults.map((result) => (
+              {fetcher.data.bible.map((result) => (
                 <li key={result.label} className="flex flex-col gap-1">
                   <span className="text-sm text-neutral-300 font-mono">{result.label}</span>
                   <span>{result.source}</span>
@@ -48,7 +48,7 @@ export default function EgwSearchPage() {
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl">EGW results</h2>
             <ul className="flex flex-col gap-2">
-              {fetcher.data.egwResults.map((result) => (
+              {fetcher.data.egw.map((result) => (
                 <li key={result.label} className="flex flex-col gap-1">
                   <span className="text-sm text-neutral-300 font-mono">{result.label}</span>
                   <span>{result.source}</span>
