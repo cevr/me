@@ -3,7 +3,12 @@ import { useFetcher } from "@remix-run/react";
 
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
-import type { LabeledEmbedding } from "~/lib/bible-tools.server";
+
+type LabeledEmbedding = {
+  label: string;
+  source: string;
+  embedding: number[];
+};
 
 export let meta: MetaFunction = () => ({
   title: "Bible study tools",
