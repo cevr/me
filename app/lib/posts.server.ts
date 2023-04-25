@@ -46,7 +46,7 @@ let humanReadableTime = (time: number) => {
   if (time < 1) {
     return "less than a minute";
   }
-  return `${Math.ceil(time)} minute`;
+  return `${Math.ceil(time)} minutes`;
 };
 
 let getReadEstimate = (content: string) => {

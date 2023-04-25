@@ -1,5 +1,6 @@
+import * as React from "react";
 import type { LoaderArgs, MetaFunction } from "@remix-run/node";
-import { Link, Outlet, useFetcher, useLoaderData, useSearchParams } from "@remix-run/react";
+import { Link, Outlet, useFetcher, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
 import clsx from "clsx";
 
 import { ExternalLink } from "~/components";
@@ -18,9 +19,15 @@ export let loader = ({ request }: LoaderArgs) => {
 };
 
 export default function Hymns() {
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { sort } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<Hymn[]>();
+
+  React.useEffect(() => {
+    fetcher.load(`/hymns/search?q=`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   return (
     <div className="flex max-w-[calc(100vw_-_32px)] flex-col gap-8 font-mono">
@@ -80,9 +87,6 @@ export default function Hymns() {
               className="w-[calc(100vw-32px)] p-0"
               onOpenAutoFocus={(event) => {
                 event.preventDefault();
-              }}
-              onClick={() => {
-                fetcher.load(`/hymns/search?q=`);
               }}
             >
               <div className="flex w-full flex-col gap-2  rounded-md bg-neutral-800 px-4 py-2">
