@@ -160,11 +160,16 @@ function HymnCommandBar({ semitone, hymnKey }: { semitone: number; hymnKey: Hymn
         name="key"
         value={hymnKey}
         onValueChange={(value) => {
-          navigate({
-            search: addToSearchParams(searchParams, {
-              key: value,
-            }).toString(),
-          });
+          navigate(
+            {
+              search: addToSearchParams(searchParams, {
+                key: value,
+              }).toString(),
+            },
+            {
+              replace: true,
+            },
+          );
         }}
       >
         <Select.Trigger className="w-[180px]">
