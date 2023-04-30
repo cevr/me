@@ -48,11 +48,11 @@ export default function EgwSearchPage() {
 
   return (
     <main className="flex flex-col h-full gap-4 justify-between h-min-0">
-      <React.Suspense fallback={null}>
-        <Await resolve={data.result}>
-          {(data) => (
-            <div className="flex flex-col gap-2 h-full overflow-y-auto scrollbar-hide">
-              {queryExists ? (
+      <div className="flex flex-col gap-2 h-full overflow-y-auto scrollbar-hide">
+        <React.Suspense fallback={null}>
+          <Await resolve={data.result}>
+            {(data) =>
+              queryExists ? (
                 <>
                   <div>
                     <div className="flex flex-col gap-2">
@@ -84,11 +84,11 @@ export default function EgwSearchPage() {
                     </div>
                   </div>
                 </>
-              ) : null}
-            </div>
-          )}
-        </Await>
-      </React.Suspense>
+              ) : null
+            }
+          </Await>
+        </React.Suspense>
+      </div>
 
       <Form method="GET" className="flex gap-2">
         <Input type="text" name="query" placeholder="Study the bible" autoComplete="off" />

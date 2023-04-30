@@ -62,27 +62,30 @@ function serveBrowsers(
 ) {
   return new Promise((resolve, reject) => {
     let didError = false;
-    const { pipe, abort } = renderToPipeableStream(<RemixServer context={remixContext} url={request.url} />, {
-      // use onShellReady to wait until a suspense boundary is triggered
-      onShellReady() {
-        responseHeaders.set("Content-Type", "text/html");
-        let body = new PassThrough();
-        pipe(body);
-        resolve(
-          new Response(body, {
-            status: didError ? 500 : responseStatusCode,
-            headers: responseHeaders,
-          }),
-        );
+    const { pipe, abort } = renderToPipeableStream(
+      <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
+      {
+        // use onShellReady to wait until a suspense boundary is triggered
+        onShellReady() {
+          responseHeaders.set("Content-Type", "text/html");
+          let body = new PassThrough();
+          pipe(body);
+          resolve(
+            new Response(body, {
+              status: didError ? 500 : responseStatusCode,
+              headers: responseHeaders,
+            }),
+          );
+        },
+        onShellError(err: unknown) {
+          reject(err);
+        },
+        onError(err: unknown) {
+          didError = true;
+          console.error(err);
+        },
       },
-      onShellError(err: unknown) {
-        reject(err);
-      },
-      onError(err: unknown) {
-        didError = true;
-        console.error(err);
-      },
-    });
+    );
     setTimeout(abort, ABORT_DELAY);
   });
 }
