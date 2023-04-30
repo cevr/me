@@ -36,7 +36,7 @@
     "esbuild": "^0.17.18",
     "framer-motion": "^10.12.4",
     "framer-motion-3d": "^10.12.4",
-    "ftld": "*",
+    "ftld": "0.41.7",
     "graphql": "^16.6.0",
     "graphql-request": "^6.0.0",
     "gray-matter": "^4.0.3",
@@ -58,6 +58,7 @@
     "three": "^0.152.2",
     "three-stdlib": "^2.21.10",
     "tonal": "^4.14.1",
+    "undici": "^5.22.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {

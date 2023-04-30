@@ -5,11 +5,7 @@ import { Await, Form, useLoaderData, useNavigation, useSearchParams } from "@rem
 
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
-
-type EmbeddingSource = {
-  source: string;
-  label: string;
-};
+import { chat } from "~/lib/bible-tools.server";
 
 export let meta: MetaFunction = () => ({
   title: "Bible study tools",
@@ -17,29 +13,16 @@ export let meta: MetaFunction = () => ({
 
 export let loader = async ({ request }: LoaderArgs) => {
   const query = new URL(request.url).searchParams.get("query") ?? "";
-  if (!query)
-    return defer({
-      result: {
-        answer: "",
-        egw: [] as EmbeddingSource[],
-        bible: [] as EmbeddingSource[],
-      },
-    });
-  const result = fetch(`https://bible-tools-api-production.up.railway.app/search?q=${query}`).then(
-    (res) =>
-      res.json() as Promise<{
-        egw: EmbeddingSource[];
-        bible: EmbeddingSource[];
-        answer: string;
-      }>,
-  );
+  if (!query) return null;
+
+  const result = chat(query).unwrap();
 
   return defer({ result });
 };
 
 export default function EgwSearchPage() {
   const [params] = useSearchParams();
-  const queryExists = params.has("query");
+  const query = params.get("query");
   const formState = useNavigation();
 
   let data = useLoaderData<typeof loader>();
@@ -49,49 +32,61 @@ export default function EgwSearchPage() {
   return (
     <main className="flex flex-col h-full gap-4 justify-between h-min-0">
       <div className="flex flex-col gap-2 h-full overflow-y-auto scrollbar-hide">
-        <React.Suspense fallback={null}>
-          <Await resolve={data.result}>
-            {(data) =>
-              queryExists ? (
-                <>
-                  <div>
-                    <div className="flex flex-col gap-2">
-                      <h2 className="text-2xl">Answer</h2>
-                      <p>{data.answer}</p>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <h2 className="text-2xl">Bible results</h2>
-                      <ul className="flex flex-col gap-2">
-                        {data.bible.map((result) => (
-                          <li key={result.label} className="flex flex-col gap-1">
-                            <span className="text-sm text-neutral-300 font-mono">{result.label}</span>
-                            <span>{result.source}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <h2 className="text-2xl">EGW results</h2>
-                      <ul className="flex flex-col gap-2">
-                        {data.egw.map((result) => (
-                          <li key={result.label} className="flex flex-col gap-1">
-                            <span className="text-sm text-neutral-300 font-mono">{result.label}</span>
-                            <span>{result.source}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+        {query ? (
+          <React.Suspense fallback={null}>
+            <Await resolve={data?.result}>
+              {(data) => (
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2">
+                    <h2 className="text-2xl">Answer</h2>
+                    <p>{data!.answer}</p>
                   </div>
-                </>
-              ) : null
-            }
-          </Await>
-        </React.Suspense>
+                  <div className="flex flex-col gap-1">
+                    {data?.bible.length ? (
+                      <div className="flex flex-col gap-2">
+                        <h2 className="text-xs uppercase">Bible</h2>
+                        <ul className="flex gap-2">
+                          {data!.bible.map((result) => (
+                            <li key={result.label} className="flex flex-col gap-1">
+                              <Button size="sm" variant="outline" className="text-sm text-neutral-300 font-mono">
+                                {result.label}
+                              </Button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+
+                    {data?.egw.length ? (
+                      <div className="flex flex-col gap-2">
+                        <h2 className="text-xs uppercase">EGW</h2>
+                        <ul className="flex gap-2 flex-wrap">
+                          {data!.egw.map((result) => (
+                            <li key={result.label} className="flex flex-col gap-1">
+                              <Button size="sm" variant="outline" className="text-sm text-neutral-300 font-mono">
+                                {result.label}
+                              </Button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+              )}
+            </Await>
+          </React.Suspense>
+        ) : null}
       </div>
 
       <Form method="GET" className="flex gap-2">
-        <Input type="text" name="query" placeholder="Study the bible" autoComplete="off" />
+        <Input
+          defaultValue={query ?? undefined}
+          type="text"
+          name="query"
+          placeholder="Study the bible"
+          autoComplete="off"
+        />
         <Button type="submit">{loading ? "Loading..." : "Search"}</Button>
       </Form>
     </main>
