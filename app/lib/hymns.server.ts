@@ -94,7 +94,7 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
     maybeInvalidate();
     hymns = hymnCache.data.hymns;
   } else {
-    const hymns = (await GithubCMS.get(hymnsFilename)) as Hymn[];
+    const hymns = await GithubCMS.get<Hymn[]>(hymnsFilename).unwrap();
 
     hymnCache.data = {
       hymns,
@@ -110,7 +110,7 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
 }
 
 function pushHymnsToPublic(hymns: Hymn[]) {
-  GithubCMS.push(hymnsFilename, hymns, "Update hymns");
+  GithubCMS.push(hymnsFilename, hymns, "Update hymns").run();
 }
 
 const hymnSearchParamsSchema = z.object({

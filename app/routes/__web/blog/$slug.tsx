@@ -35,7 +35,7 @@ export function links() {
 }
 
 export let loader: LoaderFunction = async ({ params }) => {
-  let posts = await postsApi.query();
+  let posts = await postsApi.query().unwrap();
   let postIndex = posts.findIndex((post) => post.slug === params?.slug);
 
   if (postIndex === -1) {

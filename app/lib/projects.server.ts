@@ -1,3 +1,4 @@
+import { Task } from "ftld";
 import { gql, GraphQLClient } from "graphql-request";
 
 let repositoriesQuery = gql`
@@ -48,13 +49,15 @@ let client = new GraphQLClient("https://api.github.com/graphql", {
   },
 });
 
-export let query = (): Promise<Project[]> =>
-  client
-    .request<RepositoriesQueryData>(repositoriesQuery)
-    .then(
-      (data) =>
-        data.user?.repositories?.edges
-          .map((edge) => edge.node)
-          .filter((project) => project.stargazerCount > 1 && !project.isArchived) ?? [],
-    )
-    .catch(() => []);
+export let query = (): Task<never, Project[]> =>
+  Task.from<never, Project[]>(() =>
+    client
+      .request<RepositoriesQueryData>(repositoriesQuery)
+      .then(
+        (data) =>
+          data.user?.repositories?.edges
+            .map((edge) => edge.node)
+            .filter((project) => project.stargazerCount > 1 && !project.isArchived) ?? [],
+      )
+      .catch(() => []),
+  );

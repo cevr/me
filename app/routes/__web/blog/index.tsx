@@ -11,7 +11,7 @@ export let meta: MetaFunction = () => ({
 });
 
 export let loader: LoaderFunction = async () => {
-  let posts = await postsApi.query();
+  let posts = await postsApi.query().unwrap();
   const oneHour = 1000 * 60 * 60;
   return json(
     {

@@ -1,4 +1,6 @@
+import { Task } from "ftld";
 import matter from "gray-matter";
+import { request } from "undici";
 
 type Maybe<T> = T | null;
 
@@ -67,33 +69,36 @@ let normalizePost = (post: Post): Post => {
   };
 };
 
-let fetchArticle = async (page: number): Promise<Post[]> =>
-  fetch(`https://dev.to/api/articles/me/published?page=${page}&per_page=100`, {
-    headers: {
-      "api-key": process.env.DEV_TO_TOKEN as string,
-    },
-  })
-    .then((res) => {
-      if (res.status !== 200) {
-        return Promise.reject(res.statusText);
-      }
-      return res.json() as Promise<Post[]>;
-    })
-    .catch((err) => {
-      throw new Error(`error fetching page ${page}, ${err}`);
-    });
+class FetchArticleError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = "FetchArticleError";
+  }
+}
 
-let fetchAllArticles = async (page = 1, results: Post[] = []): Promise<Post[]> => {
-  let latestResults = await fetchArticle(page);
+let fetchArticle = (page: number): Task<FetchArticleError, Post[]> =>
+  Task.from(
+    () =>
+      request(`https://dev.to/api/articles/me/published?page=${page}&per_page=100`, {
+        headers: {
+          "api-key": process.env.DEV_TO_TOKEN as string,
+        },
+      }).then((res) => {
+        return res.body.json();
+      }) as Promise<Post[]>,
+    () => new FetchArticleError("Could not fetch articles"),
+  );
 
-  if (latestResults.length === 100) return fetchAllArticles(page + 1, results.concat(latestResults));
+let fetchAllArticles = (page = 1, results: Post[] = []): Task<FetchArticleError, Post[]> => {
+  return fetchArticle(page).flatMap((latestResults) => {
+    if (latestResults.length === 100) return fetchAllArticles(page + 1, results.concat(latestResults));
 
-  return results.concat(latestResults);
+    return Task.Ok(results.concat(latestResults));
+  });
 };
 
-export let query = async () => {
-  let posts = (await fetchAllArticles()).map(normalizePost);
-  return posts;
+export let query = () => {
+  return fetchAllArticles().map((posts) => posts.map(normalizePost));
 };
 
 export { bundleMDX as serialize } from "mdx-bundler";

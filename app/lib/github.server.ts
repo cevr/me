@@ -1,6 +1,7 @@
+import { Task } from "ftld";
+import { request } from "undici";
+
 import { env } from "./env.server";
-import { TaskQueue } from "./utils";
-import { allLimited } from "./utils/promises";
 
 interface GitHubFile {
   name: string;
@@ -20,80 +21,105 @@ interface GitHubFile {
 }
 
 const githubToken = env.GITHUB_TOKEN;
-async function getSha(path: string): Promise<string | null> {
-  const res = await fetch(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
-    headers: {
-      Authorization: `token ${githubToken}`,
-    },
-  });
-  if (res.ok) {
-    const data = await res.json();
-    return data.sha;
+
+class GetShaFailedError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = "GetShaFailedError";
   }
-  return null;
 }
 
-async function push(path: string, data: any, commitMessage: string) {
-  const sha = await getSha(path);
-  return fetch(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `token ${githubToken}`,
-      "Content-Type": "application/vnd.github+json",
-    },
-    body: JSON.stringify({
-      message: commitMessage,
-      committer: { name: "cvr.im", email: "seeve.c@gmail.com" },
-      content: Buffer.from(JSON.stringify(data)).toString("base64"),
-      ...(sha ? { sha } : {}),
-    }),
-  })
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error(`Request failed with status ${response.status} ${await response.text()}`);
-      }
-      console.log(`Sucessfully pushed ${path} to github cms`);
+function getSha(path: string): Task<GetShaFailedError, string> {
+  return Task.from(async () => {
+    const res = (await request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
+      headers: {
+        Authorization: `token ${githubToken}`,
+        "user-agent": "cvr.im",
+      },
     })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
-
-const githubQueue = new TaskQueue();
-
-async function get(path: string): Promise<unknown> {
-  const res = await fetch(`https://raw.githubusercontent.com/cevr/cms/main/${path}`);
-  if (!res.ok) {
-    throw new Error(`Could not fetch file: ${path}`);
-  }
-  return res.json();
-}
-
-async function getDir(path: string) {
-  const res = await fetch(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
-    headers: {
-      Authorization: `token ${githubToken}`,
-    },
+      .then((res) => res.body.json())
+      .then((res) => res.sha)) as Promise<string>;
+    return res;
   });
-  if (!res.ok) {
-    throw new Error(`Could not fetch dir: ${path}`);
+}
+
+class PushFailedError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = "PushFailedError";
   }
-  const files = (await res.json().then((res) => [res].flat())) as GitHubFile[];
-  let count = 0;
-  return allLimited(
-    files.map((file: GitHubFile) => () => {
-      const res = get(`${path}/${file.name}`);
-      console.log(`Fetching ${path}/${file.name} (${++count}/${files.length})`);
-      return res
-    }),
-    50,
+}
+
+function push(path: string, data: any, commitMessage: string): Task<PushFailedError, void> {
+  return getSha(path).flatMap((sha) =>
+    Task.from(
+      async () => {
+        await request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `token ${githubToken}`,
+            "Content-Type": "application/vnd.github+json",
+            "user-agent": "cvr.im",
+          },
+          body: JSON.stringify({
+            message: commitMessage,
+            committer: { name: "cvr.im", email: "seeve.c@gmail.com" },
+            content: Buffer.from(JSON.stringify(data)).toString("base64"),
+            ...(sha ? { sha } : {}),
+          }),
+        });
+      },
+      () => new PushFailedError("Could not get sha"),
+    ),
   );
+}
+
+class GetFailedError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = "GetFailedError";
+  }
+}
+
+function get<T>(path: string): Task<GetFailedError, T> {
+  return Task.from(
+    () => fetch(`https://raw.githubusercontent.com/cevr/cms/main/${path}`).then((res) => res.json()),
+    () => new GetFailedError("Could not fetch file"),
+  );
+}
+
+class GetDirFailedError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = "GetDirFailedError";
+  }
+}
+
+function getDir<T>(path: string): Task<GetDirFailedError | GetFailedError, T[]> {
+  return Task.from(
+    () =>
+      request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
+        headers: {
+          Authorization: `token ${githubToken}`,
+          "user-agent": "cvr.im",
+        },
+      }).then((res) => res.body.json().then((res) => [res].flat())) as Promise<GitHubFile[]>,
+    () => new GetDirFailedError("Could not fetch dir"),
+  ).flatMap((files) => {
+    let count = 0;
+    return Task.parallel(
+      files.map((file: GitHubFile) => {
+        return get<T>(`${path}/${file.name}`).tap(() => {
+          console.log(`Fetching ${path}/${file.name} (${++count}/${files.length})`);
+        });
+      }),
+      50,
+    );
+  });
 }
 
 export const GithubCMS = {
   get,
   getDir,
-  push: (fileName: string, data: any, commitMessage: string) => {
-    githubQueue.add(fileName, () => push(fileName, data, commitMessage));
-  },
+  push,
 };
