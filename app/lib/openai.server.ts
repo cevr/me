@@ -1,21 +1,18 @@
 import { Task } from "ftld";
 import { request } from "undici";
 
+import { DomainError } from "./domain-error";
 import { env } from "./env.server";
 
 export type Embedding = number[];
 
 type Message = {
-  role: "user" | "system";
+  role: "user" | "system" | "assistant";
   content: string;
 };
 
-class OpenAIChatFailedError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "OpenAIChatFailedError";
-  }
-}
+export type OpenAIChatFailedError = DomainError<"OpenAIChatFailedError">;
+export const OpenAIChatFailedError = DomainError.make("OpenAIChatFailedError");
 
 function chat(messages: Message[]) {
   return Task.from(
@@ -36,7 +33,7 @@ function chat(messages: Message[]) {
         .then((res) => res.choices[0].message.content) as Promise<string>,
     (e) => {
       console.error(e);
-      return new OpenAIChatFailedError("Could not connect to OpenAI API");
+      return OpenAIChatFailedError("Could not connect to OpenAI API");
     },
   );
 }

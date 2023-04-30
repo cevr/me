@@ -4,5 +4,8 @@
     "@remix-run/eslint-config/node",
     "@remix-run/eslint-config/jest-testing-library",
     "prettier"
-  ]
+  ],
+  "rules": {
+    "@typescript-eslint/no-redeclare": "off"
+  }
 }

@@ -62,8 +62,8 @@ dependencies:
     specifier: ^10.12.4
     version: 10.12.4(@react-three/fiber@8.13.0)(react-dom@18.2.0)(react@18.2.0)(three@0.152.2)
   ftld:
-    specifier: 0.41.7
-    version: 0.41.7
+    specifier: 0.42.1
+    version: 0.42.1
   graphql:
     specifier: ^16.6.0
     version: 16.6.0
@@ -118,6 +118,9 @@ dependencies:
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2
+  tailwindcss-animate:
+    specifier: ^1.0.5
+    version: 1.0.5(tailwindcss@3.3.2)
   three:
     specifier: ^0.152.2
     version: 0.152.2
@@ -6260,8 +6263,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /ftld@0.41.7:
-    resolution: {integrity: sha512-MU9/XR9cb8CxXXMEwFkM7Xfy88HOieS+tXckVsUlf63UE6FnJa87//B5/iUPTqhejVio0CA8VCtU380Jr15LRQ==}
+  /ftld@0.42.1:
+    resolution: {integrity: sha512-KMIEyNURrNnLXmiEqpD4EIk3lvbU5M2FPBULn5QbG+88zOblsRuSHp20tD1GvzCxe0/Mo+lQxQsGkOVq3d/cAw==}
     dev: false
 
   /ftp@0.3.10:
@@ -9739,6 +9742,14 @@ packages:
 
   /tailwind-merge@1.12.0:
     resolution: {integrity: sha512-Y17eDp7FtN1+JJ4OY0Bqv9OA41O+MS8c1Iyr3T6JFLnOgLg3EvcyMKZAnQ8AGyvB5Nxm3t9Xb5Mhe139m8QT/g==}
+    dev: false
+
+  /tailwindcss-animate@1.0.5(tailwindcss@3.3.2):
+    resolution: {integrity: sha512-UU3qrOJ4lFQABY+MVADmBm+0KW3xZyhMdRvejwtXqYOL7YjHYxmuREFAZdmVG5LPe5E9CAst846SLC4j5I3dcw==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders'
+    dependencies:
+      tailwindcss: 3.3.2
     dev: false
 
   /tailwindcss@3.3.2:

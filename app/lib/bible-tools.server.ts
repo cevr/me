@@ -1,5 +1,7 @@
-import { Task } from "ftld";
+import { Result, Task } from "ftld";
 
+import { DomainError } from "./domain-error";
+import type { OpenAIChatFailedError } from "./openai.server";
 import { OpenAI } from "./openai.server";
 
 export type Embedding = number[];
@@ -34,12 +36,22 @@ const relatedEGWTextsPrompt = (
     .map((text) => text.source + " (" + text.label + ")")
     .join(", ")}`;
 
-export class SearchEmbeddingsError extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = "SearchEmbeddingsError";
-  }
-}
+const exploreSettingPrompt = `You have just given an initial answer to a bible student. Help them explore the topic further by providing them three more questions to ask that is related to the topic.`;
+
+const exploreMoreQuestionsPrompt = (previousAnswer: string) =>
+  `Here was your answer to the student's initial question: ${previousAnswer}. Please provide the additional questions in the following JSON format:
+  Requirements:
+
+  - Be sure to only provide a valid JSON object as a response.
+  - Please provide no more than three questions.
+  - Please do not provide any other text in the response.
+  - Provide the following type of JSON object:
+    { "explore": string[] }
+
+  `;
+
+export type SearchEmbeddingsError = DomainError<"SearchEmbeddingsError">;
+export const SearchEmbeddingsError = DomainError.make("SearchEmbeddingsError");
 
 export let searchEmbeddings = (query: string) =>
   Task.from(
@@ -50,10 +62,25 @@ export let searchEmbeddings = (query: string) =>
         egw: EmbeddingSource[];
         bible: EmbeddingSource[];
       }>,
-    () => new SearchEmbeddingsError(),
+    () => SearchEmbeddingsError(),
   );
 
-export let chat = (query: string) => {
+type SearchChatResponse = {
+  bible: EmbeddingSource[];
+  egw: EmbeddingSource[];
+  answer: string;
+};
+
+export let searchAndChat = (
+  query: string,
+): Task<
+  SearchEmbeddingsError | OpenAIChatFailedError,
+  {
+    answer: string;
+    egw: EmbeddingSource[];
+    bible: EmbeddingSource[];
+  }
+> => {
   return searchEmbeddings(query).flatMap((embeddings) =>
     OpenAI.chat([
       {
@@ -72,9 +99,65 @@ export let chat = (query: string) => {
         role: "user",
         content: query,
       },
-    ]).map((content) => ({
-      ...embeddings,
-      answer: content,
-    })),
+    ]).map(
+      (content) =>
+        ({
+          ...embeddings,
+          answer: content,
+        } satisfies SearchChatResponse),
+    ),
   );
 };
+
+type ExploreChatResponse = {
+  explore: string[];
+};
+
+type NoJsonError = DomainError<"NoJsonError">;
+const NoJsonError = DomainError.make("NoJsonError");
+
+type ExploreChatParseError = DomainError<"ExploreChatParseError">;
+const ExploreChatParseError = DomainError.make("ExploreChatParseError");
+
+export let explore = (res: SearchChatResponse) =>
+  OpenAI.chat([
+    {
+      role: "system",
+      content: exploreSettingPrompt,
+    },
+    {
+      role: "system",
+      content: relatedBiblicalTextsPrompt(res.bible),
+    },
+    {
+      role: "system",
+      content: relatedEGWTextsPrompt(res.egw),
+    },
+    {
+      role: "system",
+      content: exploreMoreQuestionsPrompt(res.answer),
+    },
+    {
+      role: "user",
+      content: "What are some other questions I can ask related to the topic?",
+    },
+  ])
+    .tap((content) => console.log(content))
+    .flatMap((content) =>
+      Result.fromPredicate(
+        (json): json is NonNullable<typeof json> => json !== null,
+        content.match(jsonRegex),
+        () => NoJsonError(),
+      ).flatMap((json) =>
+        Result.tryCatch(
+          () => JSON.parse(json[0]) as ExploreChatResponse,
+          (e) => ExploreChatParseError(),
+        ),
+      ),
+    )
+    .tapErr((err) => console.error(err))
+    .schedule({
+      retry: 3,
+    });
+
+const jsonRegex = /{\s*"explore"\s*:\s*\[(?:"[^"]*"(?:\s*,\s*"[^"]*")*)?\]\s*}/s;

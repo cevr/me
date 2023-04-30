@@ -1,11 +1,11 @@
 import * as React from "react";
 import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { defer } from "@remix-run/node";
-import { Await, Form, useLoaderData, useNavigation, useSearchParams } from "@remix-run/react";
+import { Await, Form, Link, useLoaderData, useNavigation, useSearchParams } from "@remix-run/react";
 
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
-import { chat } from "~/lib/bible-tools.server";
+import { explore, searchAndChat } from "~/lib/bible-tools.server";
 
 export let meta: MetaFunction = () => ({
   title: "Bible study tools",
@@ -15,9 +15,9 @@ export let loader = async ({ request }: LoaderArgs) => {
   const query = new URL(request.url).searchParams.get("query") ?? "";
   if (!query) return null;
 
-  const result = chat(query).unwrap();
+  const result = searchAndChat(query).unwrap();
 
-  return defer({ result });
+  return defer({ result: result, explore: result.then((res) => explore(res).unwrap()) });
 };
 
 export default function EgwSearchPage() {
@@ -48,7 +48,11 @@ export default function EgwSearchPage() {
                         <ul className="flex gap-2">
                           {data!.bible.map((result) => (
                             <li key={result.label} className="flex flex-col gap-1">
-                              <Button size="sm" variant="outline" className="text-sm text-neutral-300 font-mono">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-sm text-neutral-300 font-mono flex-shrink-0"
+                              >
                                 {result.label}
                               </Button>
                             </li>
@@ -63,7 +67,11 @@ export default function EgwSearchPage() {
                         <ul className="flex gap-2 flex-wrap">
                           {data!.egw.map((result) => (
                             <li key={result.label} className="flex flex-col gap-1">
-                              <Button size="sm" variant="outline" className="text-sm text-neutral-300 font-mono">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-sm text-neutral-300 font-mono flex-shrink-0"
+                              >
                                 {result.label}
                               </Button>
                             </li>
@@ -78,6 +86,28 @@ export default function EgwSearchPage() {
           </React.Suspense>
         ) : null}
       </div>
+
+      {query ? (
+        <React.Suspense fallback={null}>
+          <Await resolve={data?.explore}>
+            {(data) => (
+              <div className="flex gap-1 flex-col">
+                {data?.explore.map((question) => (
+                  <Link
+                    to={{
+                      search: new URLSearchParams({ query: question }).toString(),
+                    }}
+                    className="px-2 py-1 rounded-md bg-neutral-800 text-neutral-100 text-sm"
+                    key={question}
+                  >
+                    {question}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </Await>
+        </React.Suspense>
+      ) : null}
 
       <Form method="GET" className="flex gap-2">
         <Input

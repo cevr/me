@@ -1,6 +1,7 @@
 import { Task } from "ftld";
 import { request } from "undici";
 
+import { DomainError } from "./domain-error";
 import { env } from "./env.server";
 
 interface GitHubFile {
@@ -21,36 +22,30 @@ interface GitHubFile {
 }
 
 const githubToken = env.GITHUB_TOKEN;
-
-class GetShaFailedError extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = "GetShaFailedError";
-  }
-}
+type GetShaFailedError = DomainError<"GetShaFailedError">;
+const GetShaFailedError = DomainError.make("GetShaFailedError");
 
 function getSha(path: string): Task<GetShaFailedError, string> {
-  return Task.from(async () => {
-    const res = (await request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
-      headers: {
-        Authorization: `token ${githubToken}`,
-        "user-agent": "cvr.im",
-      },
-    })
-      .then((res) => res.body.json())
-      .then((res) => res.sha)) as Promise<string>;
-    return res;
-  });
+  return Task.from(
+    async () => {
+      const res = (await request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
+        headers: {
+          Authorization: `token ${githubToken}`,
+          "user-agent": "cvr.im",
+        },
+      })
+        .then((res) => res.body.json())
+        .then((res) => res.sha)) as Promise<string>;
+      return res;
+    },
+    () => GetShaFailedError(),
+  );
 }
 
-class PushFailedError extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = "PushFailedError";
-  }
-}
+type PushFailedError = DomainError<"PushFailedError">;
+const PushFailedError = DomainError.make("PushFailedError");
 
-function push(path: string, data: any, commitMessage: string): Task<PushFailedError, void> {
+function push(path: string, data: any, commitMessage: string): Task<GetShaFailedError | PushFailedError, void> {
   return getSha(path).flatMap((sha) =>
     Task.from(
       async () => {
@@ -69,33 +64,25 @@ function push(path: string, data: any, commitMessage: string): Task<PushFailedEr
           }),
         });
       },
-      () => new PushFailedError("Could not get sha"),
+      () => PushFailedError("Could not get sha"),
     ),
   );
 }
 
-class GetFailedError extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = "GetFailedError";
-  }
-}
+type GetFileFailedError = DomainError<"GetFileFailedError">;
+const GetFileFailedError = DomainError.make("GetFileFailedError");
 
-function get<T>(path: string): Task<GetFailedError, T> {
+function get<T>(path: string): Task<GetFileFailedError, T> {
   return Task.from(
     () => fetch(`https://raw.githubusercontent.com/cevr/cms/main/${path}`).then((res) => res.json()),
-    () => new GetFailedError("Could not fetch file"),
+    () => GetFileFailedError("Could not fetch file"),
   );
 }
 
-class GetDirFailedError extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = "GetDirFailedError";
-  }
-}
+type GetDirFailedError = DomainError<"GetDirFailedError">;
+const GetDirFailedError = DomainError.make("GetDirFailedError");
 
-function getDir<T>(path: string): Task<GetDirFailedError | GetFailedError, T[]> {
+function getDir<T>(path: string): Task<GetDirFailedError | GetFileFailedError, T[]> {
   return Task.from(
     () =>
       request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
@@ -104,7 +91,7 @@ function getDir<T>(path: string): Task<GetDirFailedError | GetFailedError, T[]> 
           "user-agent": "cvr.im",
         },
       }).then((res) => res.body.json().then((res) => [res].flat())) as Promise<GitHubFile[]>,
-    () => new GetDirFailedError("Could not fetch dir"),
+    () => GetDirFailedError("Could not fetch dir"),
   ).flatMap((files) => {
     let count = 0;
     return Task.parallel(

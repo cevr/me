@@ -2,6 +2,8 @@ import { Task } from "ftld";
 import matter from "gray-matter";
 import { request } from "undici";
 
+import { DomainError } from "./domain-error";
+
 type Maybe<T> = T | null;
 
 export interface Post {
@@ -69,12 +71,8 @@ let normalizePost = (post: Post): Post => {
   };
 };
 
-class FetchArticleError extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = "FetchArticleError";
-  }
-}
+type FetchArticleError = DomainError<"FetchArticleError">;
+const FetchArticleError = DomainError.make("FetchArticleError");
 
 let fetchArticle = (page: number): Task<FetchArticleError, Post[]> =>
   Task.from(
@@ -86,7 +84,7 @@ let fetchArticle = (page: number): Task<FetchArticleError, Post[]> =>
       }).then((res) => {
         return res.body.json();
       }) as Promise<Post[]>,
-    () => new FetchArticleError("Could not fetch articles"),
+    () => FetchArticleError("Could not fetch articles"),
   );
 
 let fetchAllArticles = (page = 1, results: Post[] = []): Task<FetchArticleError, Post[]> => {

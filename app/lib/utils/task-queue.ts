@@ -14,7 +14,6 @@ const defer = <T>() => {
   return { promise, resolve: resolve!, reject: reject! };
 };
 
-/* eslint-disable @typescript-eslint/no-redeclare */
 const TaskStatus = {
   Pending: "pending",
   InProgress: "in-progress",
