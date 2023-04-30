@@ -1,5 +1,6 @@
-import type { Language } from "prism-react-renderer";
-import Highlight, { defaultProps } from "prism-react-renderer";
+import type { Prism } from "prism-react-renderer";
+
+import { Highlight } from "prism-react-renderer";
 
 const theme = {
   plain: {
@@ -73,12 +74,12 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock(props: CodeBlockProps) {
-  const language = (props.className ? props.className.replace(/language-/, "") : "markup") as Language;
+  const language = (props.className ? props.className.replace(/language-/, "") : "markup") as Prism.Languages[number];
 
   const shouldHighlightLine = calculateLinesToHighlight(props.metastring);
 
   return (
-    <Highlight {...defaultProps} theme={theme} code={props.children.trim()} language={language}>
+    <Highlight theme={theme} code={props.children.trim()} language={language as any}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
           className={className}
