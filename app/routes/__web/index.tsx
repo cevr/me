@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { motion } from "framer-motion";
@@ -8,7 +8,6 @@ import { ClientOnly } from "remix-utils";
 import { Star } from "~/components/icons";
 import { KaizenCanvas } from "~/components/three";
 import { projectsApi } from "~/lib";
-import type { Project } from "~/lib/projects.server";
 
 export let meta: MetaFunction = () => {
   return {
@@ -21,8 +20,8 @@ export let links: LinksFunction = () => {
   return [];
 };
 
-export let loader: LoaderFunction = async ({ request }) => {
-  const projects = await projectsApi.query();
+export let loader = async ({ request }: LoaderArgs) => {
+  const projects = await projectsApi.query().unwrap();
   let oneDay = 1000 * 60 * 60 * 24;
   return json(
     {
@@ -52,7 +51,7 @@ const listItem = {
 };
 
 export default function Index() {
-  let data = useLoaderData<{ projects: Project[] }>();
+  let data = useLoaderData<typeof loader>();
   let stars = React.useMemo(() => {
     return data.projects.flatMap((project) => {
       return Array.from({ length: project.stargazerCount }, (_, i) => ({
