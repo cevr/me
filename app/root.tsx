@@ -1,8 +1,18 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
-import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useMatches } from "@remix-run/react";
+import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
+import {
+  isRouteErrorResponse,
+  Link,
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  useMatches,
+  useRouteError,
+} from "@remix-run/react";
 
 import rootStyles from "./styles/root.css";
-import tailwindStylesheetUrl from "./styles/tailwind.css";
+import tailwindStylesheetUrl from "./tailwind.css";
 
 export let links: LinksFunction = () => {
   return [
@@ -35,10 +45,8 @@ export let links: LinksFunction = () => {
   ];
 };
 
-export let meta: MetaFunction = () => {
-  return {
-    viewport: "width=device-width, initial-scale=1, maximum-scale=1",
-  };
+export let meta: V2_MetaFunction = () => {
+  return [{ viewport: "width=device-width, initial-scale=1, maximum-scale=1" }];
 };
 
 export default function App() {
@@ -53,64 +61,63 @@ export default function App() {
   );
 }
 
-export function CatchBoundary() {
-  let caught = useCatch();
-
-  switch (caught.status) {
-    case 401:
-    case 404:
-      return (
-        <Document title="Not found | Cristian">
-          <main
-            style={{
-              gridArea: "content",
-            }}
-            className="grid h-full place-items-center text-center text-lg leading-8 text-neutral-500 duration-200"
-          >
-            <div>
-              <p>Nope! This page definitely doesn't exist. Just checked.</p>
-              <p>
-                Take this{" "}
-                <Link
-                  to="/"
-                  className="border-b-[3px] border-salmon-500 text-salmon-500 duration-200"
-                  aria-label="home link"
-                >
-                  link
-                </Link>{" "}
-                back home
-              </p>
-            </div>
-          </main>
-        </Document>
-      );
-
-    default:
-      return (
-        <Document title="Oops! | Cristian">
-          <main
-            style={{
-              gridArea: "content",
-            }}
-          >
-            <div>
-              <p>What??! Something went wrong you say?</p>
-              <p>
-                Click this{" "}
-                <Link to="/" className="border-b-3 duration-200" aria-label="home link">
-                  link
-                </Link>{" "}
-                back home and pretend you never saw anything.
-              </p>
-            </div>
-          </main>
-        </Document>
-      );
-  }
-}
-
-export function ErrorBoundary({ error }: { error: Error }) {
+export function ErrorBoundary() {
+  const error = useRouteError();
   console.error(error);
+
+  if (isRouteErrorResponse(error)) {
+    switch (error.status) {
+      case 401:
+      case 404:
+        return (
+          <Document title="Not found | Cristian">
+            <main
+              style={{
+                gridArea: "content",
+              }}
+              className="grid h-full place-items-center text-center text-lg leading-8 text-neutral-500 duration-200"
+            >
+              <div>
+                <p>Nope! This page definitely doesn't exist. Just checked.</p>
+                <p>
+                  Take this{" "}
+                  <Link
+                    to="/"
+                    className="border-b-[3px] border-salmon-500 text-salmon-500 duration-200"
+                    aria-label="home link"
+                  >
+                    link
+                  </Link>{" "}
+                  back home
+                </p>
+              </div>
+            </main>
+          </Document>
+        );
+
+      default:
+        return (
+          <Document title="Oops! | Cristian">
+            <main
+              style={{
+                gridArea: "content",
+              }}
+            >
+              <div>
+                <p>What??! Something went wrong you say?</p>
+                <p>
+                  Click this{" "}
+                  <Link to="/" className="border-b-3 duration-200" aria-label="home link">
+                    link
+                  </Link>{" "}
+                  back home and pretend you never saw anything.
+                </p>
+              </div>
+            </main>
+          </Document>
+        );
+    }
+  }
 
   return (
     <Document title="Oops! | Cristian">

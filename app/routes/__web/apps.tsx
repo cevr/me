@@ -1,10 +1,13 @@
+import type { V2_MetaArgs } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 
 import { VerticalSpacer } from "~/components";
 
-export let meta = () => ({
-  title: "Apps | Cristian",
-});
+export let meta = (args: V2_MetaArgs) => [
+  {
+    title: "Apps | Cristian",
+  },
+];
 
 export default function AppsPage() {
   return (

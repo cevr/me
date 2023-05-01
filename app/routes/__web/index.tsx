@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { motion } from "framer-motion";
@@ -9,12 +9,12 @@ import { Star } from "~/components/icons";
 import { KaizenCanvas } from "~/components/three";
 import { projectsApi } from "~/lib";
 
-export let meta: MetaFunction = () => {
-  return {
+export let meta: V2_MetaFunction = () => [
+  {
     title: "Me | Cristian",
     description: "I'm looking to do what I can with a keyboard at hand.",
-  };
-};
+  },
+];
 
 export let links: LinksFunction = () => {
   return [];

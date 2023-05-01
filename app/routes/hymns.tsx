@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { Link, Outlet, useFetcher, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
 import clsx from "clsx";
 
@@ -10,9 +10,11 @@ import { getHymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 import type { Hymn } from "~/types/hymn";
 
-export let meta: MetaFunction = () => ({
-  title: "Hymns",
-});
+export let meta: V2_MetaFunction = () => [
+  {
+    title: "Hymns",
+  },
+];
 
 export let loader = ({ request }: LoaderArgs) => {
   return getHymnSearchParams(request);

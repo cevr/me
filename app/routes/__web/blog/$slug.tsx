@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import type { LoaderFunction, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
@@ -15,11 +15,7 @@ import blogPostStyles from "../../../styles/blog-post.css";
 
 dayjs.extend(relativeTime);
 
-export let meta: MetaFunction = (props) => {
-  return {
-    title: `${props.data?.post.title} | Cristian`,
-  };
-};
+export let meta: V2_MetaFunction = (props) => [{ title: `${props.data?.post.title} | Cristian` }];
 
 export function links() {
   return [
