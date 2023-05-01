@@ -46,7 +46,7 @@ const exploreMoreQuestionsPrompt = (previousAnswer: string) =>
   - Please provide no more than three questions.
   - Please do not provide any other text in the response.
   - Provide the following type of JSON object:
-    { "explore": string[] }
+    ["$question1", "$question2", "$question3"]
 
   `;
 
@@ -109,9 +109,7 @@ export let searchAndChat = (
   );
 };
 
-type ExploreChatResponse = {
-  explore: string[];
-};
+type ExploreChatResponse = string[];
 
 type NoJsonError = DomainError<"NoJsonError">;
 const NoJsonError = DomainError.make("NoJsonError");
@@ -146,7 +144,7 @@ export let explore = (res: SearchChatResponse) =>
     .flatMap((content) =>
       Result.fromPredicate(
         (json): json is NonNullable<typeof json> => json !== null,
-        content.match(jsonRegex),
+        content.match(stringArrayRegex),
         () => NoJsonError(),
       ).flatMap((json) =>
         Result.tryCatch(
@@ -160,4 +158,4 @@ export let explore = (res: SearchChatResponse) =>
       retry: 3,
     });
 
-const jsonRegex = /{\s*"explore"\s*:\s*\[(?:"[^"]*"(?:\s*,\s*"[^"]*")*)?\]\s*}/s;
+const stringArrayRegex = /\[.*\]/;

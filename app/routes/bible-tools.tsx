@@ -92,7 +92,7 @@ export default function EgwSearchPage() {
           <Await resolve={data?.explore}>
             {(data) => (
               <div className="flex gap-1 flex-col">
-                {data?.explore.map((question) => (
+                {data?.map((question) => (
                   <Link
                     to={{
                       search: new URLSearchParams({ query: question }).toString(),
