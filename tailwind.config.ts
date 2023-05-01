@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import type { PluginCreator } from "tailwindcss/types/config";
+// import type { PluginCreator } from "tailwindcss/types/config";
 
 export default {
   darkMode: ["class"],
@@ -97,21 +97,21 @@ export default {
   },
   plugins: [
     require("tailwindcss-animate"),
-    function ({ addBase, theme }) {
-      function extractColorVars(colorObj: Record<string, string>, colorGroup = ""): Record<string, string> {
-        return Object.keys(colorObj).reduce((vars, colorKey) => {
-          const value = colorObj[colorKey];
-          const cssVariable = colorKey === "DEFAULT" ? `--${colorGroup}` : `--${colorGroup}-${colorKey}`;
+    // function ({ addBase, theme }) {
+    //   function extractColorVars(colorObj: Record<string, string>, colorGroup = ""): Record<string, string> {
+    //     return Object.keys(colorObj).reduce((vars, colorKey) => {
+    //       const value = colorObj[colorKey];
+    //       const cssVariable = colorKey === "DEFAULT" ? `--${colorGroup}` : `--${colorGroup}-${colorKey}`;
 
-          const newVars = typeof value === "string" ? { [cssVariable]: value } : extractColorVars(value, colorKey);
+    //       const newVars = typeof value === "string" ? { [cssVariable]: value } : extractColorVars(value, colorKey);
 
-          return { ...vars, ...newVars };
-        }, {});
-      }
+    //       return { ...vars, ...newVars };
+    //     }, {});
+    //   }
 
-      addBase({
-        ":root": extractColorVars(theme("colors")),
-      });
-    } satisfies PluginCreator,
+    //   addBase({
+    //     ":root": extractColorVars(theme("colors")),
+    //   });
+    // } satisfies PluginCreator,
   ],
 } satisfies Config;

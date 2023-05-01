@@ -15,6 +15,7 @@ module.exports = {
     "markdown-table",
   ],
   server: process.env.NODE_ENV === "development" ? undefined : "./server.js",
+  serverBuildPath: "api/index.js",
   ignoredRouteFiles: [".*"],
   tailwind: true,
   postcss: true,
