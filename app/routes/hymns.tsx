@@ -86,7 +86,7 @@ export default function Hymns() {
             <Popover.Content
               sideOffset={8}
               align="start"
-              className="w-[calc(100vw-32px)] p-0"
+              className="p-0 w-full max-w-[1200px]"
               onOpenAutoFocus={(event) => {
                 event.preventDefault();
               }}
