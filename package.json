@@ -4,8 +4,12 @@
   "description": "My personal website.",
   "license": "",
   "scripts": {
-    "build": "remix build",
-    "dev": "remix dev",
+    "build": "npm run generate:css && npm run build:remix",
+    "build:remix": "remix build",
+    "dev": "concurrently \"npm:dev:*\"",
+    "dev:remix": "remix dev",
+    "dev:css": "npm run generate:css -- --watch",
+    "generate:css": "tailwindcss -i ./app/tailwind.css -o ./app/styles/tailwind.css",
     "format": "prettier --write app",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint ."
   },

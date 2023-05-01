@@ -10,4 +10,6 @@ node_modules
 /api/index.js
 /api/index.js.map
 
+/app/styles/tailwind.css
+
 .DS_Store
