@@ -1,4 +1,4 @@
-import type { LinksFunction, V2_MetaFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
 import {
   isRouteErrorResponse,
   Link,
@@ -12,6 +12,7 @@ import {
 } from "@remix-run/react";
 
 import tailwindStylesheetUrl from "~/styles/tailwind.css";
+
 import rootStyles from "./styles/root.css";
 
 export let links: LinksFunction = () => {
@@ -43,10 +44,6 @@ export let links: LinksFunction = () => {
     },
     { rel: "stylesheet", href: rootStyles },
   ];
-};
-
-export let meta: V2_MetaFunction = () => {
-  return [{ viewport: "width=device-width, initial-scale=1, maximum-scale=1" }];
 };
 
 export default function App() {
@@ -146,6 +143,7 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
     <html lang="en" className="dark h-full ml-[calc(100vw_-_100%)]">
       <head>
         <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         {title ? <title>{title}</title> : null}
         <Meta />
         <Links />
