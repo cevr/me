@@ -17,8 +17,6 @@ module.exports = {
   server: process.env.NODE_ENV === "development" ? undefined : "./server.js",
   serverBuildPath: "api/index.js",
   ignoredRouteFiles: [".*"],
-  tailwind: true,
-  postcss: true,
   future: {
     v2_meta: true,
     v2_normalizeFormMethod: true,
