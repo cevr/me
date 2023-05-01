@@ -3,6 +3,7 @@ import matter from "gray-matter";
 import { request } from "undici";
 
 import { DomainError } from "./domain-error";
+import { env } from "./env.server";
 
 type Maybe<T> = T | null;
 
@@ -79,12 +80,13 @@ let fetchArticle = (page: number): Task<FetchArticleError, Post[]> =>
     () =>
       request(`https://dev.to/api/articles/me/published?page=${page}&per_page=100`, {
         headers: {
-          "api-key": process.env.DEV_TO_TOKEN as string,
+          "api-key": env.DEV_TO_TOKEN,
+          "user-agent": "cvr.im",
         },
       }).then((res) => {
         return res.body.json();
       }) as Promise<Post[]>,
-    () => FetchArticleError("Could not fetch articles"),
+    (e) => FetchArticleError("Could not fetch articles", e),
   );
 
 let fetchAllArticles = (page = 1, results: Post[] = []): Task<FetchArticleError, Post[]> => {

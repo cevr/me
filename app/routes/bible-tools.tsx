@@ -97,7 +97,7 @@ export default function EgwSearchPage() {
                     to={{
                       search: new URLSearchParams({ query: question }).toString(),
                     }}
-                    className="px-2 py-1 rounded-md bg-neutral-800 text-neutral-100 text-sm"
+                    className={Button.variants({ variant: "outline", size: "sm" })}
                     key={question}
                   >
                     {question}

@@ -1,8 +1,8 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { Link, Links, LiveReload, Meta, Outlet, Scripts, useCatch, useMatches } from "@remix-run/react";
 
-import tailwindStylesheetUrl from "./styles/tailwind.css";
 import rootStyles from "./styles/root.css";
+import tailwindStylesheetUrl from "./styles/tailwind.css";
 
 export let links: LinksFunction = () => {
   return [
