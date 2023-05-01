@@ -11,8 +11,8 @@ import {
   useRouteError,
 } from "@remix-run/react";
 
+import tailwindStylesheetUrl from "./styles/tailwind.css";
 import rootStyles from "./styles/root.css";
-import tailwindStylesheetUrl from "./tailwind.css";
 
 export let links: LinksFunction = () => {
   return [

@@ -1,5 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+import type { PluginCreator } from "tailwindcss/types/config";
+
+export default {
   darkMode: ["class"],
   content: ["./app/**/*.{ts,tsx}"],
   theme: {
@@ -79,12 +81,12 @@ module.exports = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: 0 },
+          from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
+          to: { height: "0" },
         },
       },
       animation: {
@@ -96,7 +98,7 @@ module.exports = {
   plugins: [
     require("tailwindcss-animate"),
     function ({ addBase, theme }) {
-      function extractColorVars(colorObj, colorGroup = "") {
+      function extractColorVars(colorObj: Record<string, string>, colorGroup = ""): Record<string, string> {
         return Object.keys(colorObj).reduce((vars, colorKey) => {
           const value = colorObj[colorKey];
           const cssVariable = colorKey === "DEFAULT" ? `--${colorGroup}` : `--${colorGroup}-${colorKey}`;
@@ -110,6 +112,6 @@ module.exports = {
       addBase({
         ":root": extractColorVars(theme("colors")),
       });
-    },
+    } satisfies PluginCreator,
   ],
-};
+} satisfies Config;
