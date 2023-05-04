@@ -61,8 +61,8 @@ export let searchEmbeddings = (query: string) =>
         egw: EmbeddingSource[];
         bible: EmbeddingSource[];
       }>,
-    () => SearchEmbeddingsError(),
-  );
+    (e) => SearchEmbeddingsError(undefined, e),
+  ).tapErr((err) => console.error(err));
 
 type SearchChatResponse = {
   bible: EmbeddingSource[];
@@ -80,32 +80,34 @@ export let searchAndChat = (
     bible: EmbeddingSource[];
   }
 > => {
-  return searchEmbeddings(query).flatMap((embeddings) =>
-    OpenAI.chat([
-      {
-        role: "system",
-        content: settingPrompt,
-      },
-      {
-        role: "system",
-        content: relatedBiblicalTextsPrompt(embeddings.bible),
-      },
-      {
-        role: "system",
-        content: relatedEGWTextsPrompt(embeddings.egw),
-      },
-      {
-        role: "user",
-        content: query,
-      },
-    ]).map(
-      (content) =>
-        ({
-          ...embeddings,
-          answer: content,
-        } satisfies SearchChatResponse),
-    ),
-  );
+  return searchEmbeddings(query)
+    .flatMap((embeddings) =>
+      OpenAI.chat([
+        {
+          role: "system",
+          content: settingPrompt,
+        },
+        {
+          role: "system",
+          content: relatedBiblicalTextsPrompt(embeddings.bible),
+        },
+        {
+          role: "system",
+          content: relatedEGWTextsPrompt(embeddings.egw),
+        },
+        {
+          role: "user",
+          content: query,
+        },
+      ]).map(
+        (content) =>
+          ({
+            ...embeddings,
+            answer: content,
+          } satisfies SearchChatResponse),
+      ),
+    )
+    .tapErr((err) => console.error(err));
 };
 
 type ExploreChatResponse = string[];
@@ -152,9 +154,9 @@ export let explore = (res: SearchChatResponse) =>
         ),
       ),
     )
-    .tapErr((err) => console.error(err))
     .schedule({
       retry: 3,
-    });
+    })
+    .tapErr((err) => console.error(err));
 
 const stringArrayRegex = /\[.*\]/;

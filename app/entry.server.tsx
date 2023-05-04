@@ -5,7 +5,7 @@ import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import { PassThrough } from "stream";
 
-const ABORT_DELAY = 30000;
+const ABORT_DELAY = 60000;
 
 export default function handleRequest(
   request: Request,
