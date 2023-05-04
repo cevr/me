@@ -1,6 +1,7 @@
 import { Result, Task } from "ftld";
 
 import { DomainError } from "./domain-error";
+import { env } from "./env.server";
 import type { OpenAIChatFailedError } from "./openai.server";
 import { OpenAI } from "./openai.server";
 
@@ -56,9 +57,7 @@ export const SearchEmbeddingsError = DomainError.make("SearchEmbeddingsError");
 export let searchEmbeddings = (query: string) =>
   Task.from(
     () =>
-      fetch(`https://bible-tools-api-production.up.railway.app/search?q=${query}`).then((res) =>
-        res.json(),
-      ) as Promise<{
+      fetch(`${env.BIBLE_TOOLS_API}/search?q=${query}`).then((res) => res.json()) as Promise<{
         egw: EmbeddingSource[];
         bible: EmbeddingSource[];
       }>,

@@ -10,6 +10,7 @@ const envSchema = z.object({
   DEV_TO_TOKEN: z.string(),
   GITHUB_TOKEN: z.string(),
   OPENAI_API_KEY: z.string(),
+  BIBLE_TOOLS_API: z.string().optional().default('https://bible-tools-api.hop.sh'),
 });
 
 export type Env = z.infer<typeof envSchema>;
