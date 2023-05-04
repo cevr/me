@@ -37,18 +37,18 @@ const relatedEGWTextsPrompt = (
     .map((text) => text.source + " (" + text.label + ")")
     .join(", ")}`;
 
-const exploreSettingPrompt = `You have just given an initial answer to a bible student. Help them explore the topic further by providing them three more questions to ask that is related to the topic.`;
-
-const exploreMoreQuestionsPrompt = (previousAnswer: string) =>
-  `Here was your answer to the student's initial question: ${previousAnswer}. Please provide the additional questions in the following JSON format:
+const exploreMoreQuestionsPrompt = `You are tasked with giving the student more questions to ask to further understand and explore the topic.
   Requirements:
 
-  - Be sure to only provide a valid JSON object as a response.
-  - Please provide no more than three questions.
-  - Please do not provide any other text in the response.
+  - Only provide valid JSON as a response.
+  - Do not provide more than three questions.
+  - Do not provide any other text in the response.
   - Provide the following type of JSON object:
     ["$question1", "$question2", "$question3"]
 
+    Example:
+    Q: What is present truth?
+    A: ["What is the seal of God?", "What is the mark of the beast?", "What is the third angel's message?"]
   `;
 
 export type SearchEmbeddingsError = DomainError<"SearchEmbeddingsError">;
@@ -122,7 +122,7 @@ export let explore = (res: SearchChatResponse) =>
   OpenAI.chat([
     {
       role: "system",
-      content: exploreSettingPrompt,
+      content: exploreMoreQuestionsPrompt,
     },
     {
       role: "system",
@@ -133,12 +133,8 @@ export let explore = (res: SearchChatResponse) =>
       content: relatedEGWTextsPrompt(res.egw),
     },
     {
-      role: "system",
-      content: exploreMoreQuestionsPrompt(res.answer),
-    },
-    {
       role: "user",
-      content: "What are some other questions I can ask related to the topic?",
+      content: res.answer,
     },
   ])
     .tap((content) => console.log(content))

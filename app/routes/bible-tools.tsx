@@ -5,7 +5,7 @@ import { Await, Form, Link, useLoaderData, useNavigation, useSearchParams } from
 
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
-import { searchAndChat } from "~/lib/bible-tools.server";
+import { explore, searchAndChat } from "~/lib/bible-tools.server";
 
 export let meta: V2_MetaFunction = () => [
   {
@@ -17,16 +17,14 @@ export let loader = async ({ request }: LoaderArgs) => {
   const query = new URL(request.url).searchParams.get("query") ?? "";
   if (!query) return null;
 
-  const result = searchAndChat(query).unwrap();
-  // result.then((res) =>
-  //   explore(res).match({
-  //     Ok: (res) => res,
-  //     Err: () => [],
-  //   }),
-  // );
+  const result = searchAndChat(query);
+
   return defer({
-    result: result,
-    explore: [],
+    result: result.unwrap(),
+    explore: result.flatMap(explore).match({
+      Ok: (res) => res,
+      Err: () => [],
+    }),
   });
 };
 

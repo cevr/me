@@ -24,7 +24,7 @@ function chat(messages: Message[]) {
           Authorization: `Bearer ${env.OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "gpt-3.5-turbo",
+          model: "gpt-4",
           messages,
           temperature: 0,
         }),
