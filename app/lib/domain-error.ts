@@ -9,8 +9,8 @@ export namespace DomainError {
 
 const make =
   <Name extends string>(name: Name) =>
-  (message?: string, meta?: any): DomainError<Name> => {
-    return Object.assign(new Error(message), { name, meta });
+  (init?: { message?: string; meta?: any }): DomainError<Name> => {
+    return Object.assign(new Error(init?.message), { name, meta: init?.meta });
   };
 
 export const DomainError = {

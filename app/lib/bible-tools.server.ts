@@ -1,4 +1,5 @@
 import { Result, Task } from "ftld";
+import { request } from "undici";
 
 import { DomainError } from "./domain-error";
 import { env } from "./env.server";
@@ -51,17 +52,22 @@ const exploreMoreQuestionsPrompt = `You are tasked with giving the student more 
     A: ["What is the seal of God?", "What is the mark of the beast?", "What is the third angel's message?"]
   `;
 
+export type SearchEmbeddingsResponse = {
+  egw: EmbeddingSource[];
+  bible: EmbeddingSource[];
+};
 export type SearchEmbeddingsError = DomainError<"SearchEmbeddingsError">;
 export const SearchEmbeddingsError = DomainError.make("SearchEmbeddingsError");
 
-export let searchEmbeddings = (query: string) =>
+export let searchEmbeddings = (query: string): Task<SearchEmbeddingsError, SearchEmbeddingsResponse> =>
   Task.from(
     () =>
-      fetch(`${env.BIBLE_TOOLS_API}/search?q=${query}`).then((res) => res.json()) as Promise<{
-        egw: EmbeddingSource[];
-        bible: EmbeddingSource[];
-      }>,
-    (e) => SearchEmbeddingsError(undefined, e),
+      request(`${env.BIBLE_TOOLS_API}/search?q=${query}`, {
+        headers: {
+          "user-agent": "cvr.im",
+        },
+      }).then((res) => res.body.json()),
+    (e) => SearchEmbeddingsError({ meta: e }),
   ).tapErr((err) => console.error(err));
 
 type SearchChatResponse = {
