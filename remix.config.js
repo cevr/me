@@ -13,6 +13,9 @@ module.exports = {
     "decode-named-character-reference",
     "character-entities",
     "markdown-table",
+    /mediapipe/i,
+    'tasks-vision',
+    '@react-three/drei'
   ],
   server: process.env.NODE_ENV === "development" ? undefined : "./server.js",
   serverBuildPath: "api/index.js",
