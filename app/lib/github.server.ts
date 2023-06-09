@@ -1,3 +1,4 @@
+import type { AsyncTask} from "ftld";
 import { Task } from "ftld";
 import { request } from "undici";
 
@@ -25,7 +26,7 @@ const githubToken = env.GITHUB_TOKEN;
 type GetShaFailedError = DomainError<"GetShaFailedError">;
 const GetShaFailedError = DomainError.make("GetShaFailedError");
 
-function getSha(path: string): Task<GetShaFailedError, string> {
+function getSha(path: string): AsyncTask<GetShaFailedError, string> {
   return Task.from(
     async () => {
       const res = (await request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
@@ -45,7 +46,7 @@ function getSha(path: string): Task<GetShaFailedError, string> {
 type PushFailedError = DomainError<"PushFailedError">;
 const PushFailedError = DomainError.make("PushFailedError");
 
-function push(path: string, data: any, commitMessage: string): Task<GetShaFailedError | PushFailedError, void> {
+function push(path: string, data: any, commitMessage: string): AsyncTask<GetShaFailedError | PushFailedError, void> {
   return getSha(path).flatMap((sha) =>
     Task.from(
       async () => {
@@ -64,7 +65,7 @@ function push(path: string, data: any, commitMessage: string): Task<GetShaFailed
           }),
         });
       },
-      () => PushFailedError("Could not get sha"),
+      (e) => PushFailedError({ message: "Could not get sha", meta: e }),
     ),
   );
 }
@@ -72,17 +73,17 @@ function push(path: string, data: any, commitMessage: string): Task<GetShaFailed
 type GetFileFailedError = DomainError<"GetFileFailedError">;
 const GetFileFailedError = DomainError.make("GetFileFailedError");
 
-function get<T>(path: string): Task<GetFileFailedError, T> {
+function get<T>(path: string): AsyncTask<GetFileFailedError, T> {
   return Task.from(
     () => fetch(`https://raw.githubusercontent.com/cevr/cms/main/${path}`).then((res) => res.json()),
-    () => GetFileFailedError("Could not fetch file"),
+    (e) => GetFileFailedError({ message: "Could not fetch file", meta: e }),
   );
 }
 
 type GetDirFailedError = DomainError<"GetDirFailedError">;
 const GetDirFailedError = DomainError.make("GetDirFailedError");
 
-function getDir<T>(path: string): Task<GetDirFailedError | GetFileFailedError, T[]> {
+function getDir<T>(path: string): AsyncTask<GetDirFailedError | GetFileFailedError, T[]> {
   return Task.from(
     () =>
       request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
@@ -91,7 +92,14 @@ function getDir<T>(path: string): Task<GetDirFailedError | GetFileFailedError, T
           "user-agent": "cvr.im",
         },
       }).then((res) => res.body.json().then((res) => [res].flat())) as Promise<GitHubFile[]>,
-    () => GetDirFailedError("Could not fetch dir"),
+    (e) =>
+      GetDirFailedError({
+        message: "Could not fetch dir",
+        meta: {
+          path,
+          e,
+        },
+      }),
   ).flatMap((files) => {
     let count = 0;
     return Task.parallel(

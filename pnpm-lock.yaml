@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 dependencies:
   '@radix-ui/react-alert-dialog':
@@ -86,8 +90,8 @@ dependencies:
     specifier: ^10.12.5
     version: 10.12.5(@react-three/fiber@8.13.0)(react-dom@18.2.0)(react@18.2.0)(three@0.152.2)
   ftld:
-    specifier: 0.43.0
-    version: 0.43.0
+    specifier: 0.61.0
+    version: 0.61.0
   graphql:
     specifier: ^16.6.0
     version: 16.6.0
@@ -6239,8 +6243,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /ftld@0.43.0:
-    resolution: {integrity: sha512-XJyaWhBuMNAoTV8odtS9wE4GQRO5YhrVvLuWGA0whMx+YEuwGMDNDwJ5uCNBYT5tT1nAMBBdnXBoCEi/cSJClg==}
+  /ftld@0.61.0:
+    resolution: {integrity: sha512-q8rrXrJW7yS+lvTDJSnThhhm7tlm1mH2Sq1YNEA2hCaoQVFpJO4hrH5hW62N9H4V7c2AikJacQ7j44j3fpcHsA==}
     dev: false
 
   /ftp@0.3.10:
