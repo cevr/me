@@ -33,7 +33,7 @@ function chat(messages: Message[]) {
         .then((res) => res.choices[0].message.content) as Promise<string>,
     (e) => {
       console.error(e);
-      return OpenAIChatFailedError({ message: "Could not connect to OpenAI API" });
+      return OpenAIChatFailedError("Could not connect to OpenAI API");
     },
   );
 }

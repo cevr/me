@@ -1,4 +1,4 @@
-import { AsyncTask, Task } from "ftld";
+import { Task } from "ftld";
 import { gql, GraphQLClient } from "graphql-request";
 
 let repositoriesQuery = gql`
@@ -49,8 +49,8 @@ let client = new GraphQLClient("https://api.github.com/graphql", {
   },
 });
 
-export let query = (): AsyncTask<never, Project[]> =>
-  Task.from(() =>
+export let query = (): Task<never, Project[]> =>
+  Task.from<never, Project[]>(() =>
     client
       .request<RepositoriesQueryData>(repositoriesQuery)
       .then(
@@ -59,5 +59,5 @@ export let query = (): AsyncTask<never, Project[]> =>
             .map((edge) => edge.node)
             .filter((project) => project.stargazerCount > 1 && !project.isArchived) ?? [],
       )
-      .catch(() => [] as Project[]),
+      .catch(() => []),
   );

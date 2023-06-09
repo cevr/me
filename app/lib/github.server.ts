@@ -1,4 +1,4 @@
-import { AsyncTask, Task } from "ftld";
+import { Task } from "ftld";
 import { request } from "undici";
 
 import { DomainError } from "./domain-error";
@@ -64,7 +64,7 @@ function push(path: string, data: any, commitMessage: string): Task<GetShaFailed
           }),
         });
       },
-      () => PushFailedError({ message: "Could not get sha" }),
+      () => PushFailedError("Could not get sha"),
     ),
   );
 }
@@ -72,17 +72,17 @@ function push(path: string, data: any, commitMessage: string): Task<GetShaFailed
 type GetFileFailedError = DomainError<"GetFileFailedError">;
 const GetFileFailedError = DomainError.make("GetFileFailedError");
 
-function get<T>(path: string) {
+function get<T>(path: string): Task<GetFileFailedError, T> {
   return Task.from(
-    () => fetch(`https://raw.githubusercontent.com/cevr/cms/main/${path}`).then((res) => res.json() as T),
-    () => GetFileFailedError({ message: "Could not fetch file" }),
+    () => fetch(`https://raw.githubusercontent.com/cevr/cms/main/${path}`).then((res) => res.json()),
+    () => GetFileFailedError("Could not fetch file"),
   );
 }
 
 type GetDirFailedError = DomainError<"GetDirFailedError">;
 const GetDirFailedError = DomainError.make("GetDirFailedError");
 
-function getDir<T>(path: string) {
+function getDir<T>(path: string): Task<GetDirFailedError | GetFileFailedError, T[]> {
   return Task.from(
     () =>
       request(`https://api.github.com/repos/cevr/cms/contents/${path}`, {
@@ -91,7 +91,7 @@ function getDir<T>(path: string) {
           "user-agent": "cvr.im",
         },
       }).then((res) => res.body.json().then((res) => [res].flat())) as Promise<GitHubFile[]>,
-    () => GetDirFailedError({ message: "Could not fetch dir" }),
+    () => GetDirFailedError("Could not fetch dir"),
   ).flatMap((files) => {
     let count = 0;
     return Task.parallel(

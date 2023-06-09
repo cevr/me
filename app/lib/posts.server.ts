@@ -1,4 +1,4 @@
-import { AsyncTask, Task } from "ftld";
+import { Task } from "ftld";
 import matter from "gray-matter";
 import { request } from "undici";
 
@@ -75,7 +75,7 @@ let normalizePost = (post: Post): Post => {
 type FetchArticleError = DomainError<"FetchArticleError">;
 const FetchArticleError = DomainError.make("FetchArticleError");
 
-let fetchArticle = (page: number): AsyncTask<FetchArticleError, Post[]> =>
+let fetchArticle = (page: number): Task<FetchArticleError, Post[]> =>
   Task.from(
     () =>
       request(`https://dev.to/api/articles/me/published?page=${page}&per_page=100`, {
@@ -86,14 +86,14 @@ let fetchArticle = (page: number): AsyncTask<FetchArticleError, Post[]> =>
       }).then((res) => {
         return res.body.json();
       }) as Promise<Post[]>,
-    (e) => FetchArticleError({ message: "Could not fetch articles", meta: e }),
+    (e) => FetchArticleError("Could not fetch articles", e),
   );
 
-let fetchAllArticles = (page = 1, results: Post[] = []): AsyncTask<FetchArticleError, Post[]> => {
+let fetchAllArticles = (page = 1, results: Post[] = []): Task<FetchArticleError, Post[]> => {
   return fetchArticle(page).flatMap((latestResults) => {
     if (latestResults.length === 100) return fetchAllArticles(page + 1, results.concat(latestResults));
 
-    return Task.AsyncOk(results.concat(latestResults));
+    return Task.Ok(results.concat(latestResults));
   });
 };
 

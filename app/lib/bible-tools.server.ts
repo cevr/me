@@ -1,4 +1,4 @@
-import { AsyncTask, Result, Task } from "ftld";
+import { Result, Task } from "ftld";
 import { request } from "undici";
 
 import { DomainError } from "./domain-error";
@@ -59,14 +59,14 @@ export type SearchEmbeddingsResponse = {
 export type SearchEmbeddingsError = DomainError<"SearchEmbeddingsError">;
 export const SearchEmbeddingsError = DomainError.make("SearchEmbeddingsError");
 
-export let searchEmbeddings = (query: string): AsyncTask<SearchEmbeddingsError, SearchEmbeddingsResponse> =>
+export let searchEmbeddings = (query: string): Task<SearchEmbeddingsError, SearchEmbeddingsResponse> =>
   Task.from(
     () =>
       request(`${env.BIBLE_TOOLS_API}/search?q=${query}`, {
         headers: {
           "user-agent": "cvr.im",
         },
-      }).then((res) => res.body.json()) as Promise<SearchEmbeddingsResponse>,
+      }).then((res) => res.body.json()),
     (e) => SearchEmbeddingsError({ meta: e }),
   ).tapErr((err) => console.error(err));
 
@@ -146,8 +146,8 @@ export let explore = (res: SearchChatResponse) =>
     .tap((content) => console.log(content))
     .flatMap((content) =>
       Result.fromPredicate(
-        content.match(stringArrayRegex),
         (json): json is NonNullable<typeof json> => json !== null,
+        content.match(stringArrayRegex),
         () => NoJsonError(),
       ).flatMap((json) =>
         Result.tryCatch(
