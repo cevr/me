@@ -43,7 +43,7 @@
     "framer-motion": "^10.12.5",
     "framer-motion-3d": "^10.12.5",
     "ftld": "0.61.0",
-    "graphql": "^16.6.0",
+    "graphql": "^16.8.1",
     "graphql-request": "^6.0.0",
     "gray-matter": "^4.0.3",
     "isbot": "^3.6.10",
