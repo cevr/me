@@ -65,7 +65,7 @@
     "three": "^0.152.2",
     "three-stdlib": "^2.21.10",
     "tonal": "^4.14.1",
-    "undici": "^5.22.0",
+    "undici": "^5.26.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {
