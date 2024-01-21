@@ -17,7 +17,7 @@ export let links: LinksFunction = () => {
 };
 
 export let loader = async () => {
-  const projects = await projectsApi.query().unwrap();
+  const projects = await projectsApi.all().unwrap();
   let oneDay = 1000 * 60 * 60 * 24;
   return json(
     {

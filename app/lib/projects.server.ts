@@ -1,6 +1,7 @@
-import type { AsyncTask} from "ftld";
+import { cachified, type CacheEntry } from "@epic-web/cachified";
 import { Task } from "ftld";
 import { gql, GraphQLClient } from "graphql-request";
+import { LRUCache } from "lru-cache";
 
 let repositoriesQuery = gql`
   query {
@@ -50,15 +51,31 @@ let client = new GraphQLClient("https://api.github.com/graphql", {
   },
 });
 
-export let query = (): AsyncTask<never, Project[]> =>
-  Task.from(() =>
-    client
-      .request<RepositoriesQueryData>(repositoriesQuery)
-      .then(
-        (data) =>
-          data.user?.repositories?.edges
-            .map((edge) => edge.node)
-            .filter((project) => project.stargazerCount > 1 && !project.isArchived) ?? [],
-      )
-      .catch(() => [] as Project[]),
+class FailedToFetchProjects extends Error {
+  constructor(public readonly error: unknown) {
+    super("Failed to fetch projects");
+  }
+}
+
+let cache = new LRUCache<string, CacheEntry<Project[]>>({
+  max: 10,
+});
+export let all = () =>
+  Task.from(
+    () =>
+      cachified({
+        cache: cache as any,
+        key: "projects",
+        ttl: 1000 * 60 * 60,
+        getFreshValue: () =>
+          client
+            .request<RepositoriesQueryData>(repositoriesQuery)
+            .then(
+              (data) =>
+                data.user?.repositories?.edges
+                  .map((edge) => edge.node)
+                  .filter((project) => project.stargazerCount > 1 && !project.isArchived) ?? [],
+            ),
+      }),
+    (e) => new FailedToFetchProjects(e),
   );
