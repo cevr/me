@@ -6,11 +6,11 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "dev": "node --watch server.js",
+    "dev": "pnpm start",
     "build": "remix vite:build",
     "format": "prettier --write app",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint \"app/**/*.{js,jsx,ts,tsx}\"",
-    "start": "node --enable-source-maps server.js"
+    "start": "node --enable-source-maps server/index.js"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -83,10 +83,12 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "nodemon": "^3.0.3",
     "prettier": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
     "remix-flat-routes": "^0.6.4",
     "rimraf": "^5.0.5",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3",
     "vite": "^5.0.12",
     "vite-tsconfig-paths": "^4.3.1"
@@ -97,7 +99,8 @@
   "pnpm": {
     "overrides": {
       "react": "18.3.0-canary-feed8f3f9-20240118",
-      "react-dom": "18.3.0-canary-feed8f3f9-20240118"
+      "react-dom": "18.3.0-canary-feed8f3f9-20240118",
+      "fsevents": "^2.3.3"
     }
   }
 }

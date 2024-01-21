@@ -68,40 +68,50 @@ export default function Index() {
   let data = useLoaderData<typeof loader>();
 
   return (
-    <main
+    <motion.main
+      variants={container}
+      initial="hidden"
+      animate="show"
       style={{
         gridArea: "content",
       }}
       className="flex flex-col gap-4 py-4 md:py-12 font-mono font-light text-neutral-300"
     >
-      <section className="flex flex-col gap-4 md:flex-row-reverse">
-        <img className="mx-auto aspect-square max-w-64 w-full rounded-md" src="/images/me.jpg" alt="Portrait of me" />
+      <motion.section variants={listItem} className="flex flex-col gap-4 md:flex-row-reverse">
+        <motion.img
+          variants={listItem}
+          className="mx-auto aspect-square max-w-64 w-full rounded-md"
+          src="/images/me.jpg"
+          alt="Portrait of me"
+        />
 
-        <div className="flex flex-col gap-3 md:pt-10 w-full">
+        <motion.div variants={listItem} className="flex flex-col gap-3 md:pt-10 w-full">
           <h1 className="text-neutral-50 text-4xl md:text-6xl">Hi, I'm Cristian.</h1>
           <div>
             <p className="text-lg leading-10">I'm a product engineer that pursues excellence.</p>
 
             <p className="text-lg leading-10">I just like to be proud of my work.</p>
           </div>
-        </div>
-      </section>
-      <section className="flex flex-col gap-4">
+        </motion.div>
+      </motion.section>
+      <motion.section variants={listItem} className="flex flex-col gap-4">
         <h2 className="text-2xl md:text-4xl text-neutral-50">Experiments</h2>
 
-        <ul className="flex flex-col gap-4">
+        <motion.ul variants={listItem} className="flex flex-col gap-4">
           {apps.map((app) => (
-            <li key={app.href} className="text-lg duration-200 hover:text-salmon-500">
+            <motion.li variants={listItem} key={app.href} className="text-lg duration-200 hover:text-salmon-500">
               <Link prefetch="intent" to={app.href}>
                 {app.description}
               </Link>
-            </li>
+            </motion.li>
           ))}
-        </ul>
-      </section>
-      <section className="flex h-full flex-col gap-5 md:gap-2 md:p-0">
-        <h2 className="text-2xl md:text-4xl text-neutral-50">Projects</h2>
-        <motion.ul className="flex flex-col gap-2" variants={container} initial="hidden" animate="show">
+        </motion.ul>
+      </motion.section>
+      <motion.section variants={listItem} className="flex h-full flex-col gap-5 md:gap-2 md:p-0">
+        <motion.h2 variants={listItem} className="text-2xl md:text-4xl text-neutral-50">
+          Projects
+        </motion.h2>
+        <motion.ul variants={listItem} className="flex flex-col gap-2">
           {data.projects.map((project) => (
             <motion.li
               variants={listItem}
@@ -134,8 +144,8 @@ export default function Index() {
             </motion.li>
           ))}
         </motion.ul>
-      </section>
-    </main>
+      </motion.section>
+    </motion.main>
   );
 }
 
