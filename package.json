@@ -4,11 +4,13 @@
   "description": "My personal website.",
   "license": "",
   "sideEffects": false,
+  "type": "module",
   "scripts": {
     "dev": "remix vite:dev",
     "build": "remix vite:build",
     "format": "prettier --write app",
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint \"app/**/*.{js,jsx,ts,tsx}\""
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint \"app/**/*.{js,jsx,ts,tsx}\"",
+    "start": "node build/server/index.js"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",

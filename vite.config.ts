@@ -13,8 +13,6 @@ export default defineConfig({
   plugins: [
     remix({
       ignoredRouteFiles: ["**/.*"],
-      serverBuildDirectory: "api",
-      serverBuildFile: "index.js",
       routes: async (defineRoutes) => {
         return flatRoutes("routes", defineRoutes);
       },
