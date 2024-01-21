@@ -1,5 +1,5 @@
 import { cachified } from "@epic-web/cachified";
-import { Task, type AsyncTask, type Result } from "ftld";
+import { Task, type AsyncTask } from "ftld";
 import matter from "gray-matter";
 import { LRUCache } from "lru-cache";
 import { request } from "undici";
@@ -101,30 +101,43 @@ let fetchAllArticles = (page = 1, results: Post[] = []): AsyncTask<FetchArticleE
 
 let cache = new LRUCache<string, Post[]>({ max: 100 });
 
-export let all = (): Promise<Result<FetchArticleError, Post[]>> => {
-  return cachified({
-    cache: cache as any,
-    key: "posts",
-    getFreshValue: () =>
-      fetchAllArticles()
-        .map((posts) => posts.map(normalizePost))
-        .run(),
-  });
+export let all = (): AsyncTask<FetchArticleError, Post[]> => {
+  return Task.from(() =>
+    cachified({
+      cache: cache as any,
+      key: "posts",
+      getFreshValue: () =>
+        fetchAllArticles()
+          .map((posts) => posts.map(normalizePost))
+          .run(),
+    }),
+  );
 };
 
-export let get = (slug: string) => {
-  return cachified({
-    cache: cache as any,
-    key: `post-${slug}`,
-    getFreshValue: async () =>
-      (await all()).map((posts) => {
-        let postIndex = posts.findIndex((post) => post.slug === slug);
-        let post = posts[postIndex] as Post | undefined;
-        let olderPost = posts[postIndex + 1] as Post | undefined;
-        let newerPost = posts[postIndex - 1] as Post | undefined;
-        return { post, olderPost, newerPost };
-      }),
-  });
+export let get = (
+  slug: string,
+): AsyncTask<
+  FetchArticleError,
+  {
+    post: Post | undefined;
+    olderPost: Post | undefined;
+    newerPost: Post | undefined;
+  }
+> => {
+  return Task.from(() =>
+    cachified({
+      cache: cache as any,
+      key: `post-${slug}`,
+      getFreshValue: () =>
+        all().map((posts) => {
+          let postIndex = posts.findIndex((post) => post.slug === slug);
+          let post = posts[postIndex] as Post | undefined;
+          let olderPost = posts[postIndex + 1] as Post | undefined;
+          let newerPost = posts[postIndex - 1] as Post | undefined;
+          return { post, olderPost, newerPost };
+        }),
+    }),
+  );
 };
 
 export { bundleMDX as serialize } from "mdx-bundler";

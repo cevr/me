@@ -75,7 +75,7 @@ export default function Index() {
       style={{
         gridArea: "content",
       }}
-      className="flex flex-col gap-4 py-4 md:py-12 font-mono font-light text-neutral-300"
+      className="flex flex-col gap-4 font-mono font-light text-neutral-300"
     >
       <motion.section variants={listItem} className="flex flex-col gap-4 md:flex-row-reverse">
         <motion.img
@@ -85,7 +85,7 @@ export default function Index() {
           alt="Portrait of me"
         />
 
-        <motion.div variants={listItem} className="flex flex-col gap-3 md:pt-10 w-full">
+        <motion.div variants={listItem} className="flex flex-col gap-3 w-full">
           <h1 className="text-neutral-50 text-4xl md:text-6xl">Hi, I'm Cristian.</h1>
           <div>
             <p className="text-lg leading-10">I'm a product engineer that pursues excellence.</p>

@@ -155,7 +155,7 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
     "footer"`,
             gridTemplateRows: "auto 1fr auto",
           }}
-          className="m-auto h-full min-h-0 max-w-[100vw] p-4 md:max-w-[1200px]"
+          className="m-auto h-full min-h-0 max-w-[100vw] p-4 md:max-w-[1200px] gap-12"
         >
           {children}
         </div>

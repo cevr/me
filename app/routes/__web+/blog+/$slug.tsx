@@ -25,7 +25,7 @@ export function links() {
 
 export let loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.slug, "Missing slug");
-  const { newerPost, olderPost, post } = (await postsApi.get(params.slug)).unwrap();
+  const { newerPost, olderPost, post } = await postsApi.get(params.slug).unwrap();
 
   if (!post) {
     throw json({ message: "This post doesn't exist." }, { status: 404 });
