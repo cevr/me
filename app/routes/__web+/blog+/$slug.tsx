@@ -1,14 +1,14 @@
-import { json, type LoaderFunction, type MetaFunction } from "@remix-run/node";
+import { json, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getMDXComponent } from "mdx-bundler/client";
 import * as React from "react";
+import invariant from "tiny-invariant";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
-import type { Post } from "~/lib/posts.server";
 
 dayjs.extend(relativeTime);
 
@@ -23,17 +23,13 @@ export function links() {
   ];
 }
 
-export let loader: LoaderFunction = async ({ params }) => {
-  let posts = await postsApi.query().unwrap();
-  let postIndex = posts.findIndex((post) => post.slug === params?.slug);
+export let loader = async ({ params }: LoaderFunctionArgs) => {
+  invariant(params.slug, "Missing slug");
+  const { newerPost, olderPost, post } = (await postsApi.get(params.slug)).unwrap();
 
-  if (postIndex === -1) {
+  if (!post) {
     throw json({ message: "This post doesn't exist." }, { status: 404 });
   }
-
-  let post = posts[postIndex];
-  let olderPost = posts[postIndex + 1] ?? null;
-  let newerPost = posts[postIndex - 1] ?? null;
 
   const oneWeek = 1000 * 60 * 60 * 24 * 7;
 
@@ -55,13 +51,7 @@ export let loader: LoaderFunction = async ({ params }) => {
 };
 
 export default function Screen() {
-  const { post, newerPost, olderPost } = useLoaderData<{
-    post: Post & {
-      content: string;
-    };
-    newerPost: Post;
-    olderPost: Post;
-  }>();
+  const { post, newerPost, olderPost } = useLoaderData<typeof loader>();
   const MDXComponent = React.useMemo(() => getMDXComponent(post.content), [post.content]);
 
   return (
@@ -120,9 +110,7 @@ let components = {
   pre: (props: any) => <div className="mx-0 my-2" {...props} />,
   code: (props: any) => <CodeBlock {...props} />,
   a: (props: any) => <ButtonLink {...props} />,
-  p: (props: any) => (
-    <p className="mx-0 my-4 text-base font-light leading-[1.9rem] text-neutral-50" {...props} />
-  ),
+  p: (props: any) => <p className="mx-0 my-4 text-base font-light leading-[1.9rem] text-neutral-50" {...props} />,
   strong: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   b: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   h2: (props: any) => <h2 className="text-2xl leading-8" {...props} />,
@@ -134,9 +122,7 @@ let components = {
       {...props}
     />
   ),
-  ol: (props: any) => (
-    <ol className="mx-0 my-4 text-base font-light leading-[1.9rem] text-neutral-50" {...props} />
-  ),
+  ol: (props: any) => <ol className="mx-0 my-4 text-base font-light leading-[1.9rem] text-neutral-50" {...props} />,
   li: (props: any) => (
     <li
       className={`ml-4 before:ml-[-1em] before:inline-block before:w-[1em] before:font-bold before:text-salmon-500 before:content-["•"]`}

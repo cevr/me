@@ -1,5 +1,4 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, type LoaderFunction, type MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
 import { VerticalSpacer } from "~/components";
@@ -13,7 +12,7 @@ export let meta: MetaFunction = () => [
 ];
 
 export let loader: LoaderFunction = async () => {
-  let posts = await postsApi.query().unwrap();
+  let posts = (await postsApi.all()).unwrap();
   const oneHour = 1000 * 60 * 60;
   return json(
     {

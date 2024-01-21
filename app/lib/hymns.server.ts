@@ -74,7 +74,7 @@ const hymnsFilename = "me/hymns.json";
 //   }
 //   return fetchQueue.add("hymns", () => doFetch());
 // }
-let cache = new LRUCache<string, CacheEntry<Hymn[]>>({ max: 1 });
+let cache = new LRUCache<string, CacheEntry<Hymn[]>>({ max: 1000 });
 export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
   let hymns: Hymn[] = await cachified({
     cache: cache as any,
