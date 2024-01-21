@@ -1,6 +1,5 @@
-import type { Prism } from "prism-react-renderer";
-
-import { Highlight } from "prism-react-renderer";
+import clsx from "clsx";
+import { Highlight, type Prism } from "prism-react-renderer";
 
 const theme = {
   plain: {
@@ -82,7 +81,10 @@ export function CodeBlock(props: CodeBlockProps) {
     <Highlight theme={theme} code={props.children.trim()} language={language as any}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
-          className={className}
+          className={clsx(
+            className,
+            "duration-[0.2s] rounded bg-[color:var(--code-bg)] px-2 py-1 text-[0.9rem] text-[color:var(--salmon-500)] transition-all font-mono",
+          )}
           style={{
             ...style,
             padding: "1rem",
@@ -93,12 +95,25 @@ export function CodeBlock(props: CodeBlockProps) {
           {tokens.map((line, i) => {
             const lineProps = getLineProps({ line, key: i });
             if (shouldHighlightLine(i)) {
-              lineProps.className = `${lineProps.className} highlight-line`;
+              lineProps.className = `${lineProps.className}`;
             }
 
             return (
-              <div key={i} {...lineProps}>
-                <span className="line-number">{i + 1}</span>
+              <div
+                key={i}
+                {...lineProps}
+                className={clsx(lineProps.className, {
+                  "border-l-4 border-solid border-l-[color:var(--salmon-500)] bg-[color:var(--code-highlight-bg)]":
+                    shouldHighlightLine(i),
+                })}
+              >
+                <span
+                  className={clsx("relative ml-2 inline-block w-[1.2rem] select-none pr-6 text-center opacity-30", {
+                    "-left-1 w-[calc(1.2em_-_4px)] opacity-50": shouldHighlightLine(i),
+                  })}
+                >
+                  {i + 1}
+                </span>
                 {line.map((token, key) => (
                   <span key={key} {...getTokenProps({ token, key })} />
                 ))}

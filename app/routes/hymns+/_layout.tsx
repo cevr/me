@@ -1,7 +1,7 @@
-import * as React from "react";
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, Outlet, useFetcher, useLoaderData, useLocation, useSearchParams } from "@remix-run/react";
 import clsx from "clsx";
+import * as React from "react";
 
 import { ExternalLink } from "~/components";
 import { Input } from "~/components/input";
@@ -10,13 +10,13 @@ import { getHymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 import type { Hymn } from "~/types/hymn";
 
-export let meta: V2_MetaFunction = () => [
+export let meta: MetaFunction = () => [
   {
     title: "Hymns",
   },
 ];
 
-export let loader = ({ request }: LoaderArgs) => {
+export let loader = ({ request }: LoaderFunctionArgs) => {
   return getHymnSearchParams(request);
 };
 
@@ -88,7 +88,7 @@ export default function Hymns() {
               align="start"
               className="p-0"
               style={{
-                width: "min(calc(100vw - 32px), calc(1200px - 32px))"
+                width: "min(calc(100vw - 32px), calc(1200px - 32px))",
               }}
               onOpenAutoFocus={(event) => {
                 event.preventDefault();

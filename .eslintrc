@@ -6,6 +6,7 @@
     "prettier"
   ],
   "rules": {
-    "@typescript-eslint/no-redeclare": "off"
+    "@typescript-eslint/no-redeclare": "off",
+    "@typescript-eslint/consistent-type-imports": "warn"
   }
 }

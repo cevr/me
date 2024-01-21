@@ -1,3 +1,5 @@
+import "./styles/root.css";
+
 import type { LinksFunction } from "@remix-run/node";
 import {
   isRouteErrorResponse,
@@ -10,10 +12,6 @@ import {
   useMatches,
   useRouteError,
 } from "@remix-run/react";
-
-import tailwindStylesheetUrl from "~/styles/tailwind.css";
-
-import rootStyles from "./styles/root.css";
 
 export let links: LinksFunction = () => {
   return [
@@ -38,18 +36,13 @@ export let links: LinksFunction = () => {
       rel: "manifest",
       href: "/manifest.json",
     },
-    {
-      rel: "stylesheet",
-      href: tailwindStylesheetUrl,
-    },
-    { rel: "stylesheet", href: rootStyles },
   ];
 };
 
 export default function App() {
   const matches = useMatches();
 
-  const noscript = matches.some((match) => match.handle?.noscript);
+  const noscript = matches.some((match) => (match.handle as Record<string, any> | undefined)?.noscript);
 
   return (
     <Document noscript={noscript}>
@@ -154,7 +147,18 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
           scrollbarGutter: "stable both-edges",
         }}
       >
-        <div className="m-auto h-full min-h-0 max-w-[100vw] p-4 md:max-w-[1200px]">{children}</div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateAreas: `"nav"
+    "content"
+    "footer"`,
+            gridTemplateRows: "auto 1fr auto",
+          }}
+          className="m-auto h-full min-h-0 max-w-[100vw] p-4 md:max-w-[1200px]"
+        >
+          {children}
+        </div>
         {!noscript ? <Scripts /> : null}
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>

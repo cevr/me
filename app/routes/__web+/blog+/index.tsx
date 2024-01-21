@@ -1,4 +1,4 @@
-import type { LoaderFunction, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
@@ -6,7 +6,7 @@ import { VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
 import type { Post } from "~/lib/posts.server";
 
-export let meta: V2_MetaFunction = () => [
+export let meta: MetaFunction = () => [
   {
     title: "Blog | Cristian",
   },

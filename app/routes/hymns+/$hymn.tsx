@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import debounce from "lodash.debounce";
@@ -10,7 +10,7 @@ import { getHymn, getHymnSearchParams, transposeHymn } from "~/lib/hymns.server"
 import type { HymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 
-export let loader = async ({ params, request }: LoaderArgs) => {
+export let loader = async ({ params, request }: LoaderFunctionArgs) => {
   const number = params.hymn;
   if (!number) {
     throw new Error("hymnNumber is required");

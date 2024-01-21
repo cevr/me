@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { defer } from "@remix-run/node";
 import { Await, Form, Link, useLoaderData, useNavigation, useSearchParams } from "@remix-run/react";
 
@@ -7,13 +7,13 @@ import { Button } from "~/components/button";
 import { Input } from "~/components/input";
 import { explore, searchAndChat } from "~/lib/bible-tools.server";
 
-export let meta: V2_MetaFunction = () => [
+export let meta: MetaFunction = () => [
   {
     title: "Bible study tools",
   },
 ];
 
-export let loader = async ({ request }: LoaderArgs) => {
+export let loader = async ({ request }: LoaderFunctionArgs) => {
   const query = new URL(request.url).searchParams.get("query") ?? "";
   if (!query) return null;
 

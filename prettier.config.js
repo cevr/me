@@ -1,14 +1,11 @@
 module.exports = {
-  plugins: [require("prettier-plugin-tailwindcss"), require("./node_modules/@ianvs/prettier-plugin-sort-imports")],
   printWidth: 120,
   singleQuote: false,
   trailingComma: "all",
-  importOrder: ["^~/(.*)$", "^[./]"],
-  importOrderSeparation: true,
-  importOrderSortSpecifiers: true,
-  importOrderCombineTypeAndValueImports: false,
-  importOrderGroupNamespaceSpecifiers: true,
-  importOrderCaseInsensitive: true,
-  importOrderMergeDuplicateImports: true,
+  // Since prettier 3.0, manually specifying plugins is required
+  plugins: ["prettier-plugin-tailwindcss", "@ianvs/prettier-plugin-sort-imports"],
+  // This plugin's options
+  importOrder: ["<BUILTIN_MODULES>", "", "<THIRD_PARTY_MODULES>", "", "^~/(.*)$", "", "^[./]"],
   importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
+  importOrderTypeScriptVersion: "5.0.0",
 };

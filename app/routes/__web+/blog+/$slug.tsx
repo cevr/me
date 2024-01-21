@@ -1,31 +1,24 @@
-import * as React from "react";
-import type { LoaderFunction, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, type LoaderFunction, type MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getMDXComponent } from "mdx-bundler/client";
+import * as React from "react";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
 import type { Post } from "~/lib/posts.server";
 
-import blogPostStyles from "../../../styles/blog-post.css";
-
 dayjs.extend(relativeTime);
 
-export let meta: V2_MetaFunction = (props) => [{ title: `${props.data?.post.title} | Cristian` }];
+export let meta: MetaFunction<typeof loader> = (props) => [{ title: `${props.data?.post.title} | Cristian` }];
 
 export function links() {
   return [
     {
       rel: "stylesheet",
       href: "/code-theme",
-    },
-    {
-      rel: "stylesheet",
-      href: blogPostStyles,
     },
   ];
 }
@@ -72,19 +65,22 @@ export default function Screen() {
   const MDXComponent = React.useMemo(() => getMDXComponent(post.content), [post.content]);
 
   return (
-    <div className="post">
-      <div className="date">
+    <div className="text-base font-sans font-light text-neutral-50 leading-[1.9rem] mx-0 my-4">
+      <div className="text-neutral-400">
         {dayjs(post.published_at).format("MMMM DD, YYYY")}
 
-        {post.edited_at ? <span className="edited">{dayjs().to(post.edited_at)}</span> : null}
+        {post.edited_at ? <span className="ml-2 text-[0.5rem] italic">{dayjs().to(post.edited_at)}</span> : null}
 
         <span> | {post.read_estimate} read</span>
       </div>
-      <h1 className="title"> {post.title} </h1>
+      <h1 className="font-bold text-[2.5rem]"> {post.title} </h1>
       <VerticalSpacer size="sm" />
       <div>
         {post.tag_list.map((tag) => (
-          <span key={tag} className="blog-tag">
+          <span
+            key={tag}
+            className="duration-200 mr-2 rounded-lg bg-salmon-600 px-2 py-1 text-neutral-900 transition-all"
+          >
             #{tag}
           </span>
         ))}
@@ -92,7 +88,7 @@ export default function Screen() {
       <VerticalSpacer size="lg" />
       <MDXComponent components={components as any} />
       <VerticalSpacer size="lg" />
-      <nav className="post-nav">
+      <nav className="flex w-full justify-between">
         {olderPost ? <PostNavItem post={olderPost as any} /> : <div />}
         {newerPost ? <PostNavItem post={newerPost as any} newer /> : <div />}
       </nav>
@@ -108,12 +104,12 @@ interface PostNavItemProps {
 function PostNavItem({ post, newer }: PostNavItemProps) {
   return (
     <div
-      className={clsx("post-nav-item", {
-        newer: newer,
+      className={clsx("duration-200 text-neutral-400 transition-colors hover:text-salmon-500", {
+        "text-right": newer,
       })}
     >
-      <div className="post-nav-item-date">{newer ? "Newer →" : "← Older"}</div>
-      <Link to={`../${post.slug}`} className="post-nav-item-title">
+      <div className="text-xs">{newer ? "Newer →" : "← Older"}</div>
+      <Link to={`../${post.slug}`} className="font-bolder text-base md:text-xl">
         {post.title}
       </Link>
     </div>
@@ -121,14 +117,30 @@ function PostNavItem({ post, newer }: PostNavItemProps) {
 }
 
 let components = {
-  pre: (props: any) => <div className="code" {...props} />,
+  pre: (props: any) => <div className="mx-0 my-2" {...props} />,
   code: (props: any) => <CodeBlock {...props} />,
   a: (props: any) => <ButtonLink {...props} />,
-  p: (props: any) => <p className="paragraph" {...props} />,
+  p: (props: any) => (
+    <p className="mx-0 my-4 text-base font-light leading-[1.9rem] text-neutral-50" {...props} />
+  ),
   strong: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
   b: (props: any) => <strong style={{ fontWeight: "bold" }} {...props} />,
-  h2: (props: any) => <h2 className="subtitle" {...props} />,
+  h2: (props: any) => <h2 className="text-2xl leading-8" {...props} />,
   // eslint-disable-next-line jsx-a11y/alt-text
-  img: (props: any) => <img className="image" {...props} />,
-  blockquote: (props: any) => <blockquote className="blockquote" {...props} />,
+  img: (props: any) => <img className="mx-auto my-0" {...props} />,
+  blockquote: (props: any) => (
+    <blockquote
+      className="rounded rounded-bl-none rounded-tl-none border-l-4 border-solid border-l-salmon-500 bg-[#00000030] px-4 py-2 [&>p]:m-0"
+      {...props}
+    />
+  ),
+  ol: (props: any) => (
+    <ol className="mx-0 my-4 text-base font-light leading-[1.9rem] text-neutral-50" {...props} />
+  ),
+  li: (props: any) => (
+    <li
+      className={`ml-4 before:ml-[-1em] before:inline-block before:w-[1em] before:font-bold before:text-salmon-500 before:content-["•"]`}
+      {...props}
+    />
+  ),
 };
