@@ -2,8 +2,8 @@ import type { AsyncTask } from "ftld";
 import { Result, Task } from "ftld";
 import { request } from "undici";
 
-import { DomainError } from "./domain-error";
-import { env } from "./env.server";
+import { DomainError } from "../../lib/domain-error";
+import { env } from "../../lib/env.server";
 import type { OpenAIChatFailedError } from "./openai.server";
 import { OpenAI } from "./openai.server";
 

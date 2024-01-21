@@ -1,8 +1,8 @@
 import { Task } from "ftld";
 import { request } from "undici";
 
-import { DomainError } from "./domain-error";
-import { env } from "./env.server";
+import { DomainError } from "../../lib/domain-error";
+import { env } from "../../lib/env.server";
 
 export type Embedding = number[];
 
@@ -30,7 +30,7 @@ function chat(messages: Message[]) {
         }),
       })
         .then((res) => res.body.json())
-        .then((res) => res.choices[0].message.content) as Promise<string>,
+        .then((res) => (res as any).choices[0].message.content) as Promise<string>,
     (e) => {
       console.error(e);
       return OpenAIChatFailedError({ message: "Could not connect to OpenAI API", meta: e });

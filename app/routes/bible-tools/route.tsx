@@ -1,11 +1,11 @@
-import * as React from "react";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { defer } from "@remix-run/node";
+import { defer, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
 import { Await, Form, Link, useLoaderData, useNavigation, useSearchParams } from "@remix-run/react";
+import * as React from "react";
 
 import { Button } from "~/components/button";
 import { Input } from "~/components/input";
-import { explore, searchAndChat } from "~/lib/bible-tools.server";
+
+import { explore, searchAndChat } from "./utils.server";
 
 export let meta: MetaFunction = () => [
   {
