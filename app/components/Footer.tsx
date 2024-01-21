@@ -1,17 +1,11 @@
-import dayjs from "dayjs";
-
 import { ExternalLink } from "./ExternalLink";
 import { Email, Github, LinkedIn, Twitter } from "./icons";
 
 let email = "hello@cvr.im";
 
-type FooterProps = {
-  date: string;
-};
-
 const footerLinkClassName = "text-neutral-400 hover:text-salmon-500 duration-200 font-light h-6 w-6";
 
-export function Footer({ date }: FooterProps) {
+export function Footer() {
   return (
     <footer
       style={{
@@ -52,8 +46,6 @@ export function Footer({ date }: FooterProps) {
           <Email />
         </ExternalLink>
       </div>
-
-      <div className="text-xs text-gray-400">Rendered on {dayjs(date).format("dddd, MMMM D YYYY [at] hh:mm A")}</div>
     </footer>
   );
 }
