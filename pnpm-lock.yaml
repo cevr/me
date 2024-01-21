@@ -10,6 +10,9 @@ overrides:
   fsevents: ^2.3.3
 
 dependencies:
+  '@epic-web/cachified':
+    specifier: ^4.0.0
+    version: 4.0.0
   '@radix-ui/react-alert-dialog':
     specifier: ^1.0.5
     version: 1.0.5(@types/react-dom@18.2.18)(@types/react@18.2.48)(react-dom@18.3.0-canary-feed8f3f9-20240118)(react@18.3.0-canary-feed8f3f9-20240118)
@@ -118,6 +121,9 @@ dependencies:
   lodash.debounce:
     specifier: ^4.0.8
     version: 4.0.8
+  lru-cache:
+    specifier: ^10.1.0
+    version: 10.1.0
   lucide-react:
     specifier: ^0.312.0
     version: 0.312.0(react@18.3.0-canary-feed8f3f9-20240118)
@@ -791,6 +797,10 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /@epic-web/cachified@4.0.0:
+    resolution: {integrity: sha512-5XPdddRV1NrRev5HjfvM72tBh2jnfzBXdbcirtt0G0hveDHT4pOPrYCfyHNt+QcKSX0yifXimWMirOVXtg8ewQ==}
+    dev: false
 
   /@esbuild-plugins/node-resolve@0.2.2(esbuild@0.19.11):
     resolution: {integrity: sha512-+t5FdX3ATQlb53UFDBRb4nqjYBz492bIrnVWvpQHpzZlu9BQL5HasMZhqc409ygUwOWCXZhrWr6NyZ6T6Y+cxw==}
@@ -7108,7 +7118,6 @@ packages:
   /lru-cache@10.1.0:
     resolution: {integrity: sha512-/1clY/ui8CzjKFyjdvwPWJUYKiFVXG2I2cY0ssG7h4+hwk+XOIX7ZSG9Q7TW8TW3Kp3BUSqgFWBLgL4PJ+Blag==}
     engines: {node: 14 || >=16.14}
-    dev: true
 
   /lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}

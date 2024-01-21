@@ -13,6 +13,7 @@
     "start": "node --enable-source-maps server/index.js"
   },
   "dependencies": {
+    "@epic-web/cachified": "^4.0.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -49,6 +50,7 @@
     "gray-matter": "^4.0.3",
     "isbot": "^4.4.0",
     "lodash.debounce": "^4.0.8",
+    "lru-cache": "^10.1.0",
     "lucide-react": "^0.312.0",
     "match-sorter": "^6.3.3",
     "mdx-bundler": "^10.0.1",

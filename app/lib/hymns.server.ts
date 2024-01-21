@@ -1,13 +1,14 @@
-import * as z from "zod";
+import { cachified, type CacheEntry } from "@epic-web/cachified";
 import { load } from "cheerio";
+import { LRUCache } from "lru-cache";
 import { Chord, Interval, Note, Scale } from "tonal";
+import * as z from "zod";
 
 import type { Hymn } from "~/types/hymn";
 
 import { GithubCMS } from "./github.server";
 import { keys } from "./hymns";
-import { TaskQueue } from "./utils";
-import { allLimited } from "./utils/promises";
+import type { TaskQueue } from "./utils";
 
 declare global {
   var hymnCache: {
@@ -21,87 +22,65 @@ declare global {
 
 const hymnsFilename = "me/hymns.json";
 
-let hymnCache: typeof global.hymnCache = {};
-let fetchQueue = new TaskQueue<Hymn[]>();
+// function fetchHymns() {
+//   async function doFetch() {
+//     const baseUrl = "https://bradwarden.com/music/hymnchords/";
+//     const response = await fetch(baseUrl);
 
-if (process.env.NODE_ENV !== "production") {
-  if (!global.hymnCache) {
-    global.hymnCache = {};
-  }
-  hymnCache = global.hymnCache;
-  if (!global.fetchQueue) {
-    global.fetchQueue = new TaskQueue<Hymn[]>();
-  }
-  fetchQueue = global.fetchQueue;
-}
+//     if (!response.ok) {
+//       throw new Error("Could not fetch hymns");
+//     }
+//     const text = await response.text();
 
-function fetchHymns() {
-  async function doFetch() {
-    const baseUrl = "https://bradwarden.com/music/hymnchords/";
-    const response = await fetch(baseUrl);
+//     const $ = load(text);
 
-    if (!response.ok) {
-      throw new Error("Could not fetch hymns");
-    }
-    const text = await response.text();
+//     // get final <p> tag and all the <a> tags within it
+//     const urls = $("p")
+//       .last()
+//       .map(function () {
+//         return $(this)
+//           .find("a")
+//           .map(function () {
+//             return $(this).attr("href");
+//           })
+//           .get();
+//       })
+//       .get()
+//       .map((url) => new URL(url, baseUrl).toString());
 
-    const $ = load(text);
+//     const hymns = await allLimited(
+//       urls.map((url) => async () => {
+//         console.log("fetching", url);
+//         const res = await fetch(url);
+//         if (!res.ok) {
+//           console.log("failed to fetch", url);
+//           return null;
+//         }
+//         const content = await res.text();
+//         return parseWebPage(content);
+//       }),
+//       50,
+//     ).then((responses) => responses.filter((response): response is Hymn => response !== null));
 
-    // get final <p> tag and all the <a> tags within it
-    const urls = $("p")
-      .last()
-      .map(function () {
-        return $(this)
-          .find("a")
-          .map(function () {
-            return $(this).attr("href");
-          })
-          .get();
-      })
-      .get()
-      .map((url) => new URL(url, baseUrl).toString());
+//     console.log("fetched", hymns.length, "hymns");
 
-    const hymns = await allLimited(
-      urls.map((url) => async () => {
-        console.log("fetching", url);
-        const res = await fetch(url);
-        if (!res.ok) {
-          console.log("failed to fetch", url);
-          return null;
-        }
-        const content = await res.text();
-        return parseWebPage(content);
-      }),
-      50,
-    ).then((responses) => responses.filter((response): response is Hymn => response !== null));
+//     pushHymnsToPublic(hymns);
 
-    console.log("fetched", hymns.length, "hymns");
-
-    pushHymnsToPublic(hymns);
-
-    hymnCache.data = {
-      hymns,
-      timestamp: Date.now(),
-    };
-    return hymns;
-  }
-  return fetchQueue.add("hymns", () => doFetch());
-}
-
+//     hymnCache.data = {
+//       hymns,
+//       timestamp: Date.now(),
+//     };
+//     return hymns;
+//   }
+//   return fetchQueue.add("hymns", () => doFetch());
+// }
+let cache = new LRUCache<string, CacheEntry<Hymn[]>>({ max: 1 });
 export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
-  let hymns: Hymn[];
-  if (hymnCache.data) {
-    maybeInvalidate();
-    hymns = hymnCache.data.hymns;
-  } else {
-    const hymns = await GithubCMS.get<Hymn[]>(hymnsFilename).unwrap();
-
-    hymnCache.data = {
-      hymns,
-      timestamp: Date.now(),
-    };
-    return hymns;
-  }
+  let hymns: Hymn[] = await cachified({
+    cache: cache as any,
+    key: "hymns",
+    getFreshValue: async () => GithubCMS.get<Hymn[]>(hymnsFilename).unwrap(),
+  });
 
   if (sortBy === "title") {
     return hymns.slice().sort((a, b) => a.title.localeCompare(b.title));
@@ -109,7 +88,7 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
   return hymns;
 }
 
-function pushHymnsToPublic(hymns: Hymn[]) {
+export function pushHymnsToPublic(hymns: Hymn[]) {
   GithubCMS.push(hymnsFilename, hymns, "Update hymns").run();
 }
 
@@ -146,28 +125,24 @@ export async function getHymn(
   sortBy: "title" | "number",
   number: string,
 ): Promise<[prev: Hymn | undefined, curr: Hymn, next: Hymn | undefined]> {
-  const hymns = await getHymns(sortBy);
-  const index = hymns.findIndex((h) => h.number === number);
-  if (index === -1) {
-    throw new Error("Could not find hymn");
-  }
-  const prev = hymns[index - 1];
-  const curr = hymns[index];
-  const next = hymns[index + 1];
-  return [prev, curr, next];
+  return (await cachified({
+    cache: cache as any,
+    key: `hymn-${number}`,
+    getFreshValue: async () => {
+      const hymns = await getHymns(sortBy);
+      const index = hymns.findIndex((h) => h.number === number);
+      if (index === -1) {
+        throw new Error("Could not find hymn");
+      }
+      const prev = hymns[index - 1];
+      const curr = hymns[index];
+      const next = hymns[index + 1];
+      return [prev, curr, next];
+    },
+  })) as [prev: Hymn | undefined, curr: Hymn, next: Hymn | undefined];
 }
 
-async function maybeInvalidate() {
-  if (hymnCache.data && Date.now() - hymnCache.data.timestamp > 1000 * 60 * 60 * 24) {
-    try {
-      await fetchHymns();
-    } catch (e) {
-      console.error("Could not invalidate hymns");
-    }
-  }
-}
-
-function parseWebPage(content: string) {
+export function parseWebPage(content: string) {
   const $ = load(content);
   // if theres an anchor tag within a pre tag, then the hymn is unavailable
   const unavailable = $("pre a").text();
