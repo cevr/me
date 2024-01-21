@@ -83,7 +83,7 @@ export function CodeBlock(props: CodeBlockProps) {
         <pre
           className={clsx(
             className,
-            "duration-[0.2s] rounded bg-[color:var(--code-bg)] px-2 py-1 text-[0.9rem] text-[color:var(--salmon-500)] transition-all font-mono",
+            "duration-200 rounded bg-[color:var(--code-bg)] px-2 py-1 text-[0.9rem] text-salmon-500 transition-all font-mono",
           )}
           style={{
             ...style,
@@ -103,7 +103,7 @@ export function CodeBlock(props: CodeBlockProps) {
                 key={i}
                 {...lineProps}
                 className={clsx(lineProps.className, {
-                  "border-l-4 border-solid border-l-[color:var(--salmon-500)] bg-[color:var(--code-highlight-bg)]":
+                  "border-l-4 border-solid border-l-salmon-500 bg-[color:var(--code-highlight-bg)]":
                     shouldHighlightLine(i),
                 })}
               >

@@ -10,7 +10,7 @@
     "build": "remix vite:build",
     "format": "prettier --write app",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint \"app/**/*.{js,jsx,ts,tsx}\"",
-    "start": "node build/server/index.js"
+    "start": "node --enable-source-maps server.js"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",
