@@ -114,16 +114,13 @@ export let all = (): AsyncTask<FetchArticleError, Post[]> => {
   );
 };
 
-export let get = (
-  slug: string,
-): AsyncTask<
-  FetchArticleError,
-  {
-    post: Post | undefined;
-    olderPost: Post | undefined;
-    newerPost: Post | undefined;
-  }
-> => {
+interface PostBySlug {
+  posts: Post | undefined;
+  olderPost: Post | undefined;
+  newerPost: Post | undefined;
+}
+
+export let get = (slug: string): AsyncTask<FetchArticleError, PostBySlug> => {
   return Task.from(() =>
     cachified({
       cache: cache as any,
