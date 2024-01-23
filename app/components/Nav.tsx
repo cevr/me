@@ -11,7 +11,7 @@ export function Nav() {
         to="/"
         className={({ isActive }) =>
           cn(
-            "border-b-2 border-transparent font-[Signerica] text-[2.5rem] text-neutral-50 transition-colors hover:text-salmon-500",
+            "border-b-2 border-transparent font-[Signerica] text-[2.5rem] text-neutral-50 transition-colors hover:text-salmon-500 w-[110px]",
             { "border-salmon-500": isActive },
           )
         }

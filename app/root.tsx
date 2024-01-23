@@ -1,3 +1,4 @@
+import "./styles/font.css";
 import "./styles/root.css";
 
 import type { LinksFunction } from "@remix-run/node";

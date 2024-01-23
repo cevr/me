@@ -1,9 +1,8 @@
-import { json, type LoaderFunction, type MetaFunction } from "@remix-run/node";
+import { json, type MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
 import { VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
-import type { Post } from "~/lib/posts.server";
 
 export let meta: MetaFunction = () => [
   {
@@ -12,7 +11,7 @@ export let meta: MetaFunction = () => [
 ];
 
 const oneWeek = 1000 * 60 * 60 * 24 * 7;
-export let loader: LoaderFunction = async () => {
+export let loader = async () => {
   let posts = await postsApi.all().unwrap();
   return json(
     {
@@ -27,7 +26,7 @@ export let loader: LoaderFunction = async () => {
 };
 
 export default function Screen() {
-  const data = useLoaderData<{ posts: Post[] }>();
+  const data = useLoaderData<typeof loader>();
   return (
     <>
       <h1 className="text-5xl">Blog</h1>
