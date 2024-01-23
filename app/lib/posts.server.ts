@@ -115,7 +115,7 @@ export let all = (): AsyncTask<FetchArticleError, Post[]> => {
 };
 
 interface PostBySlug {
-  posts: Post | undefined;
+  post: Post | undefined;
   olderPost: Post | undefined;
   newerPost: Post | undefined;
 }

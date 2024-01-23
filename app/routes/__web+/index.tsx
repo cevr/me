@@ -1,4 +1,4 @@
-import { json, type LinksFunction, type MetaFunction } from "@remix-run/node";
+import { json, type MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { motion } from "framer-motion";
 
@@ -12,20 +12,16 @@ export let meta: MetaFunction = () => [
   },
 ];
 
-export let links: LinksFunction = () => {
-  return [];
-};
-
+let oneHour = 1000 * 60 * 60;
 export let loader = async () => {
   const projects = await projectsApi.all().unwrap();
-  let oneDay = 1000 * 60 * 60 * 24;
   return json(
     {
       projects,
     },
     {
       headers: {
-        "Cache-Control": `s-maxage=${oneDay}, stale-while-revalidate`,
+        "Cache-Control": `public, max-age=${oneHour}`,
       },
     },
   );

@@ -23,6 +23,8 @@ export function links() {
   ];
 }
 
+const oneWeek = 1000 * 60 * 60 * 24 * 7;
+
 export let loader = async ({ params }: LoaderFunctionArgs) => {
   invariant(params.slug, "Missing slug");
   const { newerPost, olderPost, post } = await postsApi.get(params.slug).unwrap();
@@ -30,8 +32,6 @@ export let loader = async ({ params }: LoaderFunctionArgs) => {
   if (!post) {
     throw json({ message: "This post doesn't exist." }, { status: 404 });
   }
-
-  const oneWeek = 1000 * 60 * 60 * 24 * 7;
 
   return json(
     {
@@ -44,7 +44,7 @@ export let loader = async ({ params }: LoaderFunctionArgs) => {
     },
     {
       headers: {
-        "Cache-Control": `s-maxage=${oneWeek}, stale-while-revalidate`,
+        "Cache-Control": `public, max-age=${oneWeek}`,
       },
     },
   );

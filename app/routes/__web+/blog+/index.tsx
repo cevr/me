@@ -11,16 +11,16 @@ export let meta: MetaFunction = () => [
   },
 ];
 
+const oneWeek = 1000 * 60 * 60 * 24 * 7;
 export let loader: LoaderFunction = async () => {
   let posts = await postsApi.all().unwrap();
-  const oneHour = 1000 * 60 * 60;
   return json(
     {
       posts,
     },
     {
       headers: {
-        "Cache-Control": `s-maxage=${oneHour}, stale-while-revalidate`,
+        "Cache-Control": `public, max-age=${oneWeek}`,
       },
     },
   );
