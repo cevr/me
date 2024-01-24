@@ -94,7 +94,7 @@ export async function getFilteredHymns(request: Request): Promise<Hymn[]> {
   const query = url.searchParams.get("q");
   return cachified({
     cache: cache as any,
-    key: `filtered-hymns-${query}`,
+    key: query ? `filtered-hymns-${query}` : "filtered-hymns",
     getFreshValue: async () => {
       let hymns = await getHymns("number");
       if (query) {
