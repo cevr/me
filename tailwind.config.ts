@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+
 // import type { PluginCreator } from "tailwindcss/types/config";
 
 export default {
@@ -97,6 +98,8 @@ export default {
   },
   plugins: [
     require("tailwindcss-animate"),
+    require("tailwindcss-react-aria-components"),
+
     // function ({ addBase, theme }) {
     //   function extractColorVars(colorObj: Record<string, string>, colorGroup = ""): Record<string, string> {
     //     return Object.keys(colorObj).reduce((vars, colorKey) => {

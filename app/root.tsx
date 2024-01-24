@@ -10,9 +10,11 @@ import {
   Meta,
   Outlet,
   Scripts,
-  useMatches,
+  ScrollRestoration,
+  useNavigate,
   useRouteError,
 } from "@remix-run/react";
+import { RouterProvider } from "react-aria-components";
 
 export let links: LinksFunction = () => {
   return [
@@ -41,13 +43,12 @@ export let links: LinksFunction = () => {
 };
 
 export default function App() {
-  const matches = useMatches();
-
-  const noscript = matches.some((match) => (match.handle as Record<string, any> | undefined)?.noscript);
-
+  const navigate = useNavigate();
   return (
-    <Document noscript={noscript}>
-      <Outlet />
+    <Document>
+      <RouterProvider navigate={navigate}>
+        <Outlet />
+      </RouterProvider>
     </Document>
   );
 }
@@ -132,9 +133,9 @@ export function ErrorBoundary() {
   );
 }
 
-function Document({ children, title, noscript }: { children: React.ReactNode; title?: string; noscript?: boolean }) {
+function Document({ children, title }: { children: React.ReactNode; title?: string }) {
   return (
-    <html lang="en" className="dark h-full ml-[calc(100vw_-_100%)]">
+    <html lang="en" className="dark h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -160,8 +161,9 @@ function Document({ children, title, noscript }: { children: React.ReactNode; ti
         >
           {children}
         </div>
-        {!noscript ? <Scripts /> : null}
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        <LiveReload />
+        <Scripts />
+        <ScrollRestoration />
       </body>
     </html>
   );

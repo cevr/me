@@ -1,13 +1,13 @@
-import * as React from "react";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
+import { json, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import debounce from "lodash.debounce";
+import { cacheHeader } from "pretty-cache-header";
+import * as React from "react";
 
 import { Select } from "~/components/select";
 import { keys } from "~/lib/hymns";
-import { getHymn, getHymnSearchParams, transposeHymn } from "~/lib/hymns.server";
-import type { HymnSearchParams } from "~/lib/hymns.server";
+import { getHymn, getHymnSearchParams, transposeHymn, type HymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 
 export let loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -20,13 +20,24 @@ export let loader = async ({ params, request }: LoaderFunctionArgs) => {
   const [prevHymn, hymn, nextHymn] = await getHymn(sort, number);
   const [transposedHymn, semitone] = transposeHymn(hymn, key);
 
-  return {
-    prevHymn,
-    hymn: transposedHymn,
-    nextHymn,
-    key,
-    semitone,
-  };
+  return json(
+    {
+      prevHymn,
+      hymn: transposedHymn,
+      nextHymn,
+      key,
+      semitone,
+    },
+    {
+      headers: {
+        "cache-control": cacheHeader({
+          public: true,
+          maxAge: "1year",
+          staleWhileRevalidate: "1year",
+        }),
+      },
+    },
+  );
 };
 
 export default function HymnPage() {

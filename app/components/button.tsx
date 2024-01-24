@@ -1,51 +1,57 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import type { VariantProps } from "class-variance-authority";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "cva";
+import * as ReactAria from "react-aria-components";
 
 import { cn } from "~/lib/utils";
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-input hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "underline-offset-4 hover:underline text-primary",
-      },
-      size: {
-        default: "h-10 py-2 px-4",
-        sm: "h-9 px-3 rounded-md",
-        lg: "h-11 px-8 rounded-md",
-      },
+export const buttonVariants = cva({
+  base: [
+    "inline-flex items-center justify-center rounded-md font-semibold outline-none transition-colors",
+    // Focus
+    "focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900",
+    // Disabled
+    "disabled:pointer-events-none disabled:opacity-40",
+  ],
+  variants: {
+    variant: {
+      solid:
+        "bg-slate-900 text-white open:bg-slate-100 hover:bg-slate-700 dark:bg-slate-50 dark:text-slate-900 dark:open:bg-slate-800 dark:hover:bg-slate-200",
+      destructive: "bg-red-600 text-white hover:bg-red-700 dark:hover:bg-red-700",
+      outline:
+        "border border-slate-200 bg-transparent hover:bg-slate-100 focus:bg-slate-100 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-700 dark:focus:bg-slate-700",
+      subtle:
+        "bg-slate-100 text-slate-900 hover:bg-slate-200 focus:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-700 dark:focus:bg-slate-700",
+      ghost:
+        "bg-transparent open:bg-transparent hover:bg-slate-100 focus:bg-slate-100 dark:text-slate-100 dark:open:bg-transparent dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:focus:text-slate-100",
+      link: "bg-transparent text-slate-900 underline-offset-4 hover:bg-transparent hover:underline focus:bg-transparent focus:underline dark:bg-transparent dark:text-slate-100 dark:hover:bg-transparent dark:focus:bg-transparent",
     },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
+    size: {
+      lg: "h-12 px-6 text-lg",
+      md: "h-10 px-4 text-base",
+      sm: "h-8 px-3 text-sm",
+      xs: "h-6 px-2 text-xs",
     },
   },
-);
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
-
-const _Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+  defaultVariants: {
+    variant: "solid",
+    size: "md",
   },
-);
-_Button.displayName = "Button";
-
-const Button = Object.assign(_Button, {
-  variants: buttonVariants,
 });
 
-export { Button };
+export interface ButtonProps extends ReactAria.ButtonProps, VariantProps<typeof buttonVariants> {
+  className?: string;
+}
+
+export const Button = ({ className, variant, size, ...props }: ButtonProps) => {
+  return (
+    <ReactAria.Button
+      className={cn(
+        buttonVariants({
+          variant,
+          size,
+          className,
+        }),
+      )}
+      {...props}
+    />
+  );
+};

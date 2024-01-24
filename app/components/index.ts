@@ -4,3 +4,4 @@ export * from "./Footer";
 export * from "./Nav";
 export * from "./VerticalSpacer";
 export * from "./ButtonLink";
+export * from "./combobox";

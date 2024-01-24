@@ -1,6 +1,7 @@
 import { json, type MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { motion } from "framer-motion";
+import { cacheHeader } from "pretty-cache-header";
 
 import { Star } from "~/components/icons";
 import { projectsApi } from "~/lib";
@@ -12,7 +13,6 @@ export let meta: MetaFunction = () => [
   },
 ];
 
-let oneHour = 1000 * 60 * 60;
 export let loader = async () => {
   const projects = await projectsApi.all().unwrap();
   return json(
@@ -21,7 +21,11 @@ export let loader = async () => {
     },
     {
       headers: {
-        "Cache-Control": `public, max-age=${oneHour}`,
+        "cache-control": cacheHeader({
+          public: true,
+          maxAge: "1week",
+          staleWhileRevalidate: "1year",
+        }),
       },
     },
   );

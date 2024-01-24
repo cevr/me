@@ -1,6 +1,7 @@
 import { cachified, type CacheEntry } from "@epic-web/cachified";
 import { load } from "cheerio";
 import { LRUCache } from "lru-cache";
+import { matchSorter } from "match-sorter";
 import { Chord, Interval, Note, Scale } from "tonal";
 import * as z from "zod";
 
@@ -86,6 +87,18 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
     return hymns.slice().sort((a, b) => a.title.localeCompare(b.title));
   }
   return hymns;
+}
+
+export async function getFilteredHymns(request: Request): Promise<Hymn[]> {
+  const url = new URL(request.url);
+  const query = url.searchParams.get("q");
+  let hymns = await getHymns("number");
+  if (query) {
+    hymns = matchSorter(Object.values(hymns), query, {
+      keys: ["title", "number"],
+    });
+  }
+  return hymns.slice(0, 9);
 }
 
 export function pushHymnsToPublic(hymns: Hymn[]) {

@@ -1,5 +1,6 @@
 import { json, type MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { cacheHeader } from "pretty-cache-header";
 
 import { VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
@@ -10,7 +11,6 @@ export let meta: MetaFunction = () => [
   },
 ];
 
-const oneWeek = 1000 * 60 * 60 * 24 * 7;
 export let loader = async () => {
   let posts = await postsApi.all().unwrap();
   return json(
@@ -19,7 +19,11 @@ export let loader = async () => {
     },
     {
       headers: {
-        "Cache-Control": `public, max-age=${oneWeek}`,
+        "Cache-Control": cacheHeader({
+          public: true,
+          maxAge: "1week",
+          staleWhileRevalidate: "1year",
+        }),
       },
     },
   );

@@ -1,20 +1,16 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
-import { matchSorter } from "match-sorter";
+import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { cacheHeader } from "pretty-cache-header";
 
-import { getHymns } from "~/lib/hymns.server";
+import { getFilteredHymns } from "~/lib/hymns.server";
 
 export let loader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
-  const query = url.searchParams.get("q") || "";
-
-  if (!query) {
-    return [];
-  }
-
-  const hymns = await getHymns("number");
-  const filteredHymns = matchSorter(Object.values(hymns), query, {
-    keys: ["title", "number"],
+  return json(await getFilteredHymns(request), {
+    headers: {
+      "cache-control": cacheHeader({
+        public: true,
+        maxAge: "1week",
+        staleWhileRevalidate: "1year",
+      }),
+    },
   });
-
-  return filteredHymns.slice(0, 9);
 };

@@ -1,25 +1,45 @@
-import * as React from "react"
+import { cva, type VariantProps } from "cva";
+import * as ReactAria from "react-aria-components";
 
-import { cn } from "~/lib/utils"
+import { cn } from "~/lib/utils";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+const inputVariants = cva({
+  base: [
+    "flex w-full border border-neutral-300 bg-transparent placeholder:text-neutral-400",
+    // Focus
+    "focus:outline-none focus:ring-2 focus:ring-salmon-400 focus:ring-offset-2",
+    // Dark
+    "dark:border-neutral-700 dark:text-neutral-50 dark:focus:ring-salmon-400 dark:focus:ring-offset-salmon-900",
+    // Disabled
+    "disabled:cursor-not-allowed disabled:opacity-40",
+    // Invalid
+    "invalid:border-red-600 dark:invalid:border-red-400",
+  ],
+  variants: {
+    size: {
+      lg: "h-12 rounded-lg px-4 text-lg",
+      md: "h-10 rounded-md px-4 text-base",
+      sm: "h-8 rounded px-3 text-sm",
+      xs: "h-6 rounded px-2 text-xs",
+    },
+  },
+  defaultVariants: {
+    size: "md",
+  },
+});
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
-    return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Input.displayName = "Input"
+export type InputProps = Omit<ReactAria.InputProps, "size"> & VariantProps<typeof inputVariants>;
 
-export { Input }
+export const Input = ({ className, size, ...props }: InputProps) => {
+  return (
+    <ReactAria.Input
+      className={cn(
+        inputVariants({
+          size,
+          className,
+        }),
+      )}
+      {...props}
+    />
+  );
+};

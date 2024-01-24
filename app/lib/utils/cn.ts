@@ -1,6 +1,12 @@
-import clsx from "clsx";
+import { defineConfig } from "cva";
 import { twMerge } from "tailwind-merge";
 
-export function cn(...inputs: Parameters<typeof clsx>) {
-  return twMerge(clsx(...inputs));
-}
+export const {
+  cva,
+  cx: cn,
+  compose,
+} = defineConfig({
+  hooks: {
+    onComplete: (className) => twMerge(className),
+  },
+});

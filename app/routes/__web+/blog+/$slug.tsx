@@ -1,11 +1,12 @@
+import { invariantResponse } from "@epic-web/invariant";
 import { json, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getMDXComponent } from "mdx-bundler/client";
+import { cacheHeader } from "pretty-cache-header";
 import * as React from "react";
-import invariant from "tiny-invariant";
 
 import { ButtonLink, CodeBlock, VerticalSpacer } from "~/components";
 import { postsApi } from "~/lib";
@@ -23,10 +24,10 @@ export function links() {
   ];
 }
 
-const oneWeek = 1000 * 60 * 60 * 24 * 7;
-
 export let loader = async ({ params }: LoaderFunctionArgs) => {
-  invariant(params.slug, "Missing slug");
+  invariantResponse(params.slug, "slug is required", {
+    status: 400,
+  });
   const { newerPost, olderPost, post } = await postsApi.get(params.slug).unwrap();
 
   if (!post) {
@@ -44,7 +45,11 @@ export let loader = async ({ params }: LoaderFunctionArgs) => {
     },
     {
       headers: {
-        "Cache-Control": `public, max-age=${oneWeek}`,
+        "Cache-Control": cacheHeader({
+          public: true,
+          maxAge: "1month",
+          staleWhileRevalidate: "1year",
+        }),
       },
     },
   );
