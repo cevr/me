@@ -92,13 +92,19 @@ export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
 export async function getFilteredHymns(request: Request): Promise<Hymn[]> {
   const url = new URL(request.url);
   const query = url.searchParams.get("q");
-  let hymns = await getHymns("number");
-  if (query) {
-    hymns = matchSorter(Object.values(hymns), query, {
-      keys: ["title", "number"],
-    });
-  }
-  return hymns.slice(0, 9);
+  return cachified({
+    cache: cache as any,
+    key: `filtered-hymns-${query}`,
+    getFreshValue: async () => {
+      let hymns = await getHymns("number");
+      if (query) {
+        hymns = matchSorter(hymns, query, {
+          keys: ["title", "number"],
+        });
+      }
+      return hymns.slice(0, 9);
+    },
+  });
 }
 
 export function pushHymnsToPublic(hymns: Hymn[]) {

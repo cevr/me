@@ -38,6 +38,9 @@ export default function Hymns() {
   const fetcher = useDebounceFetcher<Hymn[]>();
   const lastItems = React.useRef<Hymn[]>(initialHymns);
 
+  // combobox has trouble dealing with async data, so we need to keep track of
+  // the last items we had and use that if we don't have any new ones
+  // TODO: remove this when fixed
   React.useEffect(() => {
     if (fetcher.data) {
       lastItems.current = fetcher.data;
