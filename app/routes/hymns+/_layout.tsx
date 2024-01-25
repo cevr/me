@@ -7,7 +7,7 @@ import { useDebounceFetcher } from "remix-utils/use-debounce-fetcher";
 
 import { ComboBox, ComboBoxContent, ComboBoxInput, ComboBoxItem, ComboBoxPopover, ExternalLink } from "~/components";
 import { Label } from "~/components/label";
-import { getFilteredHymns, getHymnSearchParams } from "~/lib/hymns.server";
+import { getHymns, getHymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 import type { Hymn } from "~/types/hymn";
 
@@ -17,10 +17,13 @@ export let meta: MetaFunction = () => [
   },
 ];
 
-export let loader = async ({ request }: LoaderFunctionArgs) => {
-  let hymns = await getFilteredHymns(request);
+export let loader = async ({ request, params }: LoaderFunctionArgs) => {
+  let hymns = await getHymns();
   return json(
-    { ...getHymnSearchParams(request), initialHymns: hymns },
+    {
+      ...getHymnSearchParams(request),
+      initialHymns: hymns.slice(0, 9),
+    },
     {
       headers: {
         "cache-control": cacheHeader({
@@ -98,7 +101,7 @@ export default function Hymns() {
           menuTrigger="focus"
         >
           <Label>Search</Label>
-          <ComboBoxInput placeholder="Search by number or title" />
+          <ComboBoxInput placeholder="Search by number or title" className="md:max-w-sm" />
           <ComboBoxPopover>
             <ComboBoxContent items={fetcher.data ?? lastItems.current}>
               {(hymn) => (

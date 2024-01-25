@@ -1,5 +1,6 @@
 import { cachified, type CacheEntry } from "@epic-web/cachified";
 import { load } from "cheerio";
+import { Option } from "ftld";
 import { LRUCache } from "lru-cache";
 import { matchSorter } from "match-sorter";
 import { Chord, Interval, Note, Scale } from "tonal";
@@ -76,12 +77,15 @@ const hymnsFilename = "me/hymns.json";
 //   return fetchQueue.add("hymns", () => doFetch());
 // }
 let cache = new LRUCache<string, CacheEntry<Hymn[]>>({ max: 1000 });
-export async function getHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
-  let hymns: Hymn[] = await cachified({
+export async function getHymns(): Promise<Hymn[]> {
+  return await cachified({
     cache: cache as any,
     key: "hymns",
     getFreshValue: async () => GithubCMS.get<Hymn[]>(hymnsFilename).unwrap(),
   });
+}
+export async function getSortedHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
+  let hymns: Hymn[] = await getHymns();
 
   if (sortBy === "title") {
     return hymns.slice().sort((a, b) => a.title.localeCompare(b.title));
@@ -96,7 +100,7 @@ export async function getFilteredHymns(request: Request): Promise<Hymn[]> {
     cache: cache as any,
     key: query ? `filtered-hymns-${query}` : "filtered-hymns",
     getFreshValue: async () => {
-      let hymns = await getHymns("number");
+      let hymns = await getSortedHymns("number");
       if (query) {
         hymns = matchSorter(hymns, query, {
           keys: ["title", "number"],
@@ -148,7 +152,7 @@ export async function getHymn(
     cache: cache as any,
     key: `hymn-${number}`,
     getFreshValue: async () => {
-      const hymns = await getHymns(sortBy);
+      const hymns = await getSortedHymns(sortBy);
       const index = hymns.findIndex((h) => h.number === number);
       if (index === -1) {
         throw new Error("Could not find hymn");
@@ -231,21 +235,29 @@ export function parseWebPage(content: string) {
   };
 }
 
-export function transposeHymn(hymn: Hymn, key: HymnSearchParams["key"]): [Hymn & { scale: string }, number] {
+export function transposeHymn(
+  hymn: Hymn,
+  key: HymnSearchParams["key"],
+): [Hymn & { originalScale?: string; scale?: string }, number] {
   const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
 
-  const originalScale = Scale.detect(chords.filter(Boolean) as string[])[0].split(" ")[0];
-  if (!key) {
+  const originalScale = Option.from(
+    Scale.detect(chords.filter(Boolean) as string[], {
+      match: "fit",
+    })[0],
+  ).flatMap((s) => Option.from(s.split(" ")[0]));
+
+  if (!key || originalScale.isNone()) {
     return [
       {
         ...hymn,
-        scale: originalScale,
+        originalScale: originalScale.unwrapOr(""),
       },
       0,
     ];
   }
   const { tonic } = Chord.get(key);
-  const interval = Interval.distance(Note.get(originalScale), Note.get(tonic as string));
+  const interval = Interval.distance(Note.get(originalScale.unwrap()), Note.get(tonic as string));
 
   const transposed = chords.map((chord) => (chord ? Chord.transpose(chord, interval) : chord));
 
@@ -259,6 +271,7 @@ export function transposeHymn(hymn: Hymn, key: HymnSearchParams["key"]): [Hymn &
         lyric,
       })),
     ),
+    originalScale: originalScale.unwrap(),
     scale,
   };
 

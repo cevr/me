@@ -2,12 +2,12 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, Link, useLoaderData } from "@remix-run/react";
 import { cacheHeader } from "pretty-cache-header";
 
-import { getHymns, getHymnSearchParams } from "~/lib/hymns.server";
+import { getSortedHymns, getHymnSearchParams } from "~/lib/hymns.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { sort } = getHymnSearchParams(request);
 
-  return json(Object.values(await getHymns(sort)), {
+  return json(Object.values(await getSortedHymns(sort)), {
     headers: {
       "cache-control": cacheHeader({
         public: true,

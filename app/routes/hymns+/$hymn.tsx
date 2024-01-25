@@ -5,12 +5,11 @@ import debounce from "lodash.debounce";
 import { ChevronDown } from "lucide-react";
 import { cacheHeader } from "pretty-cache-header";
 import * as React from "react";
-import { SelectValue } from "react-aria-components";
 
 import { Label } from "~/components/label";
-import { Select, SelectButton, SelectContent, SelectItem } from "~/components/select";
+import { Select, SelectButton, SelectContent, SelectItem, SelectValue } from "~/components/select";
 import { keys } from "~/lib/hymns";
-import { getHymn, getHymnSearchParams, transposeHymn, type HymnSearchParams } from "~/lib/hymns.server";
+import { getHymn, getHymnSearchParams, transposeHymn } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 
 export let loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -44,14 +43,13 @@ export let loader = async ({ params, request }: LoaderFunctionArgs) => {
 };
 
 export default function HymnPage() {
-  const { hymn, nextHymn, prevHymn, key, semitone } = useLoaderData<typeof loader>();
+  const { hymn, nextHymn, prevHymn, semitone, key } = useLoaderData<typeof loader>();
   const ref = React.useRef<HTMLDivElement>(null);
   useFitTextToScreen(ref);
 
   return (
     <div className="flex flex-col gap-8">
-      <HymnCommandBar semitone={semitone} hymnKey={key ?? (hymn.scale as (typeof keys)[number])} />
-
+      <HymnKeySelect hymnKey={key ?? hymn.scale} defaultKey={hymn.originalScale} />
       <div className="flex gap-4 items-center justify-between">
         <h3 className="text-2xl md:text-3xl">
           {hymn.number}. {hymn.title}
@@ -166,42 +164,39 @@ function calculateCapoFret(semitones: number) {
 
   return 12 - absSemitones;
 }
-
-function HymnCommandBar({ semitone, hymnKey }: { semitone: number; hymnKey: HymnSearchParams["key"] }) {
+function HymnKeySelect({ hymnKey, defaultKey }: { hymnKey?: string; defaultKey?: string }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   return (
-    <div className="flex flex-col w-full gap-4 text-lg">
-      <Select
-        aria-label="Select a key"
-        selectedKey={hymnKey}
-        onSelectionChange={(value) => {
-          navigate(
-            {
-              search: addToSearchParams(searchParams, {
-                key: value as any,
-              }).toString(),
-            },
-            {
-              replace: true,
-            },
-          );
-        }}
-      >
-        <Label className="text-base">Key</Label>
-        <SelectButton variant="outline">
-          <SelectValue>{({ selectedText }) => <span>{selectedText || "Select a key"}</span>}</SelectValue>
-          <ChevronDown size="16" strokeWidth="3" />
-        </SelectButton>
-        <SelectContent>
-          {keys.map((key) => (
-            <SelectItem textValue={key} key={key} id={key}>
-              {key}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+    <Select
+      aria-label="Select a key"
+      defaultSelectedKey={hymnKey ?? defaultKey}
+      onSelectionChange={(value) => {
+        navigate(
+          {
+            search: addToSearchParams(searchParams, {
+              key: value as any,
+            }).toString(),
+          },
+          {
+            replace: true,
+          },
+        );
+      }}
+    >
+      <Label className="text-base">Key</Label>
+      <SelectButton variant="outline" className="md:max-w-sm">
+        <SelectValue>{({ selectedText }) => <span>{selectedText || "Select a key"}</span>}</SelectValue>
+        <ChevronDown size="16" strokeWidth="3" />
+      </SelectButton>
+      <SelectContent>
+        {keys.map((key) => (
+          <SelectItem textValue={`${key}${key === defaultKey ? " (default)" : ""}`} key={key} id={key}>
+            {key} {key === defaultKey ? "(default)" : null}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
