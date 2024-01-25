@@ -96,11 +96,11 @@ export default function HymnPage() {
 
 const getScreenHeight = () => {
   if (typeof window === "undefined") return 0;
-  return window.innerHeight;
+  return window.visualViewport?.height ?? window.innerHeight;
 };
 
-function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize = 16) {
-  const fontSize = React.useRef(initialFontSize);
+function useFitTextToScreen(ref: React.RefObject<HTMLElement>) {
+  const fontSize = React.useRef(20);
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
@@ -120,18 +120,18 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>, initialFontSize =
         lastFontSize = fontSize.current;
 
         if (container.offsetHeight < paddedHeight) {
-          fontSize.current += 0.5;
+          fontSize.current += 10
         } else if (container.offsetHeight > paddedHeight) {
-          fontSize.current -= 0.5;
+          fontSize.current -= 10
         }
 
-        container.style.fontSize = fontSize.current + "px";
+        container.style.fontSize = fontSize.current + "%";
 
         requestAnimationFrame(() => {
           // Store the last good font size based on the direction of the changes
           const increasing = fontSize.current > lastFontSize!;
           if (increasing && container.offsetHeight > paddedHeight) {
-            container.style.fontSize = lastFontSize + "px";
+            container.style.fontSize = lastFontSize + "%";
           } else {
             adjustFontSizeRecursively();
           }
