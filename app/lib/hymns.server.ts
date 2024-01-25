@@ -239,13 +239,9 @@ export function transposeHymn(
   hymn: Hymn,
   key: HymnSearchParams["key"],
 ): [Hymn & { originalScale?: string; scale?: string }, number] {
-  const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord));
+  const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord)).filter(Boolean) as string[];
 
-  const originalScale = Option.from(
-    Scale.detect(chords.filter(Boolean) as string[], {
-      match: "fit",
-    })[0],
-  ).flatMap((s) => Option.from(s.split(" ")[0]));
+  const originalScale = Option.from(Scale.detect(chords)[0]).flatMap((s) => Option.from(s.split(" ")[0]));
 
   if (!key || originalScale.isNone()) {
     return [
@@ -261,7 +257,7 @@ export function transposeHymn(
 
   const transposed = chords.map((chord) => (chord ? Chord.transpose(chord, interval) : chord));
 
-  const scale = Scale.detect(transposed.filter(Boolean) as string[])[0]?.split(" ")[0] ?? "";
+  const scale = Scale.detect(transposed)[0]?.split(" ")[0] ?? "";
 
   const transposedHymn = {
     ...hymn,
@@ -271,7 +267,7 @@ export function transposeHymn(
         lyric,
       })),
     ),
-    originalScale: originalScale.unwrap(),
+    originalScale: originalScale.unwrapOr(""),
     scale,
   };
 

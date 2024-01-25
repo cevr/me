@@ -36,6 +36,7 @@ export let loader = async ({ params, request }: LoaderFunctionArgs) => {
           public: true,
           maxAge: "1year",
           staleWhileRevalidate: "1year",
+          noCache: true,
         }),
       },
     },
@@ -44,8 +45,7 @@ export let loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function HymnPage() {
   const { hymn, nextHymn, prevHymn, semitone, key } = useLoaderData<typeof loader>();
-  const ref = React.useRef<HTMLDivElement>(null);
-  useFitTextToScreen(ref);
+  const ref = useFitTextToScreen();
 
   return (
     <div className="flex flex-col gap-8">
@@ -103,7 +103,8 @@ const getScreenHeight = () => {
   return window.visualViewport?.height ?? window.innerHeight;
 };
 
-function useFitTextToScreen(ref: React.RefObject<HTMLElement>) {
+function useFitTextToScreen() {
+  const ref = React.useRef<HTMLDivElement>(null);
   const fontSize = React.useRef(20);
 
   React.useEffect(() => {
@@ -154,6 +155,7 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  return ref;
 }
 
 function calculateCapoFret(semitones: number) {
@@ -176,7 +178,7 @@ function HymnKeySelect({ hymnKey, defaultKey }: { hymnKey?: string; defaultKey?:
         navigate(
           {
             search: addToSearchParams(searchParams, {
-              key: value as any,
+              key: value as string,
             }).toString(),
           },
           {
@@ -193,7 +195,8 @@ function HymnKeySelect({ hymnKey, defaultKey }: { hymnKey?: string; defaultKey?:
       <SelectContent>
         {keys.map((key) => (
           <SelectItem textValue={`${key}${key === defaultKey ? " (default)" : ""}`} key={key} id={key}>
-            {key} {key === defaultKey ? "(default)" : null}
+            {key}
+            {key === defaultKey ? " (default)" : null}
           </SelectItem>
         ))}
       </SelectContent>
