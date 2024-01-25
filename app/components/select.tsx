@@ -1,111 +1,79 @@
-"use client";
-
-import * as SelectPrimitive from "@radix-ui/react-select";
-import * as React from "react";
-import { Check, ChevronDown } from "lucide-react";
+import { Check } from "lucide-react";
+import * as ReactAria from "react-aria-components";
 
 import { cn } from "~/lib/utils";
 
-const SelectGroup = SelectPrimitive.Group;
+import { Button, type ButtonProps } from "./button";
 
-const SelectValue = SelectPrimitive.Value;
+export const Select = <T extends object>({ className, ...props }: ReactAria.SelectProps<T>) => {
+  return <ReactAria.Select className={cn("w-full", className)} {...props} />;
+};
 
-const SelectTrigger = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-      className,
-    )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 opacity-50" />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-));
-SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
+export interface SelectContentProps<T>
+  extends Omit<ReactAria.PopoverProps, "children" | "style">,
+    Omit<ReactAria.ListBoxProps<T>, "style"> {
+  className?: string;
+  popoverClassName?: string;
+}
 
-const SelectContent = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", ...props }, ref) => (
-  <SelectPrimitive.Portal>
-    <SelectPrimitive.Content
-      ref={ref}
+export const SelectContent = <T extends object>({ className, popoverClassName, ...props }: SelectContentProps<T>) => {
+  return (
+    <ReactAria.Popover
       className={cn(
-        "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in-80",
-        position === "popper" && "translate-y-1",
-        className,
+        "min-w-[--trigger-width] overflow-auto rounded-md border border-neutral-200 bg-white p-1 shadow-md dark:border-neutral-700 dark:bg-neutral-800",
+        // Entering
+        "entering:animate-in entering:fade-in",
+        // Exiting
+        "exiting:animate-in exiting:fade-in exiting:direction-reverse",
+        // Top
+        "placement-top:slide-in-from-bottom-2",
+        // Bottom
+        "placement-bottom:slide-in-from-top-2",
+        popoverClassName,
       )}
-      position={position}
       {...props}
     >
-      <SelectPrimitive.Viewport
-        className={cn(
-          "p-1",
-          position === "popper" &&
-            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
-        )}
-      >
+      <ReactAria.ListBox className={cn("outline-none", className)} {...props} />
+    </ReactAria.Popover>
+  );
+};
+
+export const SelectItem = ({ className, children, ...props }: ReactAria.ListBoxItemProps) => {
+  return (
+    <ReactAria.ListBoxItem
+      className={cn(
+        "group",
+        "flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-black outline-none transition-colors dark:text-white",
+        // Focus
+        "focus:bg-salmon-100 dark:focus:bg-salmon-700",
+        className,
+      )}
+      {...props}
+    >
+      <>
+        <Check aria-hidden="true" strokeWidth="3" className="invisible h-4 w-4 group-selected:visible" />
         {children}
-      </SelectPrimitive.Viewport>
-    </SelectPrimitive.Content>
-  </SelectPrimitive.Portal>
-));
-SelectContent.displayName = SelectPrimitive.Content.displayName;
+      </>
+    </ReactAria.ListBoxItem>
+  );
+};
 
-const SelectLabel = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Label>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
->(({ className, ...props }, ref) => (
-  <SelectPrimitive.Label ref={ref} className={cn("py-1.5 pl-8 pr-2 text-sm font-semibold", className)} {...props} />
-));
-SelectLabel.displayName = SelectPrimitive.Label.displayName;
+export const SelectValue = <T extends object>(props: ReactAria.SelectValueProps<T>) => {
+  return <ReactAria.SelectValue {...props} />;
+};
 
-const SelectItem = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Item
-    ref={ref}
-    className={cn(
-      "flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      className,
-    )}
-    {...props}
-  >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      <SelectPrimitive.ItemIndicator>
-        <Check className="h-4 w-4" />
-      </SelectPrimitive.ItemIndicator>
-    </span>
-
-    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-  </SelectPrimitive.Item>
-));
-SelectItem.displayName = SelectPrimitive.Item.displayName;
-
-const SelectSeparator = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
->(({ className, ...props }, ref) => (
-  <SelectPrimitive.Separator ref={ref} className={cn("-mx-1 my-1 h-px bg-muted", className)} {...props} />
-));
-SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
-
-const Select = Object.assign(SelectPrimitive.Root, {
-  Group: SelectGroup,
-  Value: SelectValue,
-  Trigger: SelectTrigger,
-  Content: SelectContent,
-  Label: SelectLabel,
-  Item: SelectItem,
-  Separator: SelectSeparator,
-});
-
-export { Select };
+export const SelectButton = ({ className, ...props }: ButtonProps) => {
+  return (
+    <Button
+      className={cn(
+        [
+          "flex w-full items-center justify-between font-normal",
+          // Disabled
+          "disabled:cursor-not-allowed disabled:pointer-events-auto",
+        ],
+        className,
+      )}
+      {...props}
+    />
+  );
+};

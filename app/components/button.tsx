@@ -7,22 +7,22 @@ export const buttonVariants = cva({
   base: [
     "inline-flex items-center justify-center rounded-md font-semibold outline-none transition-colors",
     // Focus
-    "focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900",
+    "focus:ring-2 focus:ring-salmon-400 focus:ring-offset-2 dark:focus:ring-salmon-400 dark:focus:ring-offset-salmon-900",
     // Disabled
     "disabled:pointer-events-none disabled:opacity-40",
   ],
   variants: {
     variant: {
       solid:
-        "bg-slate-900 text-white open:bg-slate-100 hover:bg-slate-700 dark:bg-slate-50 dark:text-slate-900 dark:open:bg-slate-800 dark:hover:bg-slate-200",
+        "bg-neutral-900 text-white open:bg-neutral-100 hover:bg-neutral-700 dark:bg-neutral-50 dark:text-neutral-900 dark:open:bg-neutral-800 dark:hover:bg-neutral-200",
       destructive: "bg-red-600 text-white hover:bg-red-700 dark:hover:bg-red-700",
       outline:
-        "border border-slate-200 bg-transparent hover:bg-slate-100 focus:bg-slate-100 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-700 dark:focus:bg-slate-700",
+        "border border-neutral-200 bg-transparent hover:bg-neutral-100 focus:bg-neutral-100 dark:border-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700",
       subtle:
-        "bg-slate-100 text-slate-900 hover:bg-slate-200 focus:bg-slate-200 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-700 dark:focus:bg-slate-700",
+        "bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700",
       ghost:
-        "bg-transparent open:bg-transparent hover:bg-slate-100 focus:bg-slate-100 dark:text-slate-100 dark:open:bg-transparent dark:hover:bg-slate-800 dark:hover:text-slate-100 dark:focus:bg-slate-800 dark:focus:text-slate-100",
-      link: "bg-transparent text-slate-900 underline-offset-4 hover:bg-transparent hover:underline focus:bg-transparent focus:underline dark:bg-transparent dark:text-slate-100 dark:hover:bg-transparent dark:focus:bg-transparent",
+        "bg-transparent open:bg-transparent hover:bg-neutral-100 focus:bg-neutral-100 dark:text-neutral-100 dark:open:bg-transparent dark:hover:bg-neutral-800 dark:hover:text-neutral-100 dark:focus:bg-neutral-800 dark:focus:text-neutral-100",
+      link: "bg-transparent text-neutral-900 underline-offset-4 hover:bg-transparent hover:underline focus:bg-transparent focus:underline dark:bg-transparent dark:text-neutral-100 dark:hover:bg-transparent dark:focus:bg-transparent",
     },
     size: {
       lg: "h-12 px-6 text-lg",

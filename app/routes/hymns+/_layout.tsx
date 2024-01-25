@@ -6,6 +6,7 @@ import React from "react";
 import { useDebounceFetcher } from "remix-utils/use-debounce-fetcher";
 
 import { ComboBox, ComboBoxContent, ComboBoxInput, ComboBoxItem, ComboBoxPopover, ExternalLink } from "~/components";
+import { Label } from "~/components/label";
 import { getFilteredHymns, getHymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
 import type { Hymn } from "~/types/hymn";
@@ -48,7 +49,7 @@ export default function Hymns() {
   }, [fetcher.data]);
 
   return (
-    <div className="flex max-w-[calc(100vw_-_32px)] flex-col gap-8 font-mono">
+    <div className="flex max-w-[calc(100vw_-_32px)] flex-col gap-2 font-mono">
       <div className="flex flex-col gap-2">
         <div className="flex items-end gap-2">
           <Link
@@ -96,6 +97,7 @@ export default function Hymns() {
           aria-label="Search hymns"
           menuTrigger="focus"
         >
+          <Label>Search</Label>
           <ComboBoxInput placeholder="Search by number or title" />
           <ComboBoxPopover>
             <ComboBoxContent items={fetcher.data ?? lastItems.current}>

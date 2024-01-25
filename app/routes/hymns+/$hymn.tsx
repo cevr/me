@@ -2,10 +2,13 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import { motion } from "framer-motion";
 import debounce from "lodash.debounce";
+import { ChevronDown } from "lucide-react";
 import { cacheHeader } from "pretty-cache-header";
 import * as React from "react";
+import { SelectValue } from "react-aria-components";
 
-import { Select } from "~/components/select";
+import { Label } from "~/components/label";
+import { Select, SelectButton, SelectContent, SelectItem } from "~/components/select";
 import { keys } from "~/lib/hymns";
 import { getHymn, getHymnSearchParams, transposeHymn, type HymnSearchParams } from "~/lib/hymns.server";
 import { addToSearchParams } from "~/lib/utils";
@@ -49,9 +52,12 @@ export default function HymnPage() {
     <div className="flex flex-col gap-8">
       <HymnCommandBar semitone={semitone} hymnKey={key ?? (hymn.scale as (typeof keys)[number])} />
 
-      <h3 className="text-3xl">
-        {hymn.number}. {hymn.title}
-      </h3>
+      <div className="flex gap-4 items-center justify-between">
+        <h3 className="text-2xl md:text-3xl">
+          {hymn.number}. {hymn.title}
+        </h3>
+        <span className="text-xl md:text-2xl text-end">Capo: {calculateCapoFret(semitone)}</span>
+      </div>
       <div className="flex flex-col gap-4" ref={ref}>
         {hymn.lines.map((line, lineIndex) => (
           <div key={`line-${lineIndex}`} className="flex flex-wrap gap-2">
@@ -120,9 +126,9 @@ function useFitTextToScreen(ref: React.RefObject<HTMLElement>) {
         lastFontSize = fontSize.current;
 
         if (container.offsetHeight < paddedHeight) {
-          fontSize.current += 10
+          fontSize.current += 10;
         } else if (container.offsetHeight > paddedHeight) {
-          fontSize.current -= 10
+          fontSize.current -= 10;
         }
 
         container.style.fontSize = fontSize.current + "%";
@@ -166,15 +172,15 @@ function HymnCommandBar({ semitone, hymnKey }: { semitone: number; hymnKey: Hymn
   const [searchParams] = useSearchParams();
 
   return (
-    <div className="flex w-full items-center justify-between gap-4 text-lg sm:justify-center">
+    <div className="flex flex-col w-full gap-4 text-lg">
       <Select
-        name="key"
-        value={hymnKey}
-        onValueChange={(value) => {
+        aria-label="Select a key"
+        selectedKey={hymnKey}
+        onSelectionChange={(value) => {
           navigate(
             {
               search: addToSearchParams(searchParams, {
-                key: value,
+                key: value as any,
               }).toString(),
             },
             {
@@ -183,18 +189,19 @@ function HymnCommandBar({ semitone, hymnKey }: { semitone: number; hymnKey: Hymn
           );
         }}
       >
-        <Select.Trigger className="w-[180px]">
-          <Select.Value placeholder="Select a key" />
-        </Select.Trigger>
-        <Select.Content sideOffset={8} position="popper" className="w-[180px]">
+        <Label className="text-base">Key</Label>
+        <SelectButton variant="outline">
+          <SelectValue>{({ selectedText }) => <span>{selectedText || "Select a key"}</span>}</SelectValue>
+          <ChevronDown size="16" strokeWidth="3" />
+        </SelectButton>
+        <SelectContent>
           {keys.map((key) => (
-            <Select.Item key={key} value={key}>
+            <SelectItem textValue={key} key={key} id={key}>
               {key}
-            </Select.Item>
+            </SelectItem>
           ))}
-        </Select.Content>
+        </SelectContent>
       </Select>
-      <div>Capo: {calculateCapoFret(semitone)}</div>
     </div>
   );
 }
