@@ -7,6 +7,10 @@
   ],
   "rules": {
     "@typescript-eslint/no-redeclare": "off",
-    "@typescript-eslint/consistent-type-imports": "warn"
+    "@typescript-eslint/consistent-type-imports": ["warn", {
+      "prefer": "type-imports",
+      "fixStyle": "separate-type-imports",
+      "disallowTypeAnnotations": true
+    }]
   }
 }
