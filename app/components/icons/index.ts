@@ -1,6 +1,6 @@
-export { default as Email } from "./Email";
-export { default as Github } from "./Github";
-export { default as LightSwitch } from "./LightSwitch";
-export { default as Star } from "./Star";
-export { default as Twitter } from "./Twitter";
-export { default as LinkedIn } from "./LinkedIn";
+export { default as Email } from "./email";
+export { default as Github } from "./github";
+export { default as LightSwitch } from "./light-switch";
+export { default as Star } from "./star";
+export { default as Twitter } from "./twitter";
+export { default as LinkedIn } from "./linked-in";

@@ -1,4 +1,4 @@
-import { ExternalLink } from "./ExternalLink";
+import { ExternalLink } from "./external-link";
 
 export function ButtonLink({ className, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
   return (
