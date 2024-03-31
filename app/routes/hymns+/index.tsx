@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, Link, useLoaderData } from "@remix-run/react";
 import { cacheHeader } from "pretty-cache-header";
 
-import { getSortedHymns, getHymnSearchParams } from "~/lib/hymns.server";
+import { getHymnSearchParams, getSortedHymns } from "~/lib/hymns.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { sort } = getHymnSearchParams(request);

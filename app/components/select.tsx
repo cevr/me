@@ -3,7 +3,8 @@ import * as ReactAria from "react-aria-components";
 
 import { cn } from "~/lib/utils";
 
-import { Button, type ButtonProps } from "./button";
+import type { ButtonProps } from "./button";
+import { Button } from "./button";
 
 export const Select = <T extends object>({ className, ...props }: ReactAria.SelectProps<T>) => {
   return <ReactAria.Select className={cn("w-full", className)} {...props} />;

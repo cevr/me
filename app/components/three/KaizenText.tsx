@@ -1,5 +1,5 @@
-import * as React from "react";
 import { useFrame } from "@react-three/fiber";
+import * as React from "react";
 import type { Group } from "three";
 import { Vector3 } from "three";
 

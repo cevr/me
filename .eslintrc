@@ -8,9 +8,7 @@
   "rules": {
     "@typescript-eslint/no-redeclare": "off",
     "@typescript-eslint/consistent-type-imports": ["warn", {
-      "prefer": "type-imports",
-      "fixStyle": "separate-type-imports",
-      "disallowTypeAnnotations": true
+      "prefer": "type-imports"
     }]
   }
 }

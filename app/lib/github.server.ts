@@ -1,4 +1,4 @@
-import type { AsyncTask} from "ftld";
+import type { AsyncTask } from "ftld";
 import { Task } from "ftld";
 import { request } from "undici";
 

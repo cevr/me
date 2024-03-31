@@ -111,7 +111,7 @@ export let searchAndChat = (
           ({
             ...embeddings,
             answer: content,
-          } satisfies SearchChatResponse),
+          }) satisfies SearchChatResponse,
       ),
     )
     .tapErr((err) => console.error(err));

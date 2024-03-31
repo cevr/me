@@ -161,7 +161,6 @@ function Document({ children, title }: { children: React.ReactNode; title?: stri
         >
           {children}
         </div>
-        <LiveReload />
         <Scripts />
         <ScrollRestoration />
       </body>

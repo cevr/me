@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, Link, Outlet, useLoaderData, useSearchParams } from "@remix-run/react";
+import { json, Link, Outlet, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
 import clsx from "clsx";
 import { cacheHeader } from "pretty-cache-header";
 import React from "react";
@@ -40,16 +40,12 @@ export default function Hymns() {
   const [searchParams] = useSearchParams();
   const { sort, initialHymns } = useLoaderData<typeof loader>();
   const fetcher = useDebounceFetcher<Hymn[]>();
-  const lastItems = React.useRef<Hymn[]>(initialHymns);
+  const navigate = useNavigate();
 
   // combobox has trouble dealing with async data, so we need to keep track of
   // the last items we had and use that if we don't have any new ones
   // TODO: remove this when fixed
-  React.useEffect(() => {
-    if (fetcher.data) {
-      lastItems.current = fetcher.data;
-    }
-  }, [fetcher.data]);
+
 
   return (
     <div className="flex max-w-[calc(100vw_-_32px)] flex-col gap-2 font-mono">
@@ -95,20 +91,26 @@ export default function Hymns() {
           onInputChange={(value) => {
             fetcher.load(`/hymns/search?q=${value}`);
           }}
+          onSelectionChange={(hymn) => {
+            console.log(hymn)
+            if(!hymn) return;
+            navigate({
+              pathname: `/hymns/${hymn}`,
+              search: searchParams.toString(),
+            })}}
           defaultItems={initialHymns}
-          items={fetcher.data ?? lastItems.current}
+          items={fetcher.data }
           aria-label="Search hymns"
           menuTrigger="focus"
         >
           <Label>Search</Label>
           <ComboBoxInput placeholder="Search by number or title" className="md:max-w-sm" />
           <ComboBoxPopover>
-            <ComboBoxContent items={fetcher.data ?? lastItems.current}>
+            <ComboBoxContent items={fetcher.data }>
               {(hymn) => (
                 <ComboBoxItem
                   className="font-mono"
                   textValue={hymn.number}
-                  href={`/hymns/${hymn.number}`}
                   id={hymn.number}
                 >
                   {hymn.number}: {hymn.title}

@@ -49,7 +49,7 @@ export default function HymnPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <HymnKeySelect hymnKey={key ?? hymn.scale} defaultKey={hymn.originalScale} />
+      <HymnKeySelect hymnKey={key ?? hymn.scale} defaultKey={hymn.originalScale} key={key ?? hymn.scale} />
       <div className="flex gap-4 items-center justify-between">
         <h3 className="text-2xl md:text-3xl">
           {hymn.number}. {hymn.title}

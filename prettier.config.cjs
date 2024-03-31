@@ -6,6 +6,4 @@ module.exports = {
   plugins: ["prettier-plugin-tailwindcss", "@ianvs/prettier-plugin-sort-imports"],
   // This plugin's options
   importOrder: ["<BUILTIN_MODULES>", "", "<THIRD_PARTY_MODULES>", "", "^~/(.*)$", "", "^[./]"],
-  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
-  importOrderTypeScriptVersion: "5.0.0",
 };

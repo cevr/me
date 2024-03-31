@@ -1,7 +1,7 @@
-import * as React from "react";
 import { Html, Stars } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { motion } from "framer-motion";
+import * as React from "react";
 import type { Group } from "three";
 
 import { KaizenText } from "./KaizenText";
