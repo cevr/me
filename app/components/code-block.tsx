@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { Highlight, type Prism } from "prism-react-renderer";
+import { Highlight } from "prism-react-renderer";
+import type { Prism } from "prism-react-renderer";
 
 const theme = {
   plain: {

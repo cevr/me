@@ -1,4 +1,5 @@
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { cacheHeader } from "pretty-cache-header";
 
 import { getFilteredHymns } from "~/lib/hymns.server";

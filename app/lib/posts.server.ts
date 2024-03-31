@@ -1,5 +1,6 @@
 import { cachified } from "@epic-web/cachified";
-import { Task, type AsyncTask } from "ftld";
+import { Task } from "ftld";
+import type { AsyncTask } from "ftld";
 import matter from "gray-matter";
 import { LRUCache } from "lru-cache";
 import { request } from "undici";

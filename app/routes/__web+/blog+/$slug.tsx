@@ -1,5 +1,6 @@
 import { invariantResponse } from "@epic-web/invariant";
-import { json, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import clsx from "clsx";
 import dayjs from "dayjs";

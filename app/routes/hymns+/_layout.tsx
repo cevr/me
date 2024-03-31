@@ -46,7 +46,6 @@ export default function Hymns() {
   // the last items we had and use that if we don't have any new ones
   // TODO: remove this when fixed
 
-
   return (
     <div className="flex max-w-[calc(100vw_-_32px)] flex-col gap-2 font-mono">
       <div className="flex flex-col gap-2">
@@ -92,27 +91,23 @@ export default function Hymns() {
             fetcher.load(`/hymns/search?q=${value}`);
           }}
           onSelectionChange={(hymn) => {
-            console.log(hymn)
-            if(!hymn) return;
+            if (!hymn) return;
             navigate({
               pathname: `/hymns/${hymn}`,
               search: searchParams.toString(),
-            })}}
+            });
+          }}
           defaultItems={initialHymns}
-          items={fetcher.data }
+          items={fetcher.data}
           aria-label="Search hymns"
           menuTrigger="focus"
         >
           <Label>Search</Label>
           <ComboBoxInput placeholder="Search by number or title" className="md:max-w-sm" />
           <ComboBoxPopover>
-            <ComboBoxContent items={fetcher.data }>
+            <ComboBoxContent items={fetcher.data}>
               {(hymn) => (
-                <ComboBoxItem
-                  className="font-mono"
-                  textValue={hymn.number}
-                  id={hymn.number}
-                >
+                <ComboBoxItem className="font-mono" textValue={hymn.number} id={hymn.number}>
                   {hymn.number}: {hymn.title}
                 </ComboBoxItem>
               )}

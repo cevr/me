@@ -1,8 +1,9 @@
-import { defer, type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { defer } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Await, Form, Link, useLoaderData, useNavigation, useSearchParams } from "@remix-run/react";
 import * as React from "react";
 
-import { Button } from "~/components/button";
+import { Button, buttonVariants } from "~/components/button";
 import { Input } from "~/components/input";
 
 import { explore, searchAndChat } from "./utils.server";
@@ -105,7 +106,7 @@ export default function EgwSearchPage() {
                     to={{
                       search: new URLSearchParams({ query: question }).toString(),
                     }}
-                    className={Button.variants({ variant: "outline", size: "sm" })}
+                    className={buttonVariants({ variant: "outline", size: "sm" })}
                     key={question}
                   >
                     {question}

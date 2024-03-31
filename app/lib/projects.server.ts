@@ -1,4 +1,5 @@
-import { cachified, type CacheEntry } from "@epic-web/cachified";
+import { cachified } from "@epic-web/cachified";
+import type { CacheEntry } from "@epic-web/cachified";
 import { Task } from "ftld";
 import { gql, GraphQLClient } from "graphql-request";
 import { LRUCache } from "lru-cache";

@@ -1,4 +1,5 @@
-import { cva, type VariantProps } from "cva";
+import { cva } from "cva";
+import type { VariantProps } from "cva";
 import * as ReactAria from "react-aria-components";
 
 import { cn } from "~/lib/utils";
