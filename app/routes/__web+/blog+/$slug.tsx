@@ -170,7 +170,6 @@ let components = {
       {...props}
     />
   ),
-  // eslint-disable-next-line jsx-a11y/alt-text
   img: (props: any) => (
     <img
       className="mx-auto my-0"
@@ -179,7 +178,7 @@ let components = {
   ),
   blockquote: (props: any) => (
     <blockquote
-      className="rounded rounded-bl-none rounded-tl-none border-l-4 border-solid border-l-salmon-500 bg-[#00000030] px-4 py-2 [&>p]:m-0"
+      className="rounded rounded-l-none border-l-4 border-solid border-l-salmon-500 bg-[#00000030] px-4 py-2 [&>p]:m-0"
       {...props}
     />
   ),

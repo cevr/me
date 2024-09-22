@@ -155,7 +155,7 @@ export let explore = (res: SearchChatResponse) =>
       ).flatMap((json) =>
         Result.tryCatch(
           () => JSON.parse(json[0]) as ExploreChatResponse,
-          (e) => ExploreChatParseError(),
+          () => ExploreChatParseError(),
         ),
       ),
     )

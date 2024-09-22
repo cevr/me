@@ -30,7 +30,7 @@ export let action: ActionFunction = async ({ request }) => {
 //   --contrast: salmon;
 // }`;
 
-export let loader: LoaderFunction = async ({ request }) => {
+export let loader: LoaderFunction = async () => {
   // const theme = await getTheme(request);
   // no theme for now
 

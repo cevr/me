@@ -173,7 +173,7 @@ export default function Index() {
                 <h3 className="text-pretty text-lg font-medium capitalize">
                   {project.name}{' '}
                   <span className="inline-flex items-center gap-2 tabular-nums duration-200 group-hover:opacity-100 md:text-salmon-500 md:opacity-0">
-                    <Star className="h-3 w-3" /> {project.stargazerCount}
+                    <Star className="size-3" /> {project.stargazerCount}
                   </span>
                 </h3>
                 {/* <p className="project-description text-[0.875rem] text-neutral-300">{project.description}</p> */}

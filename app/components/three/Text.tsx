@@ -18,7 +18,6 @@ export function Text({
   vAlign = 'center',
   hAlign = 'center',
   size = 1.5,
-  color = '#000000',
   ...props
 }: TextProps) {
   extend({ TextGeometry });

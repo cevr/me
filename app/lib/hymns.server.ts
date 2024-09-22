@@ -115,7 +115,7 @@ export async function getFilteredHymns(request: Request): Promise<Hymn[]> {
 }
 
 export function pushHymnsToPublic(hymns: Hymn[]) {
-  GithubCMS.push(hymnsFilename, hymns, 'Update hymns').run();
+  void GithubCMS.push(hymnsFilename, hymns, 'Update hymns').run();
 }
 
 const hymnSearchParamsSchema = z.object({
@@ -131,7 +131,7 @@ const hymnSearchParamsSchema = z.object({
     .transform((x) => x ?? undefined),
 });
 
-export type HymnSearchParams = z.infer<typeof hymnSearchParamsSchema>;
+type HymnSearchParams = z.infer<typeof hymnSearchParamsSchema>;
 
 export function getHymnSearchParams(req: Request): HymnSearchParams {
   const url = new URL(req.url);

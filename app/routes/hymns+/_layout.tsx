@@ -9,7 +9,6 @@ import {
 } from '@remix-run/react';
 import clsx from 'clsx';
 import { cacheHeader } from 'pretty-cache-header';
-import React from 'react';
 import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 
 import {
@@ -31,7 +30,7 @@ export let meta: MetaFunction = () => [
   },
 ];
 
-export let loader = async ({ request, params }: LoaderFunctionArgs) => {
+export let loader = async ({ request }: LoaderFunctionArgs) => {
   let hymns = await getHymns();
   return json(
     {

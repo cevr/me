@@ -73,7 +73,7 @@ export const ComboBoxItem = ({
         <Check
           aria-hidden="true"
           strokeWidth="3"
-          className="invisible h-4 w-4 group-selected:visible"
+          className="invisible size-4 group-selected:visible"
         />
         {children}
       </>

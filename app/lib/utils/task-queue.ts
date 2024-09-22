@@ -208,7 +208,7 @@ export class TaskQueue<Result> {
     this.queue.set(id, record as any);
     this.notify(id);
     if (!this.processing) {
-      this.processQueue();
+      void this.processQueue();
     }
     return promise;
   }

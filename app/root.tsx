@@ -163,7 +163,7 @@ function Document({
         <Links />
       </head>
       <body
-        className="h-full w-full bg-neutral-900 text-neutral-50"
+        className="size-full bg-neutral-900 text-neutral-50"
         style={{
           scrollbarGutter: 'stable both-edges',
         }}

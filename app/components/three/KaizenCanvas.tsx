@@ -91,7 +91,7 @@ function Progress() {
       position={[-6, 0, 0]}
     >
       <motion.div
-        className="h-12 w-12 rounded-[50%] border-8 border-gray-600 border-t-[salmon]"
+        className="size-12 rounded-[50%] border-8 border-gray-600 border-t-[salmon]"
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 1 }}
       />
