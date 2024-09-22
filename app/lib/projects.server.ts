@@ -1,13 +1,18 @@
-import { cachified } from "@epic-web/cachified";
-import type { CacheEntry } from "@epic-web/cachified";
-import { Task } from "ftld";
-import { gql, GraphQLClient } from "graphql-request";
-import { LRUCache } from "lru-cache";
+import { cachified } from '@epic-web/cachified';
+import type { CacheEntry } from '@epic-web/cachified';
+import { Task } from 'ftld';
+import { gql, GraphQLClient } from 'graphql-request';
+import { LRUCache } from 'lru-cache';
 
 let repositoriesQuery = gql`
   query {
     user(login: "cevr") {
-      repositories(first: 25, orderBy: { field: STARGAZERS, direction: DESC }, isFork: false, affiliations: [OWNER]) {
+      repositories(
+        first: 25
+        orderBy: { field: STARGAZERS, direction: DESC }
+        isFork: false
+        affiliations: [OWNER]
+      ) {
         edges {
           node {
             description
@@ -46,7 +51,7 @@ interface RepositoriesQueryData {
   }>;
 }
 
-let client = new GraphQLClient("https://api.github.com/graphql", {
+let client = new GraphQLClient('https://api.github.com/graphql', {
   headers: {
     Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
   },
@@ -54,7 +59,7 @@ let client = new GraphQLClient("https://api.github.com/graphql", {
 
 class FailedToFetchProjects extends Error {
   constructor(public readonly error: unknown) {
-    super("Failed to fetch projects");
+    super('Failed to fetch projects');
   }
 }
 
@@ -66,7 +71,7 @@ export let all = () =>
     () =>
       cachified({
         cache: cache as any,
-        key: "projects",
+        key: 'projects',
         ttl: 1000 * 60 * 60,
         getFreshValue: () =>
           client
@@ -75,7 +80,10 @@ export let all = () =>
               (data) =>
                 data.user?.repositories?.edges
                   .map((edge) => edge.node)
-                  .filter((project) => project.stargazerCount > 1 && !project.isArchived) ?? [],
+                  .filter(
+                    (project) =>
+                      project.stargazerCount > 1 && !project.isArchived,
+                  ) ?? [],
             ),
       }),
     (e) => new FailedToFetchProjects(e),

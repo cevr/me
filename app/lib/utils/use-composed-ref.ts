@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 type PossibleRef<T> = React.Ref<T> | undefined;
 
@@ -7,7 +7,7 @@ type PossibleRef<T> = React.Ref<T> | undefined;
  * This utility takes care of different types of refs: callback refs and RefObject(s)
  */
 function setRef<T>(ref: PossibleRef<T>, value: T) {
-  if (typeof ref === "function") {
+  if (typeof ref === 'function') {
     ref(value);
   } else if (ref !== null && ref !== undefined) {
     (ref as React.MutableRefObject<T>).current = value;

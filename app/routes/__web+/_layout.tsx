@@ -1,6 +1,6 @@
-import { Outlet } from "@remix-run/react";
+import { Outlet } from '@remix-run/react';
 
-import { Footer, Nav } from "~/components";
+import { Footer, Nav } from '~/components';
 
 export default function WebLayout() {
   return (

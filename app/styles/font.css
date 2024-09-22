@@ -1,10 +1,10 @@
 @font-face {
   /*  */
 
-  font-family: "Signerica";
+  font-family: 'Signerica';
   font-style: normal;
   font-weight: 400;
   src:
-    local("Signerica"),
-    url("/fonts/signerica-subset.ttf") format("truetype");
+    local('Signerica'),
+    url('/fonts/signerica-subset.ttf') format('truetype');
 }

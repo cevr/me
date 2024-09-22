@@ -4,7 +4,9 @@ export interface DomainError<Name extends string> extends Error {
 }
 
 export namespace DomainError {
-  export type Make<T extends typeof make = typeof make> = ReturnType<ReturnType<T>>;
+  export type Make<T extends typeof make = typeof make> = ReturnType<
+    ReturnType<T>
+  >;
 }
 
 const make =

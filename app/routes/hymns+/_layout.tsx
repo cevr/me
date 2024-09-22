@@ -1,19 +1,33 @@
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, Link, Outlet, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react";
-import clsx from "clsx";
-import { cacheHeader } from "pretty-cache-header";
-import React from "react";
-import { useDebounceFetcher } from "remix-utils/use-debounce-fetcher";
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import {
+  json,
+  Link,
+  Outlet,
+  useLoaderData,
+  useNavigate,
+  useSearchParams,
+} from '@remix-run/react';
+import clsx from 'clsx';
+import { cacheHeader } from 'pretty-cache-header';
+import React from 'react';
+import { useDebounceFetcher } from 'remix-utils/use-debounce-fetcher';
 
-import { ComboBox, ComboBoxContent, ComboBoxInput, ComboBoxItem, ComboBoxPopover, ExternalLink } from "~/components";
-import { Label } from "~/components/label";
-import { getHymns, getHymnSearchParams } from "~/lib/hymns.server";
-import { addToSearchParams } from "~/lib/utils";
-import type { Hymn } from "~/types/hymn";
+import {
+  ComboBox,
+  ComboBoxContent,
+  ComboBoxInput,
+  ComboBoxItem,
+  ComboBoxPopover,
+  ExternalLink,
+} from '~/components';
+import { Label } from '~/components/label';
+import { getHymns, getHymnSearchParams } from '~/lib/hymns.server';
+import { addToSearchParams } from '~/lib/utils';
+import type { Hymn } from '~/types/hymn';
 
 export let meta: MetaFunction = () => [
   {
-    title: "Hymns",
+    title: 'Hymns',
   },
 ];
 
@@ -26,10 +40,10 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
     },
     {
       headers: {
-        "cache-control": cacheHeader({
+        'cache-control': cacheHeader({
           public: true,
-          maxAge: "1week",
-          staleWhileRevalidate: "1year",
+          maxAge: '1week',
+          staleWhileRevalidate: '1year',
         }),
       },
     },
@@ -52,21 +66,21 @@ export default function Hymns() {
         <div className="flex items-end gap-2">
           <Link
             to={{
-              pathname: "/hymns",
+              pathname: '/hymns',
               search: searchParams.toString(),
             }}
-            className="duration-200 hover:text-salmon-500 text-2xl font-bold"
+            className="text-2xl font-bold duration-200 hover:text-salmon-500"
           >
             Hymns
           </Link>
 
           <Link
-            className={clsx("duration-200 hover:text-salmon-500", {
-              "text-salmon-500 underline": sort === "number",
+            className={clsx('duration-200 hover:text-salmon-500', {
+              'text-salmon-500 underline': sort === 'number',
             })}
             to={{
               search: addToSearchParams(searchParams, {
-                sort: "number",
+                sort: 'number',
               }).toString(),
             }}
           >
@@ -74,12 +88,12 @@ export default function Hymns() {
           </Link>
 
           <Link
-            className={clsx("duration-200 hover:text-salmon-500", {
-              "text-salmon-500 underline": sort === "title",
+            className={clsx('duration-200 hover:text-salmon-500', {
+              'text-salmon-500 underline': sort === 'title',
             })}
             to={{
               search: addToSearchParams(searchParams, {
-                sort: "title",
+                sort: 'title',
               }).toString(),
             }}
           >
@@ -103,11 +117,18 @@ export default function Hymns() {
           menuTrigger="focus"
         >
           <Label>Search</Label>
-          <ComboBoxInput placeholder="Search by number or title" className="md:max-w-sm" />
+          <ComboBoxInput
+            placeholder="Search by number or title"
+            className="md:max-w-sm"
+          />
           <ComboBoxPopover>
             <ComboBoxContent items={fetcher.data}>
               {(hymn) => (
-                <ComboBoxItem className="font-mono" textValue={hymn.number} id={hymn.number}>
+                <ComboBoxItem
+                  className="font-mono"
+                  textValue={hymn.number}
+                  id={hymn.number}
+                >
                   {hymn.number}: {hymn.title}
                 </ComboBoxItem>
               )}
@@ -116,9 +137,11 @@ export default function Hymns() {
         </ComboBox>
       </div>
       <Outlet />
-      <span className="text-[10px] px-2 py-6">
-        The Seventh-day Adventist Hymnal. Chords by{" "}
-        <ExternalLink href="https://bradwarden.com/music/hymnchords">Brad Warden</ExternalLink>
+      <span className="px-2 py-6 text-[10px]">
+        The Seventh-day Adventist Hymnal. Chords by{' '}
+        <ExternalLink href="https://bradwarden.com/music/hymnchords">
+          Brad Warden
+        </ExternalLink>
       </span>
     </div>
   );

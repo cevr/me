@@ -1,4 +1,4 @@
-import * as z from "zod";
+import * as z from 'zod';
 
 const envSchema = z.object({
   DEV_TO_TOKEN: z.string(),

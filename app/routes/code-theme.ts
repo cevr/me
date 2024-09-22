@@ -1,13 +1,13 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { redirect } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from '@remix-run/node';
+import { redirect } from '@remix-run/node';
 
-import { setTheme, themeCookie } from "~/lib";
+import { setTheme, themeCookie } from '~/lib';
 
 export let action: ActionFunction = async ({ request }) => {
   let cookie = await setTheme(request);
-  return redirect(request.headers.get("Referer") ?? "/", {
+  return redirect(request.headers.get('Referer') ?? '/', {
     headers: {
-      "Set-Cookie": (await themeCookie.serialize(cookie)) as any,
+      'Set-Cookie': (await themeCookie.serialize(cookie)) as any,
     },
   });
 };
@@ -44,6 +44,6 @@ export let loader: LoaderFunction = async ({ request }) => {
         --code-punc: #999999;
         --code-func: #dd4a68;
       }`,
-    { headers: { "content-type": "text/css" } },
+    { headers: { 'content-type': 'text/css' } },
   );
 };

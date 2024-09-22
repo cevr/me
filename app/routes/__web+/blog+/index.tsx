@@ -1,14 +1,14 @@
-import { json } from "@remix-run/node";
-import type { MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
-import { cacheHeader } from "pretty-cache-header";
+import { json } from '@remix-run/node';
+import type { MetaFunction } from '@remix-run/node';
+import { Link, useLoaderData } from '@remix-run/react';
+import { cacheHeader } from 'pretty-cache-header';
 
-import { VerticalSpacer } from "~/components";
-import { postsApi } from "~/lib";
+import { VerticalSpacer } from '~/components';
+import { postsApi } from '~/lib';
 
 export let meta: MetaFunction = () => [
   {
-    title: "Blog | Cristian",
+    title: 'Blog | Cristian',
   },
 ];
 
@@ -20,10 +20,10 @@ export let loader = async () => {
     },
     {
       headers: {
-        "Cache-Control": cacheHeader({
+        'Cache-Control': cacheHeader({
           public: true,
-          maxAge: "1week",
-          staleWhileRevalidate: "1year",
+          maxAge: '1week',
+          staleWhileRevalidate: '1year',
         }),
       },
     },
@@ -38,7 +38,10 @@ export default function Screen() {
       <VerticalSpacer />
       <ul className="flex flex-col gap-4 font-light">
         {data.posts.map((post) => (
-          <li className="text-xl text-neutral-50 duration-200 hover:text-salmon-500" key={post.slug}>
+          <li
+            className="text-xl text-neutral-50 duration-200 hover:text-salmon-500"
+            key={post.slug}
+          >
             <Link to={post.slug}>{post.title}</Link>
           </li>
         ))}

@@ -1,17 +1,18 @@
-import { ExternalLink } from "./external-link";
-import { Email, Github, LinkedIn, Twitter } from "./icons";
+import { ExternalLink } from './external-link';
+import { Email, Github, LinkedIn, Twitter } from './icons';
 
-let email = "hello@cvr.im";
+let email = 'hello@cvr.im';
 
-const footerLinkClassName = "text-neutral-400 hover:text-salmon-500 duration-200 font-light h-6 w-6";
+const footerLinkClassName =
+  'text-neutral-400 hover:text-salmon-500 duration-200 font-light h-6 w-6';
 
 export function Footer() {
   return (
     <footer
       style={{
-        gridArea: "footer",
+        gridArea: 'footer',
       }}
-      className="flex items-center justify-center gap-6 py-6 sm:justify-between h-16"
+      className="flex h-16 items-center justify-center gap-6 py-6 sm:justify-between"
     >
       <div className="flex items-center gap-5">
         <ExternalLink

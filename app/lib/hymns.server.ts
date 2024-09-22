@@ -1,17 +1,17 @@
-import { cachified } from "@epic-web/cachified";
-import type { CacheEntry } from "@epic-web/cachified";
-import { load } from "cheerio";
-import { Option } from "ftld";
-import { LRUCache } from "lru-cache";
-import { matchSorter } from "match-sorter";
-import { Chord, Interval, Note, Scale } from "tonal";
-import * as z from "zod";
+import { cachified } from '@epic-web/cachified';
+import type { CacheEntry } from '@epic-web/cachified';
+import { load } from 'cheerio';
+import { Option } from 'ftld';
+import { LRUCache } from 'lru-cache';
+import { matchSorter } from 'match-sorter';
+import { Chord, Interval, Note, Scale } from 'tonal';
+import * as z from 'zod';
 
-import type { Hymn } from "~/types/hymn";
+import type { Hymn } from '~/types/hymn';
 
-import { GithubCMS } from "./github.server";
-import { keys } from "./hymns";
-import type { TaskQueue } from "./utils";
+import { GithubCMS } from './github.server';
+import { keys } from './hymns';
+import type { TaskQueue } from './utils';
 
 declare global {
   var hymnCache: {
@@ -23,7 +23,7 @@ declare global {
   var fetchQueue: TaskQueue<Hymn[]>;
 }
 
-const hymnsFilename = "me/hymns.json";
+const hymnsFilename = 'me/hymns.json';
 
 // function fetchHymns() {
 //   async function doFetch() {
@@ -81,14 +81,16 @@ let cache = new LRUCache<string, CacheEntry<Hymn[]>>({ max: 1000 });
 export async function getHymns(): Promise<Hymn[]> {
   return await cachified({
     cache: cache as any,
-    key: "hymns",
+    key: 'hymns',
     getFreshValue: async () => GithubCMS.get<Hymn[]>(hymnsFilename).unwrap(),
   });
 }
-export async function getSortedHymns(sortBy: "number" | "title"): Promise<Hymn[]> {
+export async function getSortedHymns(
+  sortBy: 'number' | 'title',
+): Promise<Hymn[]> {
   let hymns: Hymn[] = await getHymns();
 
-  if (sortBy === "title") {
+  if (sortBy === 'title') {
     return hymns.slice().sort((a, b) => a.title.localeCompare(b.title));
   }
   return hymns;
@@ -96,15 +98,15 @@ export async function getSortedHymns(sortBy: "number" | "title"): Promise<Hymn[]
 
 export async function getFilteredHymns(request: Request): Promise<Hymn[]> {
   const url = new URL(request.url);
-  const query = url.searchParams.get("q");
+  const query = url.searchParams.get('q');
   return cachified({
     cache: cache as any,
-    key: query ? `filtered-hymns-${query}` : "filtered-hymns",
+    key: query ? `filtered-hymns-${query}` : 'filtered-hymns',
     getFreshValue: async () => {
-      let hymns = await getSortedHymns("number");
+      let hymns = await getSortedHymns('number');
       if (query) {
         hymns = matchSorter(hymns, query, {
-          keys: ["title", "number"],
+          keys: ['title', 'number'],
         });
       }
       return hymns.slice(0, 9);
@@ -113,15 +115,15 @@ export async function getFilteredHymns(request: Request): Promise<Hymn[]> {
 }
 
 export function pushHymnsToPublic(hymns: Hymn[]) {
-  GithubCMS.push(hymnsFilename, hymns, "Update hymns").run();
+  GithubCMS.push(hymnsFilename, hymns, 'Update hymns').run();
 }
 
 const hymnSearchParamsSchema = z.object({
   sort: z
-    .union([z.literal("title"), z.literal("number")])
+    .union([z.literal('title'), z.literal('number')])
     .nullable()
-    .default("number")
-    .transform((x) => x ?? "number"),
+    .default('number')
+    .transform((x) => x ?? 'number'),
   key: z
     .enum(keys)
     .nullable()
@@ -133,8 +135,8 @@ export type HymnSearchParams = z.infer<typeof hymnSearchParamsSchema>;
 
 export function getHymnSearchParams(req: Request): HymnSearchParams {
   const url = new URL(req.url);
-  const sort = url.searchParams.get("sort");
-  const key = url.searchParams.get("key");
+  const sort = url.searchParams.get('sort');
+  const key = url.searchParams.get('key');
   const params = hymnSearchParamsSchema.safeParse({
     sort,
     key,
@@ -146,7 +148,7 @@ export function getHymnSearchParams(req: Request): HymnSearchParams {
 }
 
 export async function getHymn(
-  sortBy: "title" | "number",
+  sortBy: 'title' | 'number',
   number: string,
 ): Promise<[prev: Hymn | undefined, curr: Hymn, next: Hymn | undefined]> {
   return (await cachified({
@@ -156,7 +158,7 @@ export async function getHymn(
       const hymns = await getSortedHymns(sortBy);
       const index = hymns.findIndex((h) => h.number === number);
       if (index === -1) {
-        throw new Error("Could not find hymn");
+        throw new Error('Could not find hymn');
       }
       const prev = hymns[index - 1];
       const curr = hymns[index];
@@ -169,39 +171,39 @@ export async function getHymn(
 export function parseWebPage(content: string) {
   const $ = load(content);
   // if theres an anchor tag within a pre tag, then the hymn is unavailable
-  const unavailable = $("pre a").text();
+  const unavailable = $('pre a').text();
 
   if (unavailable) {
     return null;
   }
   // we want to parse the content of the pre tag
-  const h2 = $("h2").text();
+  const h2 = $('h2').text();
   const match = h2.match(/^(\d+)\. (.*)$/);
   if (!match) {
     return null;
   }
   const [, hymnNumber, hymnTitle] = match;
 
-  const preContent = $("pre").html() || "";
-  const rawLines = preContent.split("<br>");
+  const preContent = $('pre').html() || '';
+  const rawLines = preContent.split('<br>');
 
-  const parsedLines: Hymn["lines"] = [];
+  const parsedLines: Hymn['lines'] = [];
 
   for (let i = 0; i < rawLines.length; i++) {
     let line = rawLines[i].trim();
 
-    if (line === "" && hymnNumber === "251" && i === 0) {
+    if (line === '' && hymnNumber === '251' && i === 0) {
       // special case for 251
       // the first line is blank, but this breaks the parser
       // so we just set it to Ab (the first chord)
-      line = "Ab";
+      line = 'Ab';
     }
 
-    if (line.includes("[") || line.includes("(") || line === "") {
+    if (line.includes('[') || line.includes('(') || line === '') {
       continue;
     }
 
-    const nextLine = rawLines[i + 1] ? rawLines[i + 1].trim() : "";
+    const nextLine = rawLines[i + 1] ? rawLines[i + 1].trim() : '';
 
     if (nextLine) {
       const chordRegex = /([A-G](?:#|b)?(?:m|M|dim|aug|sus)?(?:\d)?)|(\s+)/g;
@@ -218,8 +220,11 @@ export function parseWebPage(content: string) {
       }
 
       const combinedLine = chordPositions.map((chordPosition, index) => {
-        const nextChordPosition = chordPositions[index + 1]?.position || nextLine.length;
-        const lyric = nextLine.slice(chordPosition.position, nextChordPosition).trim();
+        const nextChordPosition =
+          chordPositions[index + 1]?.position || nextLine.length;
+        const lyric = nextLine
+          .slice(chordPosition.position, nextChordPosition)
+          .trim();
         return { lyric, chord: chordPosition.chord };
       });
 
@@ -230,35 +235,45 @@ export function parseWebPage(content: string) {
 
   return {
     title: hymnTitle,
-    number: hymnNumber.padStart(3, "0"),
-    reference: "The Seventh-day Adventist Hymnal. Chords by https://bradwarden.com/music/hymnchords",
+    number: hymnNumber.padStart(3, '0'),
+    reference:
+      'The Seventh-day Adventist Hymnal. Chords by https://bradwarden.com/music/hymnchords',
     lines: parsedLines,
   };
 }
 
 export function transposeHymn(
   hymn: Hymn,
-  key: HymnSearchParams["key"],
+  key: HymnSearchParams['key'],
 ): [Hymn & { originalScale?: string; scale?: string }, number] {
-  const chords = hymn.lines.flatMap((line) => line.map((l) => l.chord)).filter(Boolean) as string[];
+  const chords = hymn.lines
+    .flatMap((line) => line.map((l) => l.chord))
+    .filter(Boolean) as string[];
 
-  const originalScale = Option.from(Scale.detect(chords)[0]).flatMap((s) => Option.from(s.split(" ")[0]));
+  const originalScale = Option.from(Scale.detect(chords)[0]).flatMap((s) =>
+    Option.from(s.split(' ')[0]),
+  );
 
   if (!key || originalScale.isNone()) {
     return [
       {
         ...hymn,
-        originalScale: originalScale.unwrapOr(""),
+        originalScale: originalScale.unwrapOr(''),
       },
       0,
     ];
   }
   const { tonic } = Chord.get(key);
-  const interval = Interval.distance(Note.get(originalScale.unwrap()), Note.get(tonic as string));
+  const interval = Interval.distance(
+    Note.get(originalScale.unwrap()),
+    Note.get(tonic as string),
+  );
 
-  const transposed = chords.map((chord) => (chord ? Chord.transpose(chord, interval) : chord));
+  const transposed = chords.map((chord) =>
+    chord ? Chord.transpose(chord, interval) : chord,
+  );
 
-  const scale = Scale.detect(transposed)[0]?.split(" ")[0] ?? "";
+  const scale = Scale.detect(transposed)[0]?.split(' ')[0] ?? '';
 
   const transposedHymn = {
     ...hymn,
@@ -268,7 +283,7 @@ export function transposeHymn(
         lyric,
       })),
     ),
-    originalScale: originalScale.unwrapOr(""),
+    originalScale: originalScale.unwrapOr(''),
     scale,
   };
 

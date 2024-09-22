@@ -1,12 +1,12 @@
-import { cachified } from "@epic-web/cachified";
-import { Task } from "ftld";
-import type { AsyncTask } from "ftld";
-import matter from "gray-matter";
-import { LRUCache } from "lru-cache";
-import { request } from "undici";
+import { cachified } from '@epic-web/cachified';
+import { Task } from 'ftld';
+import type { AsyncTask } from 'ftld';
+import matter from 'gray-matter';
+import { LRUCache } from 'lru-cache';
+import { request } from 'undici';
 
-import { DomainError } from "./domain-error";
-import { env } from "./env.server";
+import { DomainError } from './domain-error';
+import { env } from './env.server';
 
 type Maybe<T> = T | null;
 
@@ -41,18 +41,18 @@ export interface Post {
 }
 
 let stripWhitespace = (string: string) => {
-  return string.replace(/^\s+/, "").replace(/\s+$/, "");
+  return string.replace(/^\s+/, '').replace(/\s+$/, '');
 };
 
 let wordCount = (string: string) => {
-  let pattern = "\\w+";
-  let reg = new RegExp(pattern, "g");
+  let pattern = '\\w+';
+  let reg = new RegExp(pattern, 'g');
   return (string.match(reg) || []).length;
 };
 
 let humanReadableTime = (time: number) => {
   if (time < 1) {
-    return "less than a minute";
+    return 'less than a minute';
   }
   return `${Math.ceil(time)} minutes`;
 };
@@ -69,32 +69,39 @@ let normalizePost = (post: Post): Post => {
   return {
     ...post,
     // remove the last bit (its a 4 digit identifier, not needed here)
-    slug: post.slug.split("-").slice(0, -1).join("-"),
+    slug: post.slug.split('-').slice(0, -1).join('-'),
     matter: { data, content },
     read_estimate: getReadEstimate(post.body_markdown),
   };
 };
 
-type FetchArticleError = DomainError<"FetchArticleError">;
-const FetchArticleError = DomainError.make("FetchArticleError");
+type FetchArticleError = DomainError<'FetchArticleError'>;
+const FetchArticleError = DomainError.make('FetchArticleError');
 
 let fetchArticle = (page: number): AsyncTask<FetchArticleError, Post[]> =>
   Task.from(
     () =>
-      request(`https://dev.to/api/articles/me/published?page=${page}&per_page=100`, {
-        headers: {
-          "api-key": env.DEV_TO_TOKEN,
-          "user-agent": "cvr.im",
+      request(
+        `https://dev.to/api/articles/me/published?page=${page}&per_page=100`,
+        {
+          headers: {
+            'api-key': env.DEV_TO_TOKEN,
+            'user-agent': 'cvr.im',
+          },
         },
-      }).then((res) => {
+      ).then((res) => {
         return res.body.json();
       }) as Promise<Post[]>,
-    (e) => FetchArticleError({ message: "Could not fetch articles", meta: e }),
+    (e) => FetchArticleError({ message: 'Could not fetch articles', meta: e }),
   );
 
-let fetchAllArticles = (page = 1, results: Post[] = []): AsyncTask<FetchArticleError, Post[]> => {
+let fetchAllArticles = (
+  page = 1,
+  results: Post[] = [],
+): AsyncTask<FetchArticleError, Post[]> => {
   return fetchArticle(page).flatMap((latestResults) => {
-    if (latestResults.length === 100) return fetchAllArticles(page + 1, results.concat(latestResults));
+    if (latestResults.length === 100)
+      return fetchAllArticles(page + 1, results.concat(latestResults));
 
     return Task.AsyncOk(results.concat(latestResults));
   });
@@ -106,7 +113,7 @@ export let all = (): AsyncTask<FetchArticleError, Post[]> => {
   return Task.from(() =>
     cachified({
       cache: cache as any,
-      key: "posts",
+      key: 'posts',
       getFreshValue: () =>
         fetchAllArticles()
           .map((posts) => posts.map(normalizePost))
@@ -138,4 +145,4 @@ export let get = (slug: string): AsyncTask<FetchArticleError, PostBySlug> => {
   );
 };
 
-export { bundleMDX as serialize } from "mdx-bundler";
+export { bundleMDX as serialize } from 'mdx-bundler';

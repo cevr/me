@@ -1,11 +1,11 @@
-import type { AsyncTask } from "ftld";
-import { Result, Task } from "ftld";
-import { request } from "undici";
+import type { AsyncTask } from 'ftld';
+import { Result, Task } from 'ftld';
+import { request } from 'undici';
 
-import { DomainError } from "../../lib/domain-error";
-import { env } from "../../lib/env.server";
-import type { OpenAIChatFailedError } from "./openai.server";
-import { OpenAI } from "./openai.server";
+import { DomainError } from '../../lib/domain-error';
+import { env } from '../../lib/env.server';
+import type { OpenAIChatFailedError } from './openai.server';
+import { OpenAI } from './openai.server';
 
 export type Embedding = number[];
 export type EmbeddingWithSource = {
@@ -26,8 +26,8 @@ const relatedBiblicalTextsPrompt = (
   }[],
 ) =>
   `Here are some related biblical texts that may help you answer the question: ${relatedTexts
-    .map((text) => text.source + " (" + text.label + ")")
-    .join(", ")}`;
+    .map((text) => text.source + ' (' + text.label + ')')
+    .join(', ')}`;
 
 const relatedEGWTextsPrompt = (
   relatedTexts: {
@@ -36,8 +36,8 @@ const relatedEGWTextsPrompt = (
   }[],
 ) =>
   `Here are some related texts from the author Ellen G. White that may help you answer the question: ${relatedTexts
-    .map((text) => text.source + " (" + text.label + ")")
-    .join(", ")}`;
+    .map((text) => text.source + ' (' + text.label + ')')
+    .join(', ')}`;
 
 const exploreMoreQuestionsPrompt = `You are tasked with giving the student more questions to ask to further understand and explore the topic.
   Requirements:
@@ -57,15 +57,17 @@ export type SearchEmbeddingsResponse = {
   egw: EmbeddingSource[];
   bible: EmbeddingSource[];
 };
-export type SearchEmbeddingsError = DomainError<"SearchEmbeddingsError">;
-export const SearchEmbeddingsError = DomainError.make("SearchEmbeddingsError");
+export type SearchEmbeddingsError = DomainError<'SearchEmbeddingsError'>;
+export const SearchEmbeddingsError = DomainError.make('SearchEmbeddingsError');
 
-export let searchEmbeddings = (query: string): AsyncTask<SearchEmbeddingsError, SearchEmbeddingsResponse> =>
+export let searchEmbeddings = (
+  query: string,
+): AsyncTask<SearchEmbeddingsError, SearchEmbeddingsResponse> =>
   Task.from(
     () =>
       request(`${env.BIBLE_TOOLS_API}/search?q=${query}`, {
         headers: {
-          "user-agent": "cvr.im",
+          'user-agent': 'cvr.im',
         },
       }).then((res) => res.body.json() as Promise<SearchEmbeddingsResponse>),
     (e) => SearchEmbeddingsError({ meta: e }),
@@ -91,19 +93,19 @@ export let searchAndChat = (
     .flatMap((embeddings) =>
       OpenAI.chat([
         {
-          role: "system",
+          role: 'system',
           content: settingPrompt,
         },
         {
-          role: "system",
+          role: 'system',
           content: relatedBiblicalTextsPrompt(embeddings.bible),
         },
         {
-          role: "system",
+          role: 'system',
           content: relatedEGWTextsPrompt(embeddings.egw),
         },
         {
-          role: "user",
+          role: 'user',
           content: query,
         },
       ]).map(
@@ -119,28 +121,28 @@ export let searchAndChat = (
 
 type ExploreChatResponse = string[];
 
-type NoJsonError = DomainError<"NoJsonError">;
-const NoJsonError = DomainError.make("NoJsonError");
+type NoJsonError = DomainError<'NoJsonError'>;
+const NoJsonError = DomainError.make('NoJsonError');
 
-type ExploreChatParseError = DomainError<"ExploreChatParseError">;
-const ExploreChatParseError = DomainError.make("ExploreChatParseError");
+type ExploreChatParseError = DomainError<'ExploreChatParseError'>;
+const ExploreChatParseError = DomainError.make('ExploreChatParseError');
 
 export let explore = (res: SearchChatResponse) =>
   OpenAI.chat([
     {
-      role: "system",
+      role: 'system',
       content: exploreMoreQuestionsPrompt,
     },
     {
-      role: "system",
+      role: 'system',
       content: relatedBiblicalTextsPrompt(res.bible),
     },
     {
-      role: "system",
+      role: 'system',
       content: relatedEGWTextsPrompt(res.egw),
     },
     {
-      role: "user",
+      role: 'user',
       content: res.answer,
     },
   ])

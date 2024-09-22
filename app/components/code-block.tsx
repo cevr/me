@@ -1,49 +1,57 @@
-import clsx from "clsx";
-import { Highlight } from "prism-react-renderer";
-import type { Prism } from "prism-react-renderer";
+import clsx from 'clsx';
+import { Highlight } from 'prism-react-renderer';
+import type { Prism } from 'prism-react-renderer';
 
 const theme = {
   plain: {
-    color: "var(--neutral-50)",
-    backgroundColor: "var(--code-bg)",
-    transition: "all 0.2s ease-out",
+    color: 'var(--neutral-50)',
+    backgroundColor: 'var(--code-bg)',
+    transition: 'all 0.2s ease-out',
     fontFamily: '"SFMono-Regular", monospace',
   },
   styles: [
     {
-      types: ["prolog", "constant", "builtin", "function", "boolean", "number", "maybe-class-name"],
+      types: [
+        'prolog',
+        'constant',
+        'builtin',
+        'function',
+        'boolean',
+        'number',
+        'maybe-class-name',
+      ],
       style: {
-        color: "var(--code-func)",
+        color: 'var(--code-func)',
       },
     },
     {
-      types: ["punctuation", "symbol"],
+      types: ['punctuation', 'symbol'],
       style: {
-        color: "var(--code-punc)",
+        color: 'var(--code-punc)',
       },
     },
     {
-      types: ["string", "char", "tag", "selector"],
+      types: ['string', 'char', 'tag', 'selector'],
       style: {
-        color: "var(--code-string)",
+        color: 'var(--code-string)',
       },
     },
     {
-      types: ["keyword", "variable"],
+      types: ['keyword', 'variable'],
       style: {
-        color: "var(--code-keyword)",
+        color: 'var(--code-keyword)',
       },
     },
     {
-      types: ["comment"],
+      types: ['comment'],
       style: {
-        color: "var(--code-comment)",
+        color: 'var(--code-comment)',
       },
     },
     {
-      types: ["attr-name"],
+      types: ['attr-name'],
       style: {
-        color: "var(--code-string)",
+        color: 'var(--code-string)',
       },
     },
   ],
@@ -74,23 +82,29 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock(props: CodeBlockProps) {
-  const language = (props.className ? props.className.replace(/language-/, "") : "markup") as Prism.Languages[number];
+  const language = (
+    props.className ? props.className.replace(/language-/, '') : 'markup'
+  ) as Prism.Languages[number];
 
   const shouldHighlightLine = calculateLinesToHighlight(props.metastring);
 
   return (
-    <Highlight theme={theme} code={props.children.trim()} language={language as any}>
+    <Highlight
+      theme={theme}
+      code={props.children.trim()}
+      language={language as any}
+    >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre
           className={clsx(
             className,
-            "duration-200 rounded bg-[color:var(--code-bg)] px-2 py-1 text-[0.9rem] text-salmon-500 transition-all font-mono",
+            'rounded bg-[color:var(--code-bg)] px-2 py-1 font-mono text-[0.9rem] text-salmon-500 transition-all duration-200',
           )}
           style={{
             ...style,
-            padding: "1rem",
-            borderRadius: "0.5rem",
-            overflow: "auto",
+            padding: '1rem',
+            borderRadius: '0.5rem',
+            overflow: 'auto',
           }}
         >
           {tokens.map((line, i) => {
@@ -104,19 +118,26 @@ export function CodeBlock(props: CodeBlockProps) {
                 key={i}
                 {...lineProps}
                 className={clsx(lineProps.className, {
-                  "border-l-4 border-solid border-l-salmon-500 bg-[color:var(--code-highlight-bg)]":
+                  'border-l-4 border-solid border-l-salmon-500 bg-[color:var(--code-highlight-bg)]':
                     shouldHighlightLine(i),
                 })}
               >
                 <span
-                  className={clsx("relative ml-2 inline-block w-[1.2rem] select-none pr-6 text-center opacity-30", {
-                    "-left-1 w-[calc(1.2em_-_4px)] opacity-50": shouldHighlightLine(i),
-                  })}
+                  className={clsx(
+                    'relative ml-2 inline-block w-[1.2rem] select-none pr-6 text-center opacity-30',
+                    {
+                      '-left-1 w-[calc(1.2em_-_4px)] opacity-50':
+                        shouldHighlightLine(i),
+                    },
+                  )}
                 >
                   {i + 1}
                 </span>
                 {line.map((token, key) => (
-                  <span key={key} {...getTokenProps({ token, key })} />
+                  <span
+                    key={key}
+                    {...getTokenProps({ token, key })}
+                  />
                 ))}
               </div>
             );

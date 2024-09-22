@@ -1,10 +1,10 @@
-import { Outlet } from "@remix-run/react";
+import { Outlet } from '@remix-run/react';
 
 export default function Screen() {
   return (
     <main
       style={{
-        gridArea: "content",
+        gridArea: 'content',
       }}
       className="mx-auto w-full md:w-[100ch]"
     >

@@ -1,21 +1,28 @@
-import { defer } from "@remix-run/node";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Await, Form, Link, useLoaderData, useNavigation, useSearchParams } from "@remix-run/react";
-import * as React from "react";
+import { defer } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import {
+  Await,
+  Form,
+  Link,
+  useLoaderData,
+  useNavigation,
+  useSearchParams,
+} from '@remix-run/react';
+import * as React from 'react';
 
-import { Button, buttonVariants } from "~/components/button";
-import { Input } from "~/components/input";
+import { Button, buttonVariants } from '~/components/button';
+import { Input } from '~/components/input';
 
-import { explore, searchAndChat } from "./utils.server";
+import { explore, searchAndChat } from './utils.server';
 
 export let meta: MetaFunction = () => [
   {
-    title: "Bible study tools",
+    title: 'Bible study tools',
   },
 ];
 
 export let loader = async ({ request }: LoaderFunctionArgs) => {
-  const query = new URL(request.url).searchParams.get("query") ?? "";
+  const query = new URL(request.url).searchParams.get('query') ?? '';
   if (!query) return null;
 
   const result = searchAndChat(query);
@@ -31,16 +38,16 @@ export let loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function EgwSearchPage() {
   const [params] = useSearchParams();
-  const query = params.get("query");
+  const query = params.get('query');
   const formState = useNavigation();
 
   let data = useLoaderData<typeof loader>();
 
-  const loading = formState.state !== "idle";
+  const loading = formState.state !== 'idle';
 
   return (
-    <main className="flex flex-col h-full gap-4 justify-between h-min-0">
-      <div className="flex flex-col gap-2 h-full overflow-y-auto scrollbar-hide">
+    <main className="h-min-0 flex h-full flex-col justify-between gap-4">
+      <div className="scrollbar-hide flex h-full flex-col gap-2 overflow-y-auto">
         {query ? (
           <React.Suspense fallback={null}>
             <Await resolve={data?.result}>
@@ -56,11 +63,14 @@ export default function EgwSearchPage() {
                         <h2 className="text-xs uppercase">Bible</h2>
                         <ul className="flex gap-2">
                           {data!.bible.map((result) => (
-                            <li key={result.label} className="flex flex-col gap-1">
+                            <li
+                              key={result.label}
+                              className="flex flex-col gap-1"
+                            >
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-sm text-neutral-300 font-mono flex-shrink-0"
+                                className="flex-shrink-0 font-mono text-sm text-neutral-300"
                               >
                                 {result.label}
                               </Button>
@@ -73,13 +83,16 @@ export default function EgwSearchPage() {
                     {data?.egw.length ? (
                       <div className="flex flex-col gap-2">
                         <h2 className="text-xs uppercase">EGW</h2>
-                        <ul className="flex gap-2 flex-wrap">
+                        <ul className="flex flex-wrap gap-2">
                           {data!.egw.map((result) => (
-                            <li key={result.label} className="flex flex-col gap-1">
+                            <li
+                              key={result.label}
+                              className="flex flex-col gap-1"
+                            >
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-sm text-neutral-300 font-mono flex-shrink-0"
+                                className="flex-shrink-0 font-mono text-sm text-neutral-300"
                               >
                                 {result.label}
                               </Button>
@@ -100,13 +113,18 @@ export default function EgwSearchPage() {
         <React.Suspense fallback={null}>
           <Await resolve={data?.explore}>
             {(data) => (
-              <div className="flex gap-1 flex-col">
+              <div className="flex flex-col gap-1">
                 {data?.map((question) => (
                   <Link
                     to={{
-                      search: new URLSearchParams({ query: question }).toString(),
+                      search: new URLSearchParams({
+                        query: question,
+                      }).toString(),
                     }}
-                    className={buttonVariants({ variant: "outline", size: "sm" })}
+                    className={buttonVariants({
+                      variant: 'outline',
+                      size: 'sm',
+                    })}
                     key={question}
                   >
                     {question}
@@ -118,7 +136,10 @@ export default function EgwSearchPage() {
         </React.Suspense>
       ) : null}
 
-      <Form method="GET" className="flex gap-2">
+      <Form
+        method="GET"
+        className="flex gap-2"
+      >
         <Input
           defaultValue={query ?? undefined}
           type="text"
@@ -126,7 +147,7 @@ export default function EgwSearchPage() {
           placeholder="Study the bible"
           autoComplete="off"
         />
-        <Button type="submit">{loading ? "Loading..." : "Search"}</Button>
+        <Button type="submit">{loading ? 'Loading...' : 'Search'}</Button>
       </Form>
     </main>
   );
