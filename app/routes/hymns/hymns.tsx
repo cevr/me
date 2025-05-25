@@ -1,4 +1,3 @@
-import type { LoaderFunctionArgs } from 'react-router';
 import { Link, useLoaderData } from 'react-router';
 
 import { HymnCombobox } from './hymn-combobox';
@@ -11,25 +10,12 @@ type Hymn = {
   lines: Array<Array<{ lyric: string; chord: string }>>;
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const search = url.searchParams.get('search') || '';
-
-  let filteredHymns = hymnsData as Hymn[];
-
-  if (search) {
-    filteredHymns = (hymnsData as Hymn[]).filter(
-      (hymn) =>
-        hymn.title.toLowerCase().includes(search.toLowerCase()) ||
-        hymn.number.includes(search),
-    );
-  }
-
-  return { hymns: filteredHymns, search };
+export async function loader() {
+  return { hymns: hymnsData as Hymn[] };
 }
 
 export default function Hymns() {
-  const { hymns, search } = useLoaderData<typeof loader>();
+  const { hymns } = useLoaderData<typeof loader>();
 
   return (
     <div className="mx-auto max-w-2xl p-8 font-mono">
@@ -54,12 +40,6 @@ export default function Hymns() {
             </Link>
           ))}
         </div>
-
-        {hymns.length === 0 && search && (
-          <div className="py-12 text-center text-gray-500">
-            No hymns found for "{search}"
-          </div>
-        )}
       </div>
     </div>
   );
