@@ -5,6 +5,8 @@
     'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --color-primary: hsl(189, 84.7%, 28.2%);
+  --color-background: hsl(0, 0%, 100%);
+  --color-foreground: hsl(0, 0%, 0%);
 
   --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -14,11 +16,13 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-background text-foreground;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
 
     --color-primary: hsl(6 93% 71%);
+    --color-background: hsl(0, 0%, 10%);
+    --color-foreground: hsl(0, 0%, 100%);
   }
 }

@@ -16,7 +16,8 @@
     "isbot": "^5.1.28",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router": "^7.6.1"
+    "react-router": "^7.6.1",
+    "tonal": "^6.4.1"
   },
   "devDependencies": {
     "@cvr/config": "^0.5.1",
