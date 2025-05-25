@@ -42,7 +42,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const matches = useMatches();
   const isStatic = (matches.at(-1)?.handle as { static?: boolean })?.static;
   return (
-    <html lang="en">
+    <html lang="en" className="dark:[&.dark]">
       <head>
         <meta charSet="utf-8" />
         <meta
@@ -51,6 +51,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         <Meta />
         <Links />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `,
+          }}
+        />
       </head>
       <body>
         {children}
