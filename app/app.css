@@ -4,9 +4,11 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --color-primary: hsl(189, 84.7%, 28.2%);
-}
-C .dark {
-  --color-primary: hsl(6 93% 71%);
+
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Inter", ui-serif, Georgia, Cambria, Times New Roman, Times,
+    serif;
 }
 
 html,
@@ -15,5 +17,7 @@ body {
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
+
+    --color-primary: hsl(6 93% 71%);
   }
 }

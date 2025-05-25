@@ -2,20 +2,18 @@ import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Cristian Ramos | Product Engineer" },
+    {
+      name: "description",
+      content: "Product engineer, technologist, and builder.",
+    },
   ];
 }
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col p-8 md:p-16 dark:bg-zinc-950 bg-zinc-50">
-      <header className="flex justify-between items-center mb-12 md:mb-24">
-        {/* <Signature className="w-16 md:w-20" /> */}
-        {/* <ModeToggle /> */}
-      </header>
-
-      <main className="flex-1 max-w-2xl mx-auto w-full">
+    <div className="min-h-screen flex flex-col p-8 md:p-16 dark:bg-zinc-950 bg-zinc-50 font-mono gap-16">
+      <main className="flex-1 max-w-2xl mx-auto flex flex-col justify-center">
         <div className="flex flex-col gap-16">
           <div>
             <h1 className="text-4xl md:text-5xl font-light mb-8 dark:text-white text-zinc-900 tracking-tight">
@@ -38,12 +36,18 @@ export default function Home() {
             <h2 className="text-xl font-medium mb-6 dark:text-white text-zinc-900 tracking-tight">
               Find me
             </h2>
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-col gap-6">
               {[
-                { name: "GitHub", href: "https://github.com" },
-                { name: "X", href: "https://x.com" },
-                { name: "LinkedIn", href: "https://linkedin.com" },
-                { name: "Email", href: "mailto:hello@example.com" },
+                { name: "GitHub", href: "https://github.com/cevr" },
+                { name: "X", href: "https://x.com/_cristianvr_" },
+                {
+                  name: "LinkedIn",
+                  href: "https://linkedin.com/in/cristianvr",
+                },
+                {
+                  name: "Email",
+                  href: "mailto:hello@cvr.im?subject=Hi Cristian!",
+                },
               ].map((link) => (
                 <a
                   key={link.name}
@@ -60,7 +64,7 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="mt-32 text-center text-xs text-zinc-500 dark:text-zinc-600">
+      <footer className="text-center text-xs text-zinc-500 dark:text-zinc-600">
         © {new Date().getFullYear()}
       </footer>
     </div>
