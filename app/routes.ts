@@ -10,7 +10,7 @@ export default [
   //
   index("routes/home.tsx"),
   ...prefix("/hymns", [
-    route("/", "routes/hymns/index.tsx"),
+    route("/", "routes/hymns/hymns.tsx"),
     route("/:hymnId", "routes/hymns/hymn.tsx"),
   ]),
 ] satisfies RouteConfig;
