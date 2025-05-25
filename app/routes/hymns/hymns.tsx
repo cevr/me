@@ -1,18 +1,14 @@
 import { Link, useLoaderData } from 'react-router';
 
 import { HymnCombobox } from './hymn-combobox';
-import hymnsData from './hymns.json';
+import { getHymns } from './hymns.server';
+import type { Hymn } from './hymns.utils';
 
-type Hymn = {
-  title: string;
-  number: string;
-  reference: string;
-  lines: Array<Array<{ lyric: string; chord: string }>>;
-};
-
-export async function loader() {
-  return { hymns: hymnsData as Hymn[] };
+export function meta() {
+  return [{ title: 'Hymns | Hymnal' }];
 }
+
+export let loader = getHymns;
 
 export default function Hymns() {
   const { hymns } = useLoaderData<typeof loader>();

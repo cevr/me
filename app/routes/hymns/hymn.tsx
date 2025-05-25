@@ -9,13 +9,18 @@ import {
   SelectValue,
 } from '~/components/ui/select';
 
+import type { Route } from './+types/hymn';
 import { HymnCombobox } from './hymn-combobox';
-import { getHymnData } from './hymns.server';
-import type { Hymn } from './hymns.server';
+import { getHymnData } from './hymn.server';
+import type { Hymn } from './hymns.utils';
 
 type HymnLine = Array<{ lyric: string; chord: string }>;
 
 export let loader = getHymnData;
+
+export function meta({ data }: Route.MetaArgs) {
+  return [{ title: `${data?.hymn.number}. ${data?.hymn.title} | Hymnal` }];
+}
 
 const KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
