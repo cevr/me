@@ -200,28 +200,28 @@ export default function Hymn() {
 
         {/* Navigation */}
         <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2">
-          <div className="empty:hidden sm:empty:block">
+          <div className="max-w-full empty:hidden sm:empty:block">
             {prevHymn && (
               <Link
                 to={`/hymns/${prevHymn.number}`}
                 className="hover:text-primary flex min-w-0 items-center gap-2 text-sm hover:underline"
               >
                 <span>←</span>
-                <div className="flex min-w-0 gap-1">
+                <div className="flex max-w-full min-w-0 gap-1">
                   <span className="shrink-0 font-mono">{prevHymn.number}.</span>
                   <span className="min-w-0 truncate">{prevHymn.title}</span>
                 </div>
               </Link>
             )}
           </div>
-          <div className="flex justify-end self-end sm:self-auto">
+          <div className="flex max-w-full justify-end self-end empty:hidden sm:self-auto sm:empty:block">
             {nextHymn && (
               <Link
                 to={`/hymns/${nextHymn.number}`}
                 className="hover:text-primary flex min-w-0 flex-row-reverse items-center gap-2 text-sm hover:underline"
               >
                 <span>→</span>
-                <div className="flex min-w-0 gap-1 text-right">
+                <div className="flex max-w-full min-w-0 gap-1 text-right">
                   <span className="shrink-0 font-mono">{nextHymn.number}.</span>
                   <span className="min-w-0 truncate">{nextHymn.title}</span>
                 </div>
