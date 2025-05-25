@@ -11,6 +11,7 @@
     "lint": "eslint app --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@radix-ui/react-select": "^2.2.5",
     "@react-router/node": "^7.6.1",
     "@react-router/serve": "^7.6.1",
     "class-variance-authority": "^0.7.1",

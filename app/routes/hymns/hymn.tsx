@@ -1,6 +1,7 @@
 import { Link, useLoaderData, useSearchParams } from 'react-router';
 import { Chord, transpose } from 'tonal';
 
+import { HymnCombobox } from './hymn-combobox';
 import { getHymnData } from './hymns.server';
 import type { Hymn } from './hymns.server';
 
@@ -103,126 +104,133 @@ export default function Hymn() {
 
   return (
     <div className="mx-auto max-w-2xl p-8 font-mono">
-      {/* Header */}
-      <div className="mb-12">
-        <Link
-          to="/hymns"
-          className="hover:text-primary mb-8 inline-block text-sm hover:underline"
-        >
-          ← Back to Hymns
-        </Link>
+      <div className="flex flex-col gap-12">
+        {/* Header */}
+        <div className="flex flex-col gap-8">
+          <Link
+            to="/hymns"
+            className="hover:text-primary inline-block text-sm hover:underline"
+          >
+            ← Back to Hymns
+          </Link>
 
-        <div className="mb-8">
-          <h1 className="mb-2 text-2xl font-light tracking-tight">
-            {hymn.number}. {hymn.title}
-          </h1>
-        </div>
-
-        {/* Key Selector */}
-        <div className="mb-8 flex items-center gap-4 text-sm">
-          <div className="flex items-center gap-2">
-            <label
-              htmlFor="key-select"
-              className="text-gray-600"
-            >
-              Key:
-            </label>
-            <select
-              id="key-select"
-              value={currentKey}
-              onChange={(e) => handleKeyChange(e.target.value)}
-              className="border-b border-gray-300 bg-transparent font-mono focus:border-gray-900 focus:outline-none"
-            >
-              {KEYS.map((key) => (
-                <option
-                  key={key}
-                  value={key}
-                >
-                  {key} {key === originalKey ? '(Original)' : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {currentKey !== originalKey && (
-            <div className="text-gray-600">
-              Capo (fret {semitones < 0 ? 12 + semitones : semitones})
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Hymn Content */}
-      <div className="flex flex-col gap-8">
-        {hymn.lines.map((line, lineIndex) => {
-          const transposedLine = transposeHymnLine(line);
-
-          return (
-            <div
-              key={lineIndex}
-              className="flex flex-wrap gap-2"
-            >
-              {transposedLine.map((segment, segmentIndex) => (
-                <div
-                  key={segmentIndex}
-                  className="flex flex-col"
-                >
-                  <span className="text-primary min-h-[1rem] shrink-0 font-mono text-xs leading-tight">
-                    {segment.chord || '\u00A0'}
-                  </span>
-                  <span className="flex-1 leading-tight">{segment.lyric}</span>
-                </div>
-              ))}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Key Information */}
-      {currentKey !== originalKey && (
-        <div className="mt-12 space-y-2 text-sm text-gray-600">
           <div>
-            Transposed from {originalKey} to {currentKey} (
-            {semitones > 0 ? '+' : ''}
-            {semitones} semitones)
+            <h1 className="text-2xl font-light tracking-tight">
+              {hymn.number}. {hymn.title}
+            </h1>
+          </div>
+
+          {/* Hymn Combobox */}
+          <HymnCombobox selectedHymnNumber={hymn.number} />
+
+          {/* Key Selector */}
+          <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="key-select"
+                className="text-gray-600"
+              >
+                Key:
+              </label>
+              <select
+                id="key-select"
+                value={currentKey}
+                onChange={(e) => handleKeyChange(e.target.value)}
+                className="border-b border-gray-300 bg-transparent font-mono focus:border-gray-900 focus:outline-none"
+              >
+                {KEYS.map((key) => (
+                  <option
+                    key={key}
+                    value={key}
+                  >
+                    {key} {key === originalKey ? '(Original)' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {currentKey !== originalKey && (
+              <div className="text-gray-600">
+                Capo (fret {semitones < 0 ? 12 + semitones : semitones})
+              </div>
+            )}
           </div>
         </div>
-      )}
 
-      {/* Reference */}
-      <div className="mt-12 border-t border-gray-200 pt-4">
-        <p className="text-xs text-gray-500">{hymn.reference}</p>
-      </div>
+        {/* Hymn Content */}
+        <div className="flex flex-col gap-8">
+          {hymn.lines.map((line, lineIndex) => {
+            const transposedLine = transposeHymnLine(line);
 
-      {/* Navigation */}
-      <div className="mt-12 flex flex-col gap-4 sm:grid sm:grid-cols-2">
-        <div className="empty:hidden sm:empty:block">
-          {prevHymn && (
-            <Link
-              to={`/hymns/${prevHymn.number}`}
-              className="hover:text-primary flex min-w-0 items-center gap-2 text-sm hover:underline"
-            >
-              <span>←</span>
-              <div className="flex min-w-0 gap-1">
-                <span className="shrink-0 font-mono">{prevHymn.number}.</span>
-                <span className="min-w-0 truncate">{prevHymn.title}</span>
+            return (
+              <div
+                key={lineIndex}
+                className="flex flex-wrap gap-2"
+              >
+                {transposedLine.map((segment, segmentIndex) => (
+                  <div
+                    key={segmentIndex}
+                    className="flex flex-col"
+                  >
+                    <span className="text-primary min-h-[1rem] shrink-0 font-mono text-xs leading-tight">
+                      {segment.chord || '\u00A0'}
+                    </span>
+                    <span className="flex-1 leading-tight">
+                      {segment.lyric}
+                    </span>
+                  </div>
+                ))}
               </div>
-            </Link>
-          )}
+            );
+          })}
         </div>
-        <div className="flex justify-end self-end sm:self-auto">
-          {nextHymn && (
-            <Link
-              to={`/hymns/${nextHymn.number}`}
-              className="hover:text-primary flex min-w-0 flex-row-reverse items-center gap-2 text-sm hover:underline"
-            >
-              <span>→</span>
-              <div className="flex min-w-0 gap-1 text-right">
-                <span className="shrink-0 font-mono">{nextHymn.number}.</span>
-                <span className="min-w-0 truncate">{nextHymn.title}</span>
-              </div>
-            </Link>
-          )}
+
+        {/* Key Information */}
+        {currentKey !== originalKey && (
+          <div className="space-y-2 text-sm text-gray-600">
+            <div>
+              Transposed from {originalKey} to {currentKey} (
+              {semitones > 0 ? '+' : ''}
+              {semitones} semitones)
+            </div>
+          </div>
+        )}
+
+        {/* Reference */}
+        <div className="border-t border-gray-200 pt-4">
+          <p className="text-xs text-gray-500">{hymn.reference}</p>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2">
+          <div className="empty:hidden sm:empty:block">
+            {prevHymn && (
+              <Link
+                to={`/hymns/${prevHymn.number}`}
+                className="hover:text-primary flex min-w-0 items-center gap-2 text-sm hover:underline"
+              >
+                <span>←</span>
+                <div className="flex min-w-0 gap-1">
+                  <span className="shrink-0 font-mono">{prevHymn.number}.</span>
+                  <span className="min-w-0 truncate">{prevHymn.title}</span>
+                </div>
+              </Link>
+            )}
+          </div>
+          <div className="flex justify-end self-end sm:self-auto">
+            {nextHymn && (
+              <Link
+                to={`/hymns/${nextHymn.number}`}
+                className="hover:text-primary flex min-w-0 flex-row-reverse items-center gap-2 text-sm hover:underline"
+              >
+                <span>→</span>
+                <div className="flex min-w-0 gap-1 text-right">
+                  <span className="shrink-0 font-mono">{nextHymn.number}.</span>
+                  <span className="min-w-0 truncate">{nextHymn.title}</span>
+                </div>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </div>
