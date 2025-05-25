@@ -28,7 +28,7 @@ export default function Hymns() {
         <HymnCombobox />
 
         {/* Hymns List */}
-        <div className="space-y-1">
+        <div className="flex flex-col gap-2">
           {hymns.map((hymn: Hymn) => (
             <Link
               key={hymn.number}

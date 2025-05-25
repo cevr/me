@@ -23,7 +23,7 @@ export default function Home() {
             <h1 className="mb-8 text-4xl font-light tracking-tight text-zinc-900 md:text-5xl dark:text-white">
               Cristian.
             </h1>
-            <div className="space-y-6 text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
+            <div className="flex flex-col gap-6 text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
               <p>Product engineer, technologist, and builder.</p>
               <p>
                 Creating meaningful digital experiences that combine thoughtful
