@@ -1,5 +1,9 @@
 import type { Route } from "./+types/home";
 
+export const handle = {
+  static: true,
+};
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Cristian Ramos | Product Engineer" },
