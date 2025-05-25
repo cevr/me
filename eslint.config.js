@@ -1,5 +1,3 @@
-import { config } from "@cvr/config/eslint";
+import { config } from '@cvr/config/eslint';
 
-export default [
-    ...config
-]
+export default [...config];

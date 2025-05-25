@@ -1,4 +1,4 @@
-import type { Route } from "./+types/home";
+import type { Route } from './+types/home';
 
 export const handle = {
   static: true,
@@ -6,24 +6,24 @@ export const handle = {
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Cristian Ramos | Product Engineer" },
+    { title: 'Cristian Ramos | Product Engineer' },
     {
-      name: "description",
-      content: "Product engineer, technologist, and builder.",
+      name: 'description',
+      content: 'Product engineer, technologist, and builder.',
     },
   ];
 }
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col p-8 md:p-16 dark:bg-zinc-950 bg-zinc-50 font-mono gap-16">
-      <main className="flex-1 max-w-2xl mx-auto flex flex-col justify-center">
+    <div className="flex min-h-screen flex-col gap-16 bg-zinc-50 p-8 font-mono md:p-16 dark:bg-zinc-950">
+      <main className="mx-auto flex max-w-2xl flex-1 flex-col justify-center">
         <div className="flex flex-col gap-16">
           <div>
-            <h1 className="text-4xl md:text-5xl font-light mb-8 dark:text-white text-zinc-900 tracking-tight">
+            <h1 className="mb-8 text-4xl font-light tracking-tight text-zinc-900 md:text-5xl dark:text-white">
               Cristian.
             </h1>
-            <div className="space-y-6 text-lg dark:text-zinc-300 text-zinc-700 leading-relaxed">
+            <div className="space-y-6 text-lg leading-relaxed text-zinc-700 dark:text-zinc-300">
               <p>Product engineer, technologist, and builder.</p>
               <p>
                 Creating meaningful digital experiences that combine thoughtful
@@ -37,20 +37,20 @@ export default function Home() {
           </div>
 
           <div>
-            <h2 className="text-xl font-medium mb-6 dark:text-white text-zinc-900 tracking-tight">
+            <h2 className="mb-6 text-xl font-medium tracking-tight text-zinc-900 dark:text-white">
               Find me
             </h2>
             <div className="flex flex-col gap-6">
               {[
-                { name: "GitHub", href: "https://github.com/cevr" },
-                { name: "X", href: "https://x.com/_cristianvr_" },
+                { name: 'GitHub', href: 'https://github.com/cevr' },
+                { name: 'X', href: 'https://x.com/_cristianvr_' },
                 {
-                  name: "LinkedIn",
-                  href: "https://linkedin.com/in/cristianvr",
+                  name: 'LinkedIn',
+                  href: 'https://linkedin.com/in/cristianvr',
                 },
                 {
-                  name: "Email",
-                  href: "mailto:hello@cvr.im?subject=Hi Cristian!",
+                  name: 'Email',
+                  href: 'mailto:hello@cvr.im?subject=Hi Cristian!',
                 },
               ].map((link) => (
                 <a
@@ -58,7 +58,7 @@ export default function Home() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-primary hover:underline transition-colors font-mono"
+                  className="text-primary font-mono text-sm transition-colors hover:underline"
                 >
                   {link.name}
                 </a>
