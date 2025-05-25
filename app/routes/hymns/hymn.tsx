@@ -129,16 +129,27 @@ export default function Hymn() {
           </div>
 
           {/* Hymn Combobox */}
-          <HymnCombobox selectedHymnNumber={hymn.number} />
+          <div className="flex items-center gap-2 text-sm">
+            <label
+              htmlFor="hymn-combobox"
+              className="text-gray-600"
+            >
+              Hymn:
+            </label>
+            <HymnCombobox
+              selectedHymnNumber={hymn.number}
+              className="w-full"
+            />
+          </div>
 
           {/* Key Selector */}
-          <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-2 text-sm">
             <div className="flex w-full items-center gap-2">
               <label
                 htmlFor="key-select"
                 className="text-gray-600"
               >
-                Key:
+                Keys:
               </label>
               <Select
                 value={currentKey}
