@@ -129,47 +129,29 @@ export default function Hymn() {
           </div>
 
           {/* Hymn Combobox */}
-          <div className="flex items-center gap-2 text-sm">
-            <label
-              htmlFor="hymn-combobox"
-              className="text-gray-600"
-            >
-              Hymn:
-            </label>
-            <HymnCombobox
-              selectedHymnNumber={hymn.number}
-              className="w-full"
-            />
-          </div>
+
+          <HymnCombobox selectedHymnNumber={hymn.number} />
 
           {/* Key Selector */}
           <div className="flex items-center gap-2 text-sm">
-            <div className="flex w-full items-center gap-2">
-              <label
-                htmlFor="key-select"
-                className="text-gray-600"
-              >
-                Keys:
-              </label>
-              <Select
-                value={currentKey}
-                onValueChange={(value) => handleKeyChange(value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select key" />
-                </SelectTrigger>
-                <SelectContent>
-                  {KEYS.map((key) => (
-                    <SelectItem
-                      key={key}
-                      value={key}
-                    >
-                      {key} {key === originalKey ? '(Original)' : ''}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Select
+              value={currentKey}
+              onValueChange={(value) => handleKeyChange(value)}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select key" />
+              </SelectTrigger>
+              <SelectContent>
+                {KEYS.map((key) => (
+                  <SelectItem
+                    key={key}
+                    value={key}
+                  >
+                    {key} {key === originalKey ? '(Original)' : ''}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           {currentKey !== originalKey && (
             <div className="text-sm text-gray-600">
