@@ -11,3 +11,4 @@ pnpm-lock.yaml
 /postgres-data
 
 /app/styles/tailwind.css
+/.react-router/
