@@ -195,31 +195,35 @@ export default function Hymn() {
       </div>
 
       {/* Navigation */}
-      <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:justify-between">
-        {prevHymn && (
-          <Link
-            to={`/hymns/${prevHymn.number}`}
-            className="hover:text-primary flex min-w-0 flex-1 items-center gap-2 text-sm hover:underline sm:flex-initial"
-          >
-            <span>←</span>
-            <div className="flex min-w-0 gap-1">
-              <span className="shrink-0 font-mono">{prevHymn.number}.</span>
-              <span className="min-w-0 truncate">{prevHymn.title}</span>
-            </div>
-          </Link>
-        )}
-        {nextHymn && (
-          <Link
-            to={`/hymns/${nextHymn.number}`}
-            className="hover:text-primary flex min-w-0 flex-1 items-center gap-2 self-end text-sm hover:underline sm:flex-initial sm:flex-row-reverse"
-          >
-            <div className="flex min-w-0 gap-1 sm:text-right">
-              <span className="shrink-0 font-mono">{nextHymn.number}.</span>
-              <span className="min-w-0 truncate">{nextHymn.title}</span>
-            </div>
-            <span>→</span>
-          </Link>
-        )}
+      <div className="mt-12 flex flex-col gap-4 sm:grid sm:grid-cols-2">
+        <div className="empty:hidden sm:empty:block">
+          {prevHymn && (
+            <Link
+              to={`/hymns/${prevHymn.number}`}
+              className="hover:text-primary flex min-w-0 items-center gap-2 text-sm hover:underline"
+            >
+              <span>←</span>
+              <div className="flex min-w-0 gap-1">
+                <span className="shrink-0 font-mono">{prevHymn.number}.</span>
+                <span className="min-w-0 truncate">{prevHymn.title}</span>
+              </div>
+            </Link>
+          )}
+        </div>
+        <div className="flex justify-end self-end sm:self-auto">
+          {nextHymn && (
+            <Link
+              to={`/hymns/${nextHymn.number}`}
+              className="hover:text-primary flex min-w-0 flex-row-reverse items-center gap-2 text-sm hover:underline"
+            >
+              <span>→</span>
+              <div className="flex min-w-0 gap-1 text-right">
+                <span className="shrink-0 font-mono">{nextHymn.number}.</span>
+                <span className="min-w-0 truncate">{nextHymn.title}</span>
+              </div>
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );
