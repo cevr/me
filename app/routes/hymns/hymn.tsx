@@ -1,6 +1,14 @@
 import { Link, useLoaderData, useSearchParams } from 'react-router';
 import { Chord, transpose } from 'tonal';
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select';
+
 import { HymnCombobox } from './hymn-combobox';
 import { getHymnData } from './hymns.server';
 import type { Hymn } from './hymns.server';
@@ -125,36 +133,38 @@ export default function Hymn() {
 
           {/* Key Selector */}
           <div className="flex items-center gap-4 text-sm">
-            <div className="flex items-center gap-2">
+            <div className="flex w-full items-center gap-2">
               <label
                 htmlFor="key-select"
                 className="text-gray-600"
               >
                 Key:
               </label>
-              <select
-                id="key-select"
+              <Select
                 value={currentKey}
-                onChange={(e) => handleKeyChange(e.target.value)}
-                className="border-b border-gray-300 bg-transparent font-mono focus:border-gray-900 focus:outline-none"
+                onValueChange={(value) => handleKeyChange(value)}
               >
-                {KEYS.map((key) => (
-                  <option
-                    key={key}
-                    value={key}
-                  >
-                    {key} {key === originalKey ? '(Original)' : ''}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select key" />
+                </SelectTrigger>
+                <SelectContent>
+                  {KEYS.map((key) => (
+                    <SelectItem
+                      key={key}
+                      value={key}
+                    >
+                      {key} {key === originalKey ? '(Original)' : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-
-            {currentKey !== originalKey && (
-              <div className="text-gray-600">
-                Capo (fret {semitones < 0 ? 12 + semitones : semitones})
-              </div>
-            )}
           </div>
+          {currentKey !== originalKey && (
+            <div className="text-sm text-gray-600">
+              Capo (fret {semitones < 0 ? 12 + semitones : semitones})
+            </div>
+          )}
         </div>
 
         {/* Hymn Content */}
@@ -184,17 +194,6 @@ export default function Hymn() {
             );
           })}
         </div>
-
-        {/* Key Information */}
-        {currentKey !== originalKey && (
-          <div className="space-y-2 text-sm text-gray-600">
-            <div>
-              Transposed from {originalKey} to {currentKey} (
-              {semitones > 0 ? '+' : ''}
-              {semitones} semitones)
-            </div>
-          </div>
-        )}
 
         {/* Reference */}
         <div className="border-t border-gray-200 pt-4">
