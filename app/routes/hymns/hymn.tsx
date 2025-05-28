@@ -119,7 +119,7 @@ function getOriginalKey(hymn: Hymn): string {
     return firstChord.root;
   }
 
-  throw new Error('No key detected in hymn');
+  return '';
 }
 
 export default function Hymn() {
@@ -176,26 +176,28 @@ export default function Hymn() {
           <HymnCombobox selectedHymnNumber={hymn.number} />
 
           {/* Key Selector */}
-          <div className="flex items-center gap-2 text-sm">
-            <Select
-              value={currentKey}
-              onValueChange={(value) => handleKeyChange(value)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select key" />
-              </SelectTrigger>
-              <SelectContent>
-                {KEYS.map((key) => (
-                  <SelectItem
-                    key={key}
-                    value={key}
-                  >
-                    {key} {key === originalKey ? '(Original)' : ''}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          {originalKey ? (
+            <div className="flex items-center gap-2 text-sm">
+              <Select
+                value={currentKey}
+                onValueChange={(value) => handleKeyChange(value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select key" />
+                </SelectTrigger>
+                <SelectContent>
+                  {KEYS.map((key) => (
+                    <SelectItem
+                      key={key}
+                      value={key}
+                    >
+                      {key} {key === originalKey ? '(Original)' : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          ) : null}
           {currentKey !== originalKey && (
             <div className="text-sm text-gray-600">
               Capo (fret {calculateCapoFret(semitones)})
