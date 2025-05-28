@@ -51,7 +51,7 @@ export function HymnCombobox({ selectedHymnNumber }: HymnComboboxProps) {
           variant="ghost"
           role="combobox"
           aria-expanded={open}
-          className="flex-1 justify-between border-b font-mono max-w-full"
+          className="max-w-full flex-1 justify-between border-b font-mono"
         >
           <span className="truncate">
             {selectedHymn
@@ -74,7 +74,13 @@ export function HymnCombobox({ selectedHymnNumber }: HymnComboboxProps) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-        <Command>
+        <Command
+          value={
+            selectedHymn
+              ? `${selectedHymn?.number} ${selectedHymn?.title}`
+              : undefined
+          }
+        >
           <CommandInput
             placeholder="Search hymns..."
             className="font-mono"

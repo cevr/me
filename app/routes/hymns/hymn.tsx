@@ -1,5 +1,6 @@
+import React from 'react';
 import { Link, useLoaderData, useSearchParams } from 'react-router';
-import { Chord, transpose } from 'tonal';
+import { Chord, Interval, Note, Scale, transpose } from 'tonal';
 
 import {
   Select,
@@ -22,7 +23,25 @@ export function meta({ data }: Route.MetaArgs) {
   return [{ title: `${data?.hymn.number}. ${data?.hymn.title} | Hymnal` }];
 }
 
-const KEYS = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const KEYS = [
+  'C',
+  'C#',
+  'Db',
+  'D',
+  'D#',
+  'Eb',
+  'E',
+  'F',
+  'F#',
+  'Gb',
+  'G',
+  'G#',
+  'Ab',
+  'A',
+  'A#',
+  'Bb',
+  'B',
+];
 
 // Convert semitones to interval string for tonal library
 function semitonesToInterval(semitones: number): string {
@@ -69,23 +88,38 @@ function transposeChord(chord: string, semitones: number): string {
 }
 
 function getOriginalKey(hymn: Hymn): string {
-  // Try to determine the original key from the first chord
+  // Collect all chords from the hymn
+  const chords: string[] = [];
+
   for (const line of hymn.lines) {
     for (const segment of line) {
       if (segment.chord && segment.chord.trim() !== '') {
-        const chordObj = Chord.get(segment.chord);
-        if (chordObj.root) {
-          return chordObj.root;
-        }
-        // Fallback: assume it's a simple note
-        const simpleChord = segment.chord.replace(/[^A-G#b]/g, '');
-        if (KEYS.includes(simpleChord)) {
-          return simpleChord;
-        }
+        chords.push(segment.chord);
       }
     }
   }
-  return 'C'; // Default fallback
+
+  if (!chords.length) {
+    throw new Error('No chords found in hymn');
+  }
+
+  // Try to detect the key using Scale.detect
+  const detectedKey = Scale.detect(chords)[0];
+
+  if (detectedKey) {
+    const chord = Chord.get(detectedKey);
+    if (chord.tonic) {
+      return chord.tonic;
+    }
+  }
+
+  // Fallback to first chord
+  const firstChord = Chord.get(chords[0]);
+  if (firstChord.root) {
+    return firstChord.root;
+  }
+
+  throw new Error('No key detected in hymn');
 }
 
 export default function Hymn() {
@@ -95,17 +129,21 @@ export default function Hymn() {
   const originalKey = getOriginalKey(hymn);
   const currentKey = searchParams.get('key') || originalKey;
 
-  // Calculate semitones difference
-  const originalKeyIndex = KEYS.indexOf(originalKey);
-  const currentKeyIndex = KEYS.indexOf(currentKey);
-  const semitones = currentKeyIndex - originalKeyIndex;
+  const intervals = Interval.distance(
+    Note.get(originalKey),
+    Note.get(currentKey),
+  );
+
+  const semitones = Interval.semitones(intervals) ?? 0;
 
   const handleKeyChange = (newKey: string) => {
-    if (newKey === originalKey) {
-      setSearchParams({});
-    } else {
-      setSearchParams({ key: newKey });
-    }
+    React.startTransition(() => {
+      if (newKey === originalKey) {
+        setSearchParams({});
+      } else {
+        setSearchParams({ key: newKey });
+      }
+    });
   };
 
   const transposeHymnLine = (line: HymnLine): HymnLine => {
@@ -160,7 +198,7 @@ export default function Hymn() {
           </div>
           {currentKey !== originalKey && (
             <div className="text-sm text-gray-600">
-              Capo (fret {semitones < 0 ? 12 + semitones : semitones})
+              Capo (fret {calculateCapoFret(semitones)})
             </div>
           )}
         </div>
@@ -232,4 +270,13 @@ export default function Hymn() {
       </div>
     </div>
   );
+}
+
+function calculateCapoFret(semitones: number) {
+  const absSemitones = Math.abs(semitones);
+  if (semitones === 0) {
+    return 0;
+  }
+
+  return 12 - absSemitones;
 }
