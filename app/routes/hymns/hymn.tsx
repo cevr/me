@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLoaderData, useSearchParams } from 'react-router';
-import { Chord, Interval, Note, Scale, transpose } from 'tonal';
+import { Chord, Interval, Note, Scale } from 'tonal';
 
 import {
   Select,
@@ -23,7 +23,12 @@ export function meta({ data }: Route.MetaArgs) {
   return [{ title: `${data?.hymn.number}. ${data?.hymn.title} | Hymnal` }];
 }
 
-const KEYS = [
+const keys = [
+  'Ab',
+  'A',
+  'A#',
+  'Bb',
+  'B',
   'C',
   'C#',
   'Db',
@@ -36,56 +41,7 @@ const KEYS = [
   'Gb',
   'G',
   'G#',
-  'Ab',
-  'A',
-  'A#',
-  'Bb',
-  'B',
-];
-
-// Convert semitones to interval string for tonal library
-function semitonesToInterval(semitones: number): string {
-  const intervals = [
-    '1P',
-    '2m',
-    '2M',
-    '3m',
-    '3M',
-    '4P',
-    '4A',
-    '5P',
-    '6m',
-    '6M',
-    '7m',
-    '7M',
-  ];
-
-  if (semitones === 0) return '1P';
-
-  const absSteps = Math.abs(semitones);
-  const octaves = Math.floor(absSteps / 12);
-  const remainder = absSteps % 12;
-
-  let interval = intervals[remainder];
-  if (octaves > 0) {
-    interval = `${octaves + 1}${interval.slice(1)}`;
-  }
-
-  return semitones < 0 ? `-${interval}` : interval;
-}
-
-function transposeChord(chord: string, semitones: number): string {
-  if (!chord || chord.trim() === '') return chord;
-
-  try {
-    const interval = semitonesToInterval(semitones);
-    return transpose(chord, interval);
-  } catch (error) {
-    // If transposition fails, return original chord
-    console.warn(`Could not transpose chord: ${chord}`, error);
-    return chord;
-  }
-}
+] as const;
 
 function getOriginalKey(hymn: Hymn): string {
   // Collect all chords from the hymn
@@ -149,7 +105,9 @@ export default function Hymn() {
   const transposeHymnLine = (line: HymnLine): HymnLine => {
     return line.map((segment) => ({
       ...segment,
-      chord: transposeChord(segment.chord, semitones),
+      chord: segment.chord
+        ? Chord.transpose(segment.chord, intervals)
+        : segment.chord,
     }));
   };
 
@@ -186,7 +144,7 @@ export default function Hymn() {
                   <SelectValue placeholder="Select key" />
                 </SelectTrigger>
                 <SelectContent>
-                  {KEYS.map((key) => (
+                  {keys.map((key) => (
                     <SelectItem
                       key={key}
                       value={key}
