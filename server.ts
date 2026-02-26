@@ -33,8 +33,27 @@ Bun.serve({
       });
     }
 
-    // React Router handles everything else
-    return handler(req);
+    // SSR — cache at CDN edge, revalidate in background
+    const response = await handler(req);
+
+    if (response.status === 200 && !response.headers.has("cache-control")) {
+      const isRSS = pathname.endsWith("/rss.xml");
+      const isSitemap = pathname === "/sitemap.xml";
+
+      if (isRSS || isSitemap) {
+        response.headers.set(
+          "cache-control",
+          "public, max-age=3600, s-maxage=86400, stale-while-revalidate=43200",
+        );
+      } else {
+        response.headers.set(
+          "cache-control",
+          "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+        );
+      }
+    }
+
+    return response;
   },
 });
 
