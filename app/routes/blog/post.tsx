@@ -3,6 +3,22 @@ import type { Route } from "./+types/post";
 import { getPost } from "./blog.server";
 import { PageLayout } from "~/components/page-layout";
 
+export const meta: Route.MetaFunction = ({ data }) => {
+  if (!data) return [{ title: "not found — cristian" }];
+  const { post } = data;
+  return [
+    { title: `${post.title} — cristian` },
+    ...(post.description
+      ? [{ name: "description", content: post.description }]
+      : []),
+    { property: "og:title", content: post.title },
+    { property: "og:type", content: "article" },
+    ...(post.description
+      ? [{ property: "og:description", content: post.description }]
+      : []),
+  ];
+};
+
 export async function loader({ params }: Route.LoaderArgs) {
   const post = await getPost(params.slug);
   if (!post) throw data("Not found", { status: 404 });

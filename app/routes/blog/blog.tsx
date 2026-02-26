@@ -3,6 +3,11 @@ import type { Route } from "./+types/blog";
 import { getPosts } from "./blog.server";
 import { PageLayout } from "~/components/page-layout";
 
+export const meta: Route.MetaFunction = () => [
+  { title: "writing — cristian" },
+  { name: "description", content: "Thoughts on building things with care." },
+];
+
 export async function loader() {
   const posts = await getPosts();
   return { posts };

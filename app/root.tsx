@@ -10,8 +10,22 @@ import type { Route } from "./+types/root";
 
 import "./app.css";
 
+export const meta: Route.MetaFunction = () => [
+  { title: "cristian" },
+  { name: "description", content: "Building things with care." },
+  { property: "og:title", content: "cristian" },
+  { property: "og:description", content: "Building things with care." },
+  { property: "og:type", content: "website" },
+  { name: "twitter:card", content: "summary" },
+  { name: "twitter:title", content: "cristian" },
+  { name: "twitter:description", content: "Building things with care." },
+];
+
 export const links: Route.LinksFunction = () => [
-  { rel: "icon", href: "/favicon.ico" },
+  { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+  { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+  { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+  { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
 ];
 
 /**
@@ -33,6 +47,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1e2240" media="(prefers-color-scheme: dark)" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <Meta />
         <Links />
