@@ -14,10 +14,15 @@ export interface Post extends PostMeta {
   html: string;
 }
 
-const POSTS_DIR = path.join(import.meta.dirname, "posts");
+const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
 export async function getPosts(): Promise<PostMeta[]> {
-  const files = await fs.readdir(POSTS_DIR);
+  let files: string[];
+  try {
+    files = await fs.readdir(POSTS_DIR);
+  } catch {
+    return [];
+  }
   const posts = await Promise.all(
     files
       .filter((f) => f.endsWith(".md"))
