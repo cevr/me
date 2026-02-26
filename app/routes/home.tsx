@@ -1,76 +1,71 @@
+import { Landscape } from "~/components/landscape";
 import { useTheme } from "~/lib/theme";
-
-const swatches = [
-  { name: "background", var: "bg-background", text: "text-foreground" },
-  { name: "card", var: "bg-card", text: "text-card-foreground" },
-  { name: "primary", var: "bg-primary", text: "text-primary-foreground" },
-  { name: "secondary", var: "bg-secondary", text: "text-secondary-foreground" },
-  { name: "muted", var: "bg-muted", text: "text-muted-foreground" },
-  { name: "accent", var: "bg-accent", text: "text-accent-foreground" },
-  { name: "destructive", var: "bg-destructive", text: "text-primary-foreground" },
-] as const;
 
 export default function Home() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-svh bg-background p-8 text-foreground">
-      <div className="mx-auto max-w-2xl">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Ghibli Palette</h1>
+    <div className="relative flex min-h-dvh flex-col items-center justify-center px-6">
+      <Landscape />
+
+      <main className="relative w-full max-w-sm">
+        <h1 className="text-2xl font-medium tracking-tight">cristian</h1>
+
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          building things with care.
+        </p>
+
+        <nav
+          className="mt-6 flex gap-4 font-mono text-sm"
+          aria-label="Social links"
+        >
+          <a
+            href="https://github.com/cevr"
+            className="text-muted-foreground transition-colors hover:text-foreground"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            github
+          </a>
+          <span className="text-border" aria-hidden>
+            /
+          </span>
+          <a
+            href="https://x.com/_cristianvr_"
+            className="text-muted-foreground transition-colors hover:text-foreground"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            x
+          </a>
+          <span className="text-border" aria-hidden>
+            /
+          </span>
+          <a
+            href="mailto:hello@cvr.im"
+            className="text-muted-foreground transition-colors hover:text-foreground"
+          >
+            email
+          </a>
+        </nav>
+
+        <div className="mt-10 flex items-center justify-between">
+          <a
+            href="/blog"
+            className="font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            writing &rarr;
+          </a>
+
           <button
             onClick={toggleTheme}
-            className="rounded-md border border-border px-3 py-1.5 text-sm transition-colors hover:bg-secondary"
+            className="cursor-pointer font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
-            {theme === "dark" ? "Light" : "Dark"}
+            {theme === "dark" ? "light" : "dark"}
           </button>
         </div>
-
-        <p className="mt-4 text-muted-foreground">
-          {theme === "light"
-            ? "Laputa Blue — Castle in the Sky, open expanse"
-            : "Night Sky — Howl's castle under stars"}
-        </p>
-
-        <div className="mt-8 grid gap-3">
-          {swatches.map((s) => (
-            <div
-              key={s.name}
-              className={`${s.var} ${s.text} flex items-center justify-between rounded-lg border border-border px-4 py-3`}
-            >
-              <span className="font-medium">{s.name}</span>
-              <span className="text-sm opacity-70">{s.var}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 rounded-lg border border-border bg-card p-6">
-          <h2 className="text-lg font-bold text-card-foreground">
-            Card Example
-          </h2>
-          <p className="mt-2 text-muted-foreground text-pretty">
-            The forest breathed slowly, each tree a patient witness to the
-            passing of quiet centuries. Somewhere between the moss and the
-            morning light, something small and kind waited.
-          </p>
-          <div className="mt-4 flex gap-3">
-            <button className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90">
-              Primary
-            </button>
-            <button className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-colors hover:opacity-90">
-              Accent
-            </button>
-            <button className="rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:opacity-90">
-              Secondary
-            </button>
-          </div>
-        </div>
-
-        <p className="mt-6 text-sm text-muted-foreground">
-          Try selecting this text to see the terracotta selection color.
-        </p>
-      </div>
+      </main>
     </div>
   );
 }
