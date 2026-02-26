@@ -1,6 +1,0 @@
-dist/**
-build/**
-public/**
-.cache/**
-node_modules/**
-/.react-router/**
