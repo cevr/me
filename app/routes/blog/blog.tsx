@@ -6,6 +6,8 @@ import { PageLayout } from "~/components/page-layout";
 export const meta: Route.MetaFunction = () => [
   { title: "writing — cristian" },
   { name: "description", content: "Thoughts on building things with care." },
+  { property: "og:url", content: "https://cvr.im/blog" },
+  { tagName: "link", rel: "canonical", href: "https://cvr.im/blog" },
 ];
 
 export async function loader() {

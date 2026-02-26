@@ -3,19 +3,22 @@ import type { Route } from "./+types/post";
 import { getPost } from "./blog.server";
 import { PageLayout } from "~/components/page-layout";
 
-export const meta: Route.MetaFunction = ({ data }) => {
+export const meta: Route.MetaFunction = ({ data, params }) => {
   if (!data) return [{ title: "not found — cristian" }];
   const { post } = data;
+  const url = `https://cvr.im/blog/${params.slug}`;
   return [
     { title: `${post.title} — cristian` },
     ...(post.description
       ? [{ name: "description", content: post.description }]
       : []),
     { property: "og:title", content: post.title },
+    { property: "og:url", content: url },
     { property: "og:type", content: "article" },
     ...(post.description
       ? [{ property: "og:description", content: post.description }]
       : []),
+    { tagName: "link", rel: "canonical", href: url },
   ];
 };
 
