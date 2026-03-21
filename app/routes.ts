@@ -6,4 +6,5 @@ export default [
   route("blog/:slug", "routes/blog/post.tsx"),
   route("sitemap.xml", "routes/sitemap.xml.tsx"),
   route("blog/rss.xml", "routes/blog/rss.xml.tsx"),
+  route("*", "routes/catch-all.tsx"),
 ] satisfies RouteConfig;
