@@ -34,7 +34,12 @@ Bun.serve({
     }
 
     // SSR — cache at CDN edge, revalidate in background
-    const response = await handler(req);
+    let response: Response;
+    try {
+      response = await handler(req);
+    } catch {
+      return new Response("Not Found", { status: 404 });
+    }
 
     if (response.status === 200 && !response.headers.has("cache-control")) {
       const isRSS = pathname.endsWith("/rss.xml");
@@ -54,6 +59,9 @@ Bun.serve({
     }
 
     return response;
+  },
+  error() {
+    return new Response("Internal Server Error", { status: 500 });
   },
 });
 
