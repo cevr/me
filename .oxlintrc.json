@@ -1,0 +1,169 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/npm/oxlint/configuration_schema.json",
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "error"
+  },
+  "plugins": ["typescript", "import", "node", "react"],
+  "jsPlugins": ["oxlint-plugin-effect/plugin"],
+  "rules": {
+    "typescript/no-explicit-any": "error",
+    "typescript/no-unsafe-type-assertion": "error",
+    "typescript/no-non-null-assertion": "error",
+    "typescript/no-extra-non-null-assertion": "error",
+    "typescript/no-non-null-asserted-optional-chain": "error",
+    "typescript/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports",
+        "fixStyle": "separate-type-imports"
+      }
+    ],
+    "import/no-duplicates": "error",
+    "node/no-process-env": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "no-underscore-dangle": "off",
+    "no-nested-ternary": "error",
+    "no-shadow": "off",
+    "complexity": [
+      "error",
+      {
+        "max": 21
+      }
+    ],
+    "effect/maxCognitiveComplexity": [
+      "error",
+      {
+        "max": 21
+      }
+    ],
+    "effect/maxHalsteadDifficulty": [
+      "error",
+      {
+        "max": 79
+      }
+    ],
+    "effect/noAs": "error",
+    "effect/noAsyncFunction": "error",
+    "effect/noChainedTypeAssertions": "error",
+    "effect/noConditionalEmptyObjectSpread": "error",
+    "effect/noDynamicImports": "error",
+    "effect/noEffectBind": "error",
+    "effect/noEffectDo": "error",
+    "effect/noGlobals": "error",
+    "effect/noInlineProvide": "error",
+    "effect/noKnownValueWidening": "error",
+    "effect/noManagedRuntimeInEffect": "error",
+    "effect/noModuleMocks": "error",
+    "effect/noNestedEffectGen": "error",
+    "effect/noNewError": "error",
+    "effect/noNewPromise": "error",
+    "effect/noNodeBuiltinImport": "error",
+    "effect/noNullish": "error",
+    "effect/noObjectParameters": "error",
+    "effect/noPerCallCacheConstruction": "error",
+    "effect/noRunCollectOnUnboundedStream": "error",
+    "effect/noRuntimeTypeof": "error",
+    "effect/noSequentialEffectAll": "error",
+    "effect/noShapeInSymbolNames": "error",
+    "effect/noSilentCatchAll": "error",
+    "effect/noTernary": "error",
+    "effect/noTestLifecycleHooks": "error",
+    "effect/noThrowStatement": "error",
+    "effect/noTryCatch": "error",
+    "effect/noUnboundedConcurrency": "error",
+    "effect/noUnboundedRetry": "error",
+    "effect/noUnknownParameters": "error",
+    "effect/noUnknownTypeAliases": "error",
+    "effect/noUnsafeDictionaryType": "error",
+    "effect/noWidenThenAssert": "error",
+    "effect/preferCatchTag": "error",
+    "effect/preferEffectFn": "error",
+    "effect/preferMatchTagsExhaustive": "error",
+    "effect/preferPredicateIsTagged": "error",
+    "effect/preferServiceOf": "error",
+    "effect/requireNamedEffectFn": "error",
+    "react/react-in-jsx-scope": "off",
+    "import/no-unassigned-import": [
+      "error",
+      {
+        "allow": ["**/*.css"]
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/*.d.ts",
+    "**/bin/**",
+    "**/scripts/**",
+    "**/.alchemy/**",
+    "build/**",
+    ".react-router/**",
+    "app/components/ui/**"
+  ],
+  "overrides": [
+    {
+      "files": ["**/tests/**", "**/*.test.ts", "**/*.test.tsx"],
+      "rules": {
+        "typescript/no-non-null-assertion": "off",
+        "typescript/no-explicit-any": "off",
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    },
+    {
+      "files": ["app/**/*.ts", "app/**/*.tsx", "react-router.config.ts", "vite.config.ts"],
+      "rules": {
+        "effect/maxCognitiveComplexity": "off",
+        "effect/maxHalsteadDifficulty": "off",
+        "effect/noAs": "off",
+        "effect/noAsyncFunction": "off",
+        "effect/noChainedTypeAssertions": "off",
+        "effect/noConditionalEmptyObjectSpread": "off",
+        "effect/noDynamicImports": "off",
+        "effect/noEffectBind": "off",
+        "effect/noEffectDo": "off",
+        "effect/noGlobals": "off",
+        "effect/noInlineProvide": "off",
+        "effect/noKnownValueWidening": "off",
+        "effect/noManagedRuntimeInEffect": "off",
+        "effect/noModuleMocks": "off",
+        "effect/noNestedEffectGen": "off",
+        "effect/noNewError": "off",
+        "effect/noNewPromise": "off",
+        "effect/noNodeBuiltinImport": "off",
+        "effect/noNullish": "off",
+        "effect/noObjectParameters": "off",
+        "effect/noPerCallCacheConstruction": "off",
+        "effect/noRunCollectOnUnboundedStream": "off",
+        "effect/noRuntimeTypeof": "off",
+        "effect/noSequentialEffectAll": "off",
+        "effect/noShapeInSymbolNames": "off",
+        "effect/noSilentCatchAll": "off",
+        "effect/noTernary": "off",
+        "effect/noTestLifecycleHooks": "off",
+        "effect/noThrowStatement": "off",
+        "effect/noTryCatch": "off",
+        "effect/noUnboundedConcurrency": "off",
+        "effect/noUnboundedRetry": "off",
+        "effect/noUnknownParameters": "off",
+        "effect/noUnknownTypeAliases": "off",
+        "effect/noUnsafeDictionaryType": "off",
+        "effect/noWidenThenAssert": "off",
+        "effect/preferCatchTag": "off",
+        "effect/preferEffectFn": "off",
+        "effect/preferMatchTagsExhaustive": "off",
+        "effect/preferPredicateIsTagged": "off",
+        "effect/preferServiceOf": "off",
+        "effect/requireNamedEffectFn": "off"
+      }
+    }
+  ]
+}

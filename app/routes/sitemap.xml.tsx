@@ -20,9 +20,7 @@ export async function loader() {
 ${urls
   .map(
     (u) => `  <url>
-    <loc>${SITE}${u.loc}</loc>${
-      "lastmod" in u ? `\n    <lastmod>${u.lastmod}</lastmod>` : ""
-    }
+    <loc>${SITE}${u.loc}</loc>${"lastmod" in u ? `\n    <lastmod>${u.lastmod}</lastmod>` : ""}
     <priority>${u.priority}</priority>
   </url>`,
   )

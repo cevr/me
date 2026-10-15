@@ -12,9 +12,7 @@ export async function loader() {
       <link>${SITE}/blog/${p.slug}</link>
       <guid isPermaLink="true">${SITE}/blog/${p.slug}</guid>
       <pubDate>${new Date(p.date).toUTCString()}</pubDate>${
-        p.description
-          ? `\n      <description>${escapeXml(p.description)}</description>`
-          : ""
+        p.description ? `\n      <description>${escapeXml(p.description)}</description>` : ""
       }
     </item>`,
     )
