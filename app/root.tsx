@@ -30,7 +30,12 @@ export const links: Route.LinksFunction = () => [
   { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
   { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
   { rel: "canonical", href: "https://cvr.im" },
-  { rel: "alternate", type: "application/rss+xml", title: "cristian", href: "https://cvr.im/blog/rss.xml" },
+  {
+    rel: "alternate",
+    type: "application/rss+xml",
+    title: "cristian",
+    href: "https://cvr.im/blog/rss.xml",
+  },
 ];
 
 /**
@@ -71,24 +76,25 @@ export default function Root() {
   return <Outlet />;
 }
 
+function errorMessage(error: unknown): string {
+  if (isRouteErrorResponse(error)) {
+    if (error.status === 404) return "this page doesn\u2019t exist.";
+    return String(error.data);
+  }
+  if (error instanceof Error) return error.message;
+  return "Unknown error";
+}
+
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   const is404 = isRouteErrorResponse(error) && error.status === 404;
   const title = is404 ? "not found" : "something went wrong";
-  const message = is404
-    ? "this page doesn\u2019t exist."
-    : isRouteErrorResponse(error)
-      ? error.data
-      : error instanceof Error
-        ? error.message
-        : "Unknown error";
+  const message = errorMessage(error);
 
   return (
     <div className="relative flex min-h-dvh flex-col items-center px-6 pt-28 pb-16 sm:pt-40">
       <Landscape />
       <main className="relative w-full max-w-[60ch]">
-        <h1 className="text-2xl font-medium tracking-tight text-balance">
-          {title}
-        </h1>
+        <h1 className="text-2xl font-medium tracking-tight text-balance">{title}</h1>
         <p className="mt-3 text-muted-foreground">{message}</p>
         <Link
           to="/"

@@ -1,0 +1,12 @@
+pre-commit:
+  parallel: false
+  jobs:
+    - name: lint+fmt
+      run: bun run lint:fix && bun run fmt
+      stage_fixed: true
+    - name: typecheck
+      run: bun run typecheck
+    - name: build
+      run: bun run build
+    - name: test
+      run: bun run test

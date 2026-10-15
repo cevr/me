@@ -1,0 +1,63 @@
+# The gate on every push and pull request; then `prod` on master, a `pr-<n>`
+# preview per pull request, and a teardown when the pull request closes.
+# CI owns `prod`: a local deploy builds a bundle that hashes differently, so
+# use a throwaway stage for local work (AGENTS.md).
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+concurrency:
+  group: deploy-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || 'prod' }}
+  cancel-in-progress: false
+
+env:
+  LEFTHOOK: 0
+  STAGE: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || 'prod' }}
+  # Provider credentials. Profiles are never read when CI=true.
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+  CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+
+jobs:
+  gate:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run gate
+      - run: git diff --exit-code
+
+  deploy:
+    needs: gate
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: bunx alchemy provider check-env --provider Cloudflare
+      - run: bunx alchemy deploy alchemy.run.ts --stage "$STAGE" --yes
+
+  cleanup:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    environment: preview
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Destroy the preview stage
+        run: |
+          case "$STAGE" in pr-*) ;; *) echo "refusing to destroy $STAGE"; exit 1 ;; esac
+          bun run build
+          bunx alchemy destroy alchemy.run.ts --stage "$STAGE" --yes

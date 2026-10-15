@@ -32,16 +32,14 @@ export async function getPosts(): Promise<PostMeta[]> {
         const { data } = matter(raw);
         return {
           slug,
-          title: data.title as string,
-          date: data.date as string,
-          description: data.description as string | undefined,
+          title: data["title"] as string,
+          date: data["date"] as string,
+          description: data["description"] as string | undefined,
         };
       }),
   );
 
-  return posts.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-  );
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export async function getPost(slug: string): Promise<Post | null> {
@@ -52,9 +50,9 @@ export async function getPost(slug: string): Promise<Post | null> {
     const html = await marked(content);
     return {
       slug,
-      title: data.title as string,
-      date: data.date as string,
-      description: data.description as string | undefined,
+      title: data["title"] as string,
+      date: data["date"] as string,
+      description: data["description"] as string | undefined,
       html,
     };
   } catch {
