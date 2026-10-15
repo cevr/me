@@ -1,4 +1,4 @@
-# The gate on every push and pull request; then `prod` on main, a `pr-<n>`
+# The gate on every push and pull request; then `prod` on master, a `pr-<n>`
 # preview per pull request, and a teardown when the pull request closes.
 # CI owns `prod`: a local deploy builds a bundle that hashes differently, so
 # use a throwaway stage for local work (AGENTS.md).
@@ -6,7 +6,7 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
     types: [opened, synchronize, reopened, closed]
 
