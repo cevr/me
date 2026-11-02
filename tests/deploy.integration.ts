@@ -7,7 +7,7 @@
  * off a change to the stack, the Worker, or the Alchemy or Effect versions.
  */
 import { expect } from "bun:test";
-import * as Test from "alchemy/Test/Bun";
+import * as Test from "@alchemy.run/test/Bun";
 import * as Cloudflare from "@alchemy.run/cloudflare";
 import { Effect, Option, Schedule } from "effect";
 import { HttpClient } from "effect/http";
