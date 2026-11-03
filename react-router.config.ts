@@ -7,11 +7,9 @@ export default {
   appDirectory: "app",
   async prerender() {
     const postsDir = path.join(process.cwd(), "content/posts");
-    let slugs: string[] = [];
-    try {
-      const files = await fs.readdir(postsDir);
-      slugs = files.filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, ""));
-    } catch {}
+    const noPostsYet: string[] = [];
+    const files = await fs.readdir(postsDir).catch(() => noPostsYet);
+    const slugs = files.filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, ""));
 
     return ["/", "/blog", ...slugs.map((s) => `/blog/${s}`), "/sitemap.xml", "/blog/rss.xml"];
   },

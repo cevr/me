@@ -17,10 +17,12 @@ test(
     const url = yield* Effect.fromOption(Option.fromNullishOr(outputs.url));
     const raw = yield* HttpClient.HttpClient;
     const client = raw.pipe(HttpClient.filterStatusOk);
+    const whileFreshWorkersDevHostAnswers404 = {
+      schedule: Schedule.exponential("1 second"),
+      times: 8,
+    };
     const get = (path: string) =>
-      client
-        .get(`${url}${path}`)
-        .pipe(Effect.retry({ schedule: Schedule.exponential("1 second"), times: 8 }));
+      client.get(`${url}${path}`).pipe(Effect.retry(whileFreshWorkersDevHostAnswers404));
 
     const home = yield* get("/");
     const html = yield* home.text;

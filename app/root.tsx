@@ -38,7 +38,7 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-const themeScript = `
+const themeBeforeFirstPaintScript = `
   (function() {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -55,7 +55,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#f5f7fa" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#1e2240" media="(prefers-color-scheme: dark)" />
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: themeBeforeFirstPaintScript }} />
         <Meta />
         <Links />
       </head>
