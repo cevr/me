@@ -1,5 +1,3 @@
-// Server rendering on the Worker: React's Web Streams renderer, since the
-// Worker has no Node streams. Crawlers get the whole document at once.
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
 import type { EntryContext } from "react-router";

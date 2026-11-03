@@ -38,10 +38,6 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
-/**
- * Inline script to prevent flash of wrong theme.
- * Reads from localStorage, falls back to system preference.
- */
 const themeScript = `
   (function() {
     var theme = localStorage.getItem('theme');

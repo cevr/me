@@ -1,12 +1,6 @@
-/**
- * Abstract atmospheric gradient with shimmer.
- * Sky at top, background in middle, ground at bottom.
- * Dark mode: twinkling stars near the top.
- */
 export function Landscape() {
   return (
     <div className="pointer-events-none fixed inset-0" aria-hidden>
-      {/* Sky */}
       <div
         className="absolute inset-x-0 top-0 animate-sky overflow-hidden bg-gradient-to-b from-primary/30 to-transparent"
         style={{
@@ -16,7 +10,6 @@ export function Landscape() {
         <div className="animate-shimmer absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
       </div>
 
-      {/* Ground */}
       <div
         className="absolute inset-x-0 bottom-0 animate-ground overflow-hidden bg-gradient-to-t from-accent/25 to-transparent"
         style={{
@@ -29,7 +22,6 @@ export function Landscape() {
         />
       </div>
 
-      {/* Stars — dark mode only */}
       <div className="absolute inset-0 opacity-0 dark:opacity-100 transition-opacity duration-700">
         <Star left="6%" top="3%" delay={0} size={3} />
         <Star left="14%" top="8%" delay={2.2} size={2} />

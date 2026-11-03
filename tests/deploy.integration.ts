@@ -1,11 +1,3 @@
-/**
- * The deploy, checked against real Cloudflare: a throwaway `test_$USER` stage
- * is deployed, probed and destroyed in one scope, so a failure destroys it too.
- *
- * Outside the gate's test folder pattern on purpose, so the gate never
- * deploys. Run it with `bun run test:deploy` (it builds first) before handing
- * off a change to the stack, the Worker, or the Alchemy or Effect versions.
- */
 import { expect } from "bun:test";
 import * as Test from "@alchemy.run/test/Bun";
 import * as Cloudflare from "@alchemy.run/cloudflare";
@@ -25,7 +17,6 @@ test(
     const url = yield* Effect.fromOption(Option.fromNullishOr(outputs.url));
     const raw = yield* HttpClient.HttpClient;
     const client = raw.pipe(HttpClient.filterStatusOk);
-    // A fresh workers.dev host can answer 404 for a few seconds after deploy.
     const get = (path: string) =>
       client
         .get(`${url}${path}`)

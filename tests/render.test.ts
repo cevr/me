@@ -1,6 +1,3 @@
-// The Worker's render policy, against React Router's real production build:
-// what reaches the Worker is a path no static file answers.
-
 import { Effect } from "effect";
 import { HttpServerRequest } from "effect/http";
 import { test } from "bun:test";
