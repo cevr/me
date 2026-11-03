@@ -100,7 +100,6 @@
           "optionMatchToFromOption": "error",
           "outdatedApi": "error",
           "overriddenSchemaConstructor": "error",
-          "preferSchemaOverJson": "off",
           "preferSchemaTypeProperty": "off",
           "preferSucceedSomeOrNone": "error",
           "preferTypedSchemaDecoder": "error",
